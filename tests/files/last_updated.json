@@ -1,0 +1,36 @@
+{
+    "ResponseMetadata": {
+        "HTTPStatusCode": 200,
+        "RequestId": "d1f4f951-74d8-471a-9a65-1b6f7df7d61a"
+    },
+    "Items": [{
+        "doc": {
+            "S": "{\"sign_off\": \"ADM\", \"sticky\": false, \"unique_id\": 287, \"order\": 26, \"unique_name\": \"#287\", \"_type\": \"archive\", \"version\": 2, \"highlight\": false, \"particular_type\": \"post\", \"event_id\": \"tag:localhost:2016:a998d4f6-7f34-4b08-83a6-278b427c2fad\", \"dateline\": {\"date\": \"2016-04-05T10:39:09+00:00\", \"source\": \"SF\", \"text\": null, \"located\": null}, \"blog\": \"56fceedda505e600f71959c8\", \"guid\": \"urn:newsml:localhost:2016-04-05T10:39:09.392936:fbd4ce06-25df-48e2-8970-72f692a39f7e\", \"post_status\": \"open\", \"groups\": [{\"refs\": [{\"idRef\": \"main\"}], \"role\": \"grpRole:NEP\", \"id\": \"root\"}, {\"refs\": [{\"residRef\": \"urn:newsml:localhost:2016-04-05T10:52:38.306613:406f409f-9f32-4915-8713-e7bec30427e5\", \"type\": \"text\", \"item\": {\"sign_off\": \"ADM\", \"version_creator\": \"56c3530029ac1100191f8cd0\", \"expiry\": \"2016-05-05T10:52:38+00:00\", \"unique_name\": \"#291\", \"particular_type\": \"item\", \"event_id\": \"tag:localhost:2016:a53f0a7e-b92f-4553-b496-c51093046717\", \"text\": \"fdgdfgd sdfsf dfgdfgdfgdf\", \"dateline\": {\"date\": \"2016-04-05T10:52:38+00:00\", \"source\": \"SF\", \"text\": null, \"located\": null}, \"blog\": \"56fceedda505e600f71959c8\", \"guid\": \"urn:newsml:localhost:2016-04-05T10:52:38.306613:406f409f-9f32-4915-8713-e7bec30427e5\", \"pubstatus\": \"usable\", \"priority\": 3, \"family_id\": \"urn:newsml:localhost:2016-04-05T10:52:38.306613:406f409f-9f32-4915-8713-e7bec30427e5\", \"state\": \"draft\", \"more_coming\": false, \"place\": [], \"operation\": \"create\", \"_updated\": \"2016-04-05T10:52:38+00:00\", \"versioncreated\": \"2016-04-05T10:52:38+00:00\", \"_created\": \"2016-04-05T10:52:38+00:00\", \"language\": \"en\", \"firstcreated\": \"2016-04-05T10:52:38+00:00\", \"_id\": \"urn:newsml:localhost:2016-04-05T10:52:38.306613:406f409f-9f32-4915-8713-e7bec30427e5\", \"item_type\": \"text\", \"original_creator\": \"56c3530029ac1100191f8cd0\", \"_etag\": \"93908362a43c9fa2245a30bab927e1398a35db76\", \"urgency\": 3, \"unique_id\": 291, \"linked_in_packages\": [{\"package\": \"urn:newsml:localhost:2016-04-05T10:39:09.392936:fbd4ce06-25df-48e2-8970-72f692a39f7e\"}], \"_current_version\": 1, \"source\": \"Liveblog\", \"type\": \"text\", \"marked_for_not_publication\": false}, \"guid\": \"urn:newsml:localhost:2016-04-05T10:52:38.306613:406f409f-9f32-4915-8713-e7bec30427e5\"}], \"role\": \"grpRole:Main\", \"id\": \"main\"}], \"priority\": 3, \"family_id\": \"urn:newsml:localhost:2016-04-05T10:39:09.392936:fbd4ce06-25df-48e2-8970-72f692a39f7e\", \"published_date\": \"2016-04-05T10:39:09+00:00\", \"_links\": {\"self\": {\"title\": \"Posts\", \"href\": \"/posts/urn:newsml:localhost:2016-04-05T10:39:09.392936:fbd4ce06-25df-48e2-8970-72f692a39f7e\"}}, \"state\": \"draft\", \"more_coming\": false, \"firstcreated\": \"2016-04-05T10:39:09+00:00\", \"operation\": \"update\", \"_updated\": \"2016-04-05T10:52:38+00:00\", \"versioncreated\": \"2016-04-05T10:52:38+00:00\", \"_created\": \"2016-04-05T10:39:09+00:00\", \"language\": \"en\", \"place\": [], \"_id\": \"urn:newsml:localhost:2016-04-05T10:39:09.392936:fbd4ce06-25df-48e2-8970-72f692a39f7e\", \"expiry\": \"2016-05-05T10:52:38+00:00\", \"original_creator\": \"56c3530029ac1100191f8cd0\", \"_etag\": \"32e0b1d8d54e9556d3d31e0b4e462fa9fcc63208\", \"urgency\": 3, \"deleted\": false, \"pubstatus\": \"usable\", \"_current_version\": 3, \"version_creator\": \"56c3530029ac1100191f8cd0\", \"source\": \"Liveblog\", \"type\": \"composite\", \"marked_for_not_publication\": false, \"publisher\": {\"last_name\": \"Strator\", \"sign_off\": \"ADM\", \"username\": \"admin\", \"_created\": \"2016-02-16T16:49:04+00:00\", \"role\": null, \"session_preferences\": {\"57037f9da505e600f26ac856\": {\"desk:last_worked\": \"\", \"desk:items\": [], \"pinned:items\": [], \"stage:items\": [], \"scratchpad:items\": []}}, \"user_preferences\": {\"templates:recent\": {}, \"archive:view\": {\"view\": \"mgrid\", \"default\": \"mgrid\", \"allowed\": [\"mgrid\", \"compact\"], \"category\": \"archive\", \"label\": \"Users archive view format\", \"type\": \"string\"}, \"editor:theme\": {\"theme\": \"\", \"type\": \"string\"}, \"workqueue:items\": {\"items\": []}, \"email:notification\": {\"label\": \"Send notifications via email\", \"default\": true, \"enabled\": true, \"type\": \"bool\", \"category\": \"notifications\"}, \"dateline:located\": {\"label\": \"Located\", \"type\": \"dict\", \"category\": \"article_defaults\"}, \"dashboard:ingest\": {\"providers\": []}, \"article:default:place\": {\"label\": \"Place\", \"place\": [], \"type\": \"list\", \"category\": \"article_defaults\"}, \"agg:view\": {\"active\": {}}, \"feature:preview\": {\"label\": \"Enable Feature Preview\", \"default\": false, \"enabled\": false, \"type\": \"bool\", \"category\": \"feature\"}, \"categories:preferred\": {\"label\": \"Preferred Categories\", \"selected\": {}, \"type\": \"dict\", \"category\": \"categories\"}}, \"first_name\": \"Admini\", \"_id\": \"56c3530029ac1100191f8cd0\", \"user_type\": \"administrator\", \"is_active\": true, \"is_enabled\": true, \"_etag\": \"3878052aff60f62723965262f0e155a9e78c1158\", \"email\": \"martin@borho.net\", \"active_privileges\": {\"hold\": 1, \"blogs\": 1, \"request_membership\": 1, \"users\": 1, \"desks\": 1, \"tasks\": 1, \"posts\": 1, \"groups\": 1, \"global_preferences\": 1, \"publish_post\": 1, \"rewrite\": 1, \"unspike\": 1, \"archive\": 1, \"restore\": 1, \"roles\": 1, \"ingest\": 1, \"metadata_uniquename\": 1, \"legal_archive\": 1, \"ingest_providers\": 1, \"saved_searches\": 1, \"unlock\": 1, \"spike\": 1, \"submit_post\": 1}, \"display_name\": \"Admini Strator\", \"needs_activation\": false, \"_updated\": \"2016-02-16T16:50:28+00:00\"}}"
+        },
+        "attemps": {
+            "N": "0"
+        },
+        "post_id": {
+            "S": "urn:newsml:localhost:2016-04-05T10:39:09.392936:fbd4ce06-25df-48e2-8970-72f692a39f7e"
+        },
+        "updated": {
+            "S": "2016-04-05T10:52:38+00:00"
+        },
+        "created": {
+            "S": "2016-04-05T10:39:09+00:00"
+        },
+        "source_id": {
+            "S": "56fceedda505e600f71959c8"
+        }
+    }],
+    "ScannedCount": 1,
+    "Count": 1,
+    "LastEvaluatedKey": {
+        "updated": {
+            "S": "2016-04-05T10:52:38+00:00"
+        },
+        "source_id": {
+            "S": "56fceedda505e600f71959c8"
+        }
+    }
+}

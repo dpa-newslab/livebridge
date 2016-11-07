@@ -1,0 +1,38 @@
+auth:
+    dev:
+        user: "dev"
+        password: "pwd"
+        api_key: "F00Baz"
+    live:
+        user: "prod"
+        password: "pwd2"
+        api_key: "Foobar"
+    slack:
+        token: "token-str"
+bridges:
+    - source_id: "abcdefg"
+      endpoint:  "https://example.com/api/"
+      type:  "liveblog"
+      targets:
+        - type: "scribble"
+          event_id: "123456"
+          auth: "dev"
+        - type: "another"
+          event_id: "654321"
+          auth: "live"
+    - source_id: 54321
+      endpoint:  "https://foo.org/api/"
+      type:  "liveblog"
+      auth: "slack"
+      targets:
+        - type: "scribble"
+          event_id: "123456"
+          auth: "dev"
+#    - channel: 54321
+#      endpoint:  "https://foo.org/api/"
+#      type:  "slack"
+#      user: "slack"
+#      targets:
+#        - type: "scribble"
+#          event_id: "123456"
+#          user: "dev"

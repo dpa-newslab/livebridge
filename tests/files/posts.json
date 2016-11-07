@@ -1,0 +1,3934 @@
+{
+    "_items": [{
+        "_created": "2016-03-29T13:42:56+00:00",
+        "_current_version": 1,
+        "_etag": "f7ae4310d1224d2f8d6285a1038947daffb192ff",
+        "_id": "urn:newsml:localhost:2016-03-29T13:42:56.901700:8a812573-3045-45f2-98a9-312f400680d5",
+        "_links": {
+            "self": {
+                "href": "/posts/urn:newsml:localhost:2016-03-29T13:42:56.901700:8a812573-3045-45f2-98a9-312f400680d5",
+                "title": "Posts"
+            }
+        },
+        "_type": "archive",
+        "_updated": "2016-03-29T13:42:56+00:00",
+        "blog": "56c5b34120dc360081f8e518",
+        "dateline": {
+            "date": "2016-03-29T13:42:56+00:00",
+            "located": null,
+            "source": "SF",
+            "text": null
+        },
+        "deleted": false,
+        "event_id": "tag:localhost:2016:483f2575-24cb-4140-9292-c8ad6e483511",
+        "expiry": "2016-04-28T13:42:56+00:00",
+        "family_id": "urn:newsml:localhost:2016-03-29T13:42:56.901700:8a812573-3045-45f2-98a9-312f400680d5",
+        "firstcreated": "2016-03-29T13:42:56+00:00",
+        "groups": [{
+            "id": "root",
+            "refs": [{
+                "idRef": "main"
+            }],
+            "role": "grpRole:NEP"
+        }, {
+            "id": "main",
+            "refs": [{
+                "guid": "urn:newsml:localhost:2016-03-29T13:42:56.832333:6fe4b766-aa63-41ea-86d7-1a9f787ff732",
+                "item": {
+                    "_created": "2016-03-29T13:42:56+00:00",
+                    "_current_version": 1,
+                    "_etag": "cf76477f7c3cbe1e2cfb1075ff772bf6696bbf76",
+                    "_id": "urn:newsml:localhost:2016-03-29T13:42:56.832333:6fe4b766-aa63-41ea-86d7-1a9f787ff732",
+                    "_updated": "2016-03-29T13:42:56+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T13:42:56+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:2f4196e1-a5c2-452a-87e2-0c8e83a0427b",
+                    "expiry": "2016-04-28T13:42:56+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T13:42:56.832333:6fe4b766-aa63-41ea-86d7-1a9f787ff732",
+                    "firstcreated": "2016-03-29T13:42:56+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T13:42:56.832333:6fe4b766-aa63-41ea-86d7-1a9f787ff732",
+                    "item_type": "text",
+                    "language": "en",
+                    "linked_in_packages": [{
+                        "package": "urn:newsml:localhost:2016-03-29T13:42:56.901700:8a812573-3045-45f2-98a9-312f400680d5"
+                    }],
+                    "marked_for_not_publication": false,
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "<b>Wenn ich einen Text \u00fcber ein Foto oder \u00fcber ein Social-Media-Post schreibe, dann erscheint mein Profil (dpa-live-Logo mit Ver\u00f6ffentlichungsdatum) zweimal im selben Post!!!</b>",
+                    "type": "text",
+                    "unique_id": 159,
+                    "unique_name": "#159",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T13:42:56+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T13:42:56.832333:6fe4b766-aa63-41ea-86d7-1a9f787ff732",
+                "type": "text"
+            }],
+            "role": "grpRole:Main"
+        }],
+        "guid": "urn:newsml:localhost:2016-03-29T13:42:56.901700:8a812573-3045-45f2-98a9-312f400680d5",
+        "highlight": false,
+        "language": "en",
+        "marked_for_not_publication": false,
+        "more_coming": false,
+        "operation": "create",
+        "order": 39,
+        "original_creator": "56cad43adfc3f600800d2b97",
+        "particular_type": "post",
+        "place": [],
+        "post_status": "submitted",
+        "priority": 3,
+        "published_date": "2016-03-29T13:42:56+00:00",
+        "publisher": {
+            "_created": "2016-02-22T09:26:18+00:00",
+            "_etag": "4ec12d6f5cb5b8dad6776c2ed17baee1f27f5500",
+            "_id": "56cad43adfc3f600800d2b97",
+            "_updated": "2016-03-29T10:12:16+00:00",
+            "active_privileges": {
+                "archive": 1,
+                "blogs": 1,
+                "desks": 1,
+                "global_preferences": 1,
+                "groups": 1,
+                "hold": 1,
+                "ingest": 1,
+                "ingest_providers": 1,
+                "legal_archive": 1,
+                "metadata_uniquename": 1,
+                "posts": 1,
+                "publish_post": 1,
+                "request_membership": 1,
+                "restore": 1,
+                "rewrite": 1,
+                "roles": 1,
+                "saved_searches": 1,
+                "spike": 1,
+                "submit_post": 1,
+                "tasks": 1,
+                "unlock": 1,
+                "unspike": 1,
+                "users": 1
+            },
+            "avatar": "56e6cdea4f4cb600e86928ae",
+            "display_name": "dpa \u30fblive Desk",
+            "email": "sueleyman.artiisik@dpa-info.com",
+            "first_name": "dpa \u30fblive",
+            "is_active": true,
+            "is_enabled": true,
+            "last_name": "Desk",
+            "needs_activation": false,
+            "picture_url": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/a4e7b72c7955fb9151af778dd07eaa3ae50cab3a5491e22a972c4dc1a3d87dee",
+            "role": "54e64cde1024542de2649be9",
+            "session_preferences": {
+                "56fa53740e8fda00f31bbf13": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa55570e8fda00e9a83ab1": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa821c0e8fda00e7518415": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                }
+            },
+            "sign_off": "art",
+            "user_preferences": {
+                "agg:view": {
+                    "active": {}
+                },
+                "archive:view": {
+                    "allowed": ["mgrid", "compact"],
+                    "category": "archive",
+                    "default": "mgrid",
+                    "label": "Users archive view format",
+                    "type": "string",
+                    "view": "mgrid"
+                },
+                "article:default:place": {
+                    "category": "article_defaults",
+                    "label": "Place",
+                    "place": [],
+                    "type": "list"
+                },
+                "categories:preferred": {
+                    "category": "categories",
+                    "label": "Preferred Categories",
+                    "selected": {},
+                    "type": "dict"
+                },
+                "dashboard:ingest": {
+                    "providers": []
+                },
+                "dateline:located": {
+                    "category": "article_defaults",
+                    "label": "Located",
+                    "type": "dict"
+                },
+                "editor:theme": {
+                    "theme": "",
+                    "type": "string"
+                },
+                "email:notification": {
+                    "category": "notifications",
+                    "default": true,
+                    "enabled": true,
+                    "label": "Send notifications via email",
+                    "type": "bool"
+                },
+                "feature:preview": {
+                    "category": "feature",
+                    "default": false,
+                    "enabled": false,
+                    "label": "Enable Feature Preview",
+                    "type": "bool"
+                },
+                "templates:recent": {},
+                "workqueue:items": {
+                    "items": []
+                }
+            },
+            "user_type": "administrator",
+            "username": "sartiisik"
+        },
+        "pubstatus": "usable",
+        "sign_off": "art",
+        "source": "Liveblog",
+        "state": "draft",
+        "sticky": false,
+        "type": "composite",
+        "unique_id": 160,
+        "unique_name": "#160",
+        "urgency": 3,
+        "version_creator": "56cad43adfc3f600800d2b97",
+        "versioncreated": "2016-03-29T13:42:56+00:00"
+    }, {
+        "_created": "2016-03-29T13:41:31+00:00",
+        "_current_version": 1,
+        "_etag": "6a471e4c932e60c6df9886756d9c7bd5e380e96b",
+        "_id": "urn:newsml:localhost:2016-03-29T13:41:31.071788:2cade3a8-2044-45bd-9b12-78d363cfc158",
+        "_links": {
+            "self": {
+                "href": "/posts/urn:newsml:localhost:2016-03-29T13:41:31.071788:2cade3a8-2044-45bd-9b12-78d363cfc158",
+                "title": "Posts"
+            }
+        },
+        "_type": "archive",
+        "_updated": "2016-03-29T13:41:31+00:00",
+        "blog": "56c5b34120dc360081f8e518",
+        "dateline": {
+            "date": "2016-03-29T13:41:31+00:00",
+            "located": null,
+            "source": "SF",
+            "text": null
+        },
+        "deleted": false,
+        "event_id": "tag:localhost:2016:e1de0353-f83c-4a68-83ff-9aa6b3f3bdbb",
+        "expiry": "2016-04-28T13:41:31+00:00",
+        "family_id": "urn:newsml:localhost:2016-03-29T13:41:31.071788:2cade3a8-2044-45bd-9b12-78d363cfc158",
+        "firstcreated": "2016-03-29T13:41:31+00:00",
+        "groups": [{
+            "id": "root",
+            "refs": [{
+                "idRef": "main"
+            }],
+            "role": "grpRole:NEP"
+        }, {
+            "id": "main",
+            "refs": [{
+                "guid": "urn:newsml:localhost:2016-03-29T13:41:30.946860:9c1193ca-8f01-42f3-9f3d-95197babe1dc",
+                "item": {
+                    "_created": "2016-03-29T13:41:30+00:00",
+                    "_current_version": 1,
+                    "_etag": "cb0852aef483bee6b11706bac6be074affd5c272",
+                    "_id": "urn:newsml:localhost:2016-03-29T13:41:30.946860:9c1193ca-8f01-42f3-9f3d-95197babe1dc",
+                    "_updated": "2016-03-29T13:41:30+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T13:41:30+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:f4819f6a-5518-46ec-b641-200f7cb639e3",
+                    "expiry": "2016-04-28T13:41:30+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T13:41:30.946860:9c1193ca-8f01-42f3-9f3d-95197babe1dc",
+                    "firstcreated": "2016-03-29T13:41:30+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T13:41:30.946860:9c1193ca-8f01-42f3-9f3d-95197babe1dc",
+                    "item_type": "text",
+                    "language": "en",
+                    "linked_in_packages": [{
+                        "package": "urn:newsml:localhost:2016-03-29T13:41:31.071788:2cade3a8-2044-45bd-9b12-78d363cfc158"
+                    }],
+                    "marked_for_not_publication": false,
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "Foto mit Text dr\u00fcber.",
+                    "type": "text",
+                    "unique_id": 156,
+                    "unique_name": "#156",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T13:41:30+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T13:41:30.946860:9c1193ca-8f01-42f3-9f3d-95197babe1dc",
+                "type": "text"
+            }, {
+                "guid": "urn:newsml:localhost:2016-03-29T13:41:31.006334:8526c58d-e5ab-415a-85e1-b9de4e560980",
+                "item": {
+                    "_created": "2016-03-29T13:41:31+00:00",
+                    "_current_version": 1,
+                    "_etag": "c8afd6eff6ce7356a6efc9e2754df13fe2f40cda",
+                    "_id": "urn:newsml:localhost:2016-03-29T13:41:31.006334:8526c58d-e5ab-415a-85e1-b9de4e560980",
+                    "_updated": "2016-03-29T13:41:31+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T13:41:31+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:48efcd6b-f21d-4949-8b82-6a8f0abdf177",
+                    "expiry": "2016-04-28T13:41:31+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T13:41:31.006334:8526c58d-e5ab-415a-85e1-b9de4e560980",
+                    "firstcreated": "2016-03-29T13:41:31+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T13:41:31.006334:8526c58d-e5ab-415a-85e1-b9de4e560980",
+                    "item_type": "image",
+                    "language": "en",
+                    "linked_in_packages": [{
+                        "package": "urn:newsml:localhost:2016-03-29T13:41:31.071788:2cade3a8-2044-45bd-9b12-78d363cfc158"
+                    }],
+                    "marked_for_not_publication": false,
+                    "meta": {
+                        "caption": "Das dpa-live-Logo",
+                        "credit": "Foto: Max Mustermann, dpa",
+                        "media": {
+                            "_id": "urn:newsml:localhost:2016-03-29T13:41:05.035118:4bdb976a-8192-45c2-b80b-33fd116c697c",
+                            "_info": "https://dpa-live-dev.dpa-newslab.com/apiarchive/urn:newsml:localhost:2016-03-29T13:41:05.035118:4bdb976a-8192-45c2-b80b-33fd116c697c",
+                            "_url": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/578482f7455dbb997ea8270cbf25a7cf0699dbc87e167a4a4f73ba2ef5917512",
+                            "renditions": {
+                                "baseImage": {
+                                    "height": 1080,
+                                    "href": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/0f44c02fd533dc85ad5946b5439902b17feb844eda38646fa1e74546033e6b5b",
+                                    "media": "0f44c02fd533dc85ad5946b5439902b17feb844eda38646fa1e74546033e6b5b",
+                                    "mimetype": "image/jpeg",
+                                    "width": 1080
+                                },
+                                "original": {
+                                    "height": 319,
+                                    "href": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/8bdfde82d3508011603713421826acd30bec51a477316cfa31fceb45ee1562e3",
+                                    "media": "8bdfde82d3508011603713421826acd30bec51a477316cfa31fceb45ee1562e3",
+                                    "mimetype": "image/jpeg",
+                                    "width": 319
+                                },
+                                "thumbnail": {
+                                    "height": 320,
+                                    "href": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/578482f7455dbb997ea8270cbf25a7cf0699dbc87e167a4a4f73ba2ef5917512",
+                                    "media": "578482f7455dbb997ea8270cbf25a7cf0699dbc87e167a4a4f73ba2ef5917512",
+                                    "mimetype": "image/jpeg",
+                                    "width": 320
+                                },
+                                "viewImage": {
+                                    "height": 720,
+                                    "href": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/edf8eb8de157e51fd3c5d5a2c3f865bcdce1b5e0d3033de1c4e2c23c4513477d",
+                                    "media": "edf8eb8de157e51fd3c5d5a2c3f865bcdce1b5e0d3033de1c4e2c23c4513477d",
+                                    "mimetype": "image/jpeg",
+                                    "width": 720
+                                }
+                            }
+                        }
+                    },
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "<figure>    <img src=\"http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/578482f7455dbb997ea8270cbf25a7cf0699dbc87e167a4a4f73ba2ef5917512\" alt=\"Das dpa-live-Logo\" srcset=\"http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/0f44c02fd533dc85ad5946b5439902b17feb844eda38646fa1e74546033e6b5b 1080w, http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/8bdfde82d3508011603713421826acd30bec51a477316cfa31fceb45ee1562e3 319w, http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/578482f7455dbb997ea8270cbf25a7cf0699dbc87e167a4a4f73ba2ef5917512 320w, http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/edf8eb8de157e51fd3c5d5a2c3f865bcdce1b5e0d3033de1c4e2c23c4513477d 720w\"/>    <figcaption>Das dpa-live-Logo Credit: Foto: Max Mustermann, dpa</figcaption></figure>",
+                    "type": "text",
+                    "unique_id": 157,
+                    "unique_name": "#157",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T13:41:31+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T13:41:31.006334:8526c58d-e5ab-415a-85e1-b9de4e560980",
+                "type": "text"
+            }],
+            "role": "grpRole:Main"
+        }],
+        "guid": "urn:newsml:localhost:2016-03-29T13:41:31.071788:2cade3a8-2044-45bd-9b12-78d363cfc158",
+        "highlight": false,
+        "language": "en",
+        "marked_for_not_publication": false,
+        "more_coming": false,
+        "operation": "create",
+        "order": 38,
+        "original_creator": "56cad43adfc3f600800d2b97",
+        "particular_type": "post",
+        "place": [],
+        "post_status": "open",
+        "priority": 3,
+        "published_date": "2016-03-29T13:41:31+00:00",
+        "publisher": {
+            "_created": "2016-02-22T09:26:18+00:00",
+            "_etag": "4ec12d6f5cb5b8dad6776c2ed17baee1f27f5500",
+            "_id": "56cad43adfc3f600800d2b97",
+            "_updated": "2016-03-29T10:12:16+00:00",
+            "active_privileges": {
+                "archive": 1,
+                "blogs": 1,
+                "desks": 1,
+                "global_preferences": 1,
+                "groups": 1,
+                "hold": 1,
+                "ingest": 1,
+                "ingest_providers": 1,
+                "legal_archive": 1,
+                "metadata_uniquename": 1,
+                "posts": 1,
+                "publish_post": 1,
+                "request_membership": 1,
+                "restore": 1,
+                "rewrite": 1,
+                "roles": 1,
+                "saved_searches": 1,
+                "spike": 1,
+                "submit_post": 1,
+                "tasks": 1,
+                "unlock": 1,
+                "unspike": 1,
+                "users": 1
+            },
+            "avatar": "56e6cdea4f4cb600e86928ae",
+            "display_name": "dpa \u30fblive Desk",
+            "email": "sueleyman.artiisik@dpa-info.com",
+            "first_name": "dpa \u30fblive",
+            "is_active": true,
+            "is_enabled": true,
+            "last_name": "Desk",
+            "needs_activation": false,
+            "picture_url": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/a4e7b72c7955fb9151af778dd07eaa3ae50cab3a5491e22a972c4dc1a3d87dee",
+            "role": "54e64cde1024542de2649be9",
+            "session_preferences": {
+                "56fa53740e8fda00f31bbf13": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa55570e8fda00e9a83ab1": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa821c0e8fda00e7518415": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                }
+            },
+            "sign_off": "art",
+            "user_preferences": {
+                "agg:view": {
+                    "active": {}
+                },
+                "archive:view": {
+                    "allowed": ["mgrid", "compact"],
+                    "category": "archive",
+                    "default": "mgrid",
+                    "label": "Users archive view format",
+                    "type": "string",
+                    "view": "mgrid"
+                },
+                "article:default:place": {
+                    "category": "article_defaults",
+                    "label": "Place",
+                    "place": [],
+                    "type": "list"
+                },
+                "categories:preferred": {
+                    "category": "categories",
+                    "label": "Preferred Categories",
+                    "selected": {},
+                    "type": "dict"
+                },
+                "dashboard:ingest": {
+                    "providers": []
+                },
+                "dateline:located": {
+                    "category": "article_defaults",
+                    "label": "Located",
+                    "type": "dict"
+                },
+                "editor:theme": {
+                    "theme": "",
+                    "type": "string"
+                },
+                "email:notification": {
+                    "category": "notifications",
+                    "default": true,
+                    "enabled": true,
+                    "label": "Send notifications via email",
+                    "type": "bool"
+                },
+                "feature:preview": {
+                    "category": "feature",
+                    "default": false,
+                    "enabled": false,
+                    "label": "Enable Feature Preview",
+                    "type": "bool"
+                },
+                "templates:recent": {},
+                "workqueue:items": {
+                    "items": []
+                }
+            },
+            "user_type": "administrator",
+            "username": "sartiisik"
+        },
+        "pubstatus": "usable",
+        "sign_off": "art",
+        "source": "Liveblog",
+        "state": "draft",
+        "sticky": false,
+        "type": "composite",
+        "unique_id": 158,
+        "unique_name": "#158",
+        "urgency": 3,
+        "version_creator": "56cad43adfc3f600800d2b97",
+        "versioncreated": "2016-03-29T13:41:31+00:00"
+    }, {
+        "_created": "2016-03-29T13:27:18+00:00",
+        "_current_version": 3,
+        "_etag": "6a63a0506eb35e43603e5be1f06a2adef2eef5c9",
+        "_id": "urn:newsml:localhost:2016-03-29T13:27:18.309465:9fd9d93f-4ed7-4afe-9378-b607d90710d5",
+        "_links": {
+            "self": {
+                "href": "/posts/urn:newsml:localhost:2016-03-29T13:27:18.309465:9fd9d93f-4ed7-4afe-9378-b607d90710d5",
+                "title": "Posts"
+            }
+        },
+        "_type": "archive",
+        "_updated": "2016-03-29T13:37:36+00:00",
+        "blog": "56c5b34120dc360081f8e518",
+        "dateline": {
+            "date": "2016-03-29T13:27:18+00:00",
+            "located": null,
+            "source": "SF",
+            "text": null
+        },
+        "deleted": false,
+        "event_id": "tag:localhost:2016:15e01306-056e-4599-8f31-30c826fb6c76",
+        "expiry": "2016-04-28T13:37:36+00:00",
+        "family_id": "urn:newsml:localhost:2016-03-29T13:27:18.309465:9fd9d93f-4ed7-4afe-9378-b607d90710d5",
+        "firstcreated": "2016-03-29T13:27:18+00:00",
+        "groups": [{
+            "id": "root",
+            "refs": [{
+                "idRef": "main"
+            }],
+            "role": "grpRole:NEP"
+        }, {
+            "id": "main",
+            "refs": [{
+                "guid": "urn:newsml:localhost:2016-03-29T13:37:36.308909:277d0896-917e-4f73-abcb-dc504a53ff78",
+                "item": {
+                    "_created": "2016-03-29T13:37:36+00:00",
+                    "_current_version": 1,
+                    "_etag": "872fdeb18a833778d7c19b0405b5245fa8fe33ef",
+                    "_id": "urn:newsml:localhost:2016-03-29T13:37:36.308909:277d0896-917e-4f73-abcb-dc504a53ff78",
+                    "_updated": "2016-03-29T13:37:36+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T13:37:36+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:dd87b417-9399-414e-80c4-f187be435617",
+                    "expiry": "2016-04-28T13:37:36+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T13:37:36.308909:277d0896-917e-4f73-abcb-dc504a53ff78",
+                    "firstcreated": "2016-03-29T13:37:36+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T13:37:36.308909:277d0896-917e-4f73-abcb-dc504a53ff78",
+                    "item_type": "text",
+                    "language": "en",
+                    "linked_in_packages": [{
+                        "package": "urn:newsml:localhost:2016-03-29T13:27:18.309465:9fd9d93f-4ed7-4afe-9378-b607d90710d5"
+                    }],
+                    "marked_for_not_publication": false,
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</div><div><br></div><div><b>K\u00f6nnen wir die Schriftart und Schriftgr\u00f6\u00dfe \u00e4ndern?</b>",
+                    "type": "text",
+                    "unique_id": 145,
+                    "unique_name": "#145",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T13:37:36+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T13:37:36.308909:277d0896-917e-4f73-abcb-dc504a53ff78",
+                "type": "text"
+            }],
+            "role": "grpRole:Main"
+        }],
+        "guid": "urn:newsml:localhost:2016-03-29T13:27:18.309465:9fd9d93f-4ed7-4afe-9378-b607d90710d5",
+        "highlight": false,
+        "language": "en",
+        "marked_for_not_publication": false,
+        "more_coming": false,
+        "operation": "update",
+        "order": 34,
+        "original_creator": "56cad43adfc3f600800d2b97",
+        "particular_type": "post",
+        "place": [],
+        "post_status": "open",
+        "priority": 3,
+        "published_date": "2016-03-29T13:27:18+00:00",
+        "publisher": {
+            "_created": "2016-02-22T09:26:18+00:00",
+            "_etag": "4ec12d6f5cb5b8dad6776c2ed17baee1f27f5500",
+            "_id": "56cad43adfc3f600800d2b97",
+            "_updated": "2016-03-29T10:12:16+00:00",
+            "active_privileges": {
+                "archive": 1,
+                "blogs": 1,
+                "desks": 1,
+                "global_preferences": 1,
+                "groups": 1,
+                "hold": 1,
+                "ingest": 1,
+                "ingest_providers": 1,
+                "legal_archive": 1,
+                "metadata_uniquename": 1,
+                "posts": 1,
+                "publish_post": 1,
+                "request_membership": 1,
+                "restore": 1,
+                "rewrite": 1,
+                "roles": 1,
+                "saved_searches": 1,
+                "spike": 1,
+                "submit_post": 1,
+                "tasks": 1,
+                "unlock": 1,
+                "unspike": 1,
+                "users": 1
+            },
+            "avatar": "56e6cdea4f4cb600e86928ae",
+            "display_name": "dpa \u30fblive Desk",
+            "email": "sueleyman.artiisik@dpa-info.com",
+            "first_name": "dpa \u30fblive",
+            "is_active": true,
+            "is_enabled": true,
+            "last_name": "Desk",
+            "needs_activation": false,
+            "picture_url": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/a4e7b72c7955fb9151af778dd07eaa3ae50cab3a5491e22a972c4dc1a3d87dee",
+            "role": "54e64cde1024542de2649be9",
+            "session_preferences": {
+                "56fa53740e8fda00f31bbf13": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa55570e8fda00e9a83ab1": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa821c0e8fda00e7518415": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                }
+            },
+            "sign_off": "art",
+            "user_preferences": {
+                "agg:view": {
+                    "active": {}
+                },
+                "archive:view": {
+                    "allowed": ["mgrid", "compact"],
+                    "category": "archive",
+                    "default": "mgrid",
+                    "label": "Users archive view format",
+                    "type": "string",
+                    "view": "mgrid"
+                },
+                "article:default:place": {
+                    "category": "article_defaults",
+                    "label": "Place",
+                    "place": [],
+                    "type": "list"
+                },
+                "categories:preferred": {
+                    "category": "categories",
+                    "label": "Preferred Categories",
+                    "selected": {},
+                    "type": "dict"
+                },
+                "dashboard:ingest": {
+                    "providers": []
+                },
+                "dateline:located": {
+                    "category": "article_defaults",
+                    "label": "Located",
+                    "type": "dict"
+                },
+                "editor:theme": {
+                    "theme": "",
+                    "type": "string"
+                },
+                "email:notification": {
+                    "category": "notifications",
+                    "default": true,
+                    "enabled": true,
+                    "label": "Send notifications via email",
+                    "type": "bool"
+                },
+                "feature:preview": {
+                    "category": "feature",
+                    "default": false,
+                    "enabled": false,
+                    "label": "Enable Feature Preview",
+                    "type": "bool"
+                },
+                "templates:recent": {},
+                "workqueue:items": {
+                    "items": []
+                }
+            },
+            "user_type": "administrator",
+            "username": "sartiisik"
+        },
+        "pubstatus": "usable",
+        "sign_off": "art",
+        "source": "Liveblog",
+        "state": "draft",
+        "sticky": false,
+        "type": "composite",
+        "unique_id": 137,
+        "unique_name": "#137",
+        "urgency": 3,
+        "version": 2,
+        "version_creator": "56cad43adfc3f600800d2b97",
+        "versioncreated": "2016-03-29T13:37:36+00:00"
+    }, {
+        "_created": "2016-03-29T10:34:18+00:00",
+        "_current_version": 3,
+        "_etag": "a56901c81dcec93636f4bf479020f4e6a9023c20",
+        "_id": "urn:newsml:localhost:2016-03-29T10:34:18.198960:6f8da0d4-e7c5-416e-8be9-02f6a404882b",
+        "_links": {
+            "self": {
+                "href": "/posts/urn:newsml:localhost:2016-03-29T10:34:18.198960:6f8da0d4-e7c5-416e-8be9-02f6a404882b",
+                "title": "Posts"
+            }
+        },
+        "_type": "archive",
+        "_updated": "2016-03-29T13:37:49+00:00",
+        "blog": "56c5b34120dc360081f8e518",
+        "dateline": {
+            "date": "2016-03-29T10:34:18+00:00",
+            "located": null,
+            "source": "SF",
+            "text": null
+        },
+        "deleted": false,
+        "event_id": "tag:localhost:2016:af5fa110-12b6-43ed-afcd-9d0f360716dc",
+        "expiry": "2016-04-28T13:37:49+00:00",
+        "family_id": "urn:newsml:localhost:2016-03-29T10:34:18.198960:6f8da0d4-e7c5-416e-8be9-02f6a404882b",
+        "firstcreated": "2016-03-29T10:34:18+00:00",
+        "groups": [{
+            "id": "root",
+            "refs": [{
+                "idRef": "main"
+            }],
+            "role": "grpRole:NEP"
+        }, {
+            "id": "main",
+            "refs": [{
+                "guid": "urn:newsml:localhost:2016-03-29T13:37:49.219074:bba6e98e-8e7c-44ae-ba55-f07bc8349d37",
+                "item": {
+                    "_created": "2016-03-29T13:37:49+00:00",
+                    "_current_version": 1,
+                    "_etag": "6b98b58c06774f1331451a73434dfd6cc1123f7a",
+                    "_id": "urn:newsml:localhost:2016-03-29T13:37:49.219074:bba6e98e-8e7c-44ae-ba55-f07bc8349d37",
+                    "_updated": "2016-03-29T13:37:49+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T13:37:49+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:393bc466-d4d1-4558-ba82-a71fe27c9c69",
+                    "expiry": "2016-04-28T13:37:49+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T13:37:49.219074:bba6e98e-8e7c-44ae-ba55-f07bc8349d37",
+                    "firstcreated": "2016-03-29T13:37:49+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T13:37:49.219074:bba6e98e-8e7c-44ae-ba55-f07bc8349d37",
+                    "item_type": "text",
+                    "language": "en",
+                    "linked_in_packages": [{
+                        "package": "urn:newsml:localhost:2016-03-29T10:34:18.198960:6f8da0d4-e7c5-416e-8be9-02f6a404882b"
+                    }],
+                    "marked_for_not_publication": false,
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "<b>Leider besteht nicht die M\u00f6glichkeit eigene dpa-Videos oder Audios bzw. .pdfs hochzuladen vom Desktop hochzuladen.</b>",
+                    "type": "text",
+                    "unique_id": 146,
+                    "unique_name": "#146",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T13:37:49+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T13:37:49.219074:bba6e98e-8e7c-44ae-ba55-f07bc8349d37",
+                "type": "text"
+            }],
+            "role": "grpRole:Main"
+        }],
+        "guid": "urn:newsml:localhost:2016-03-29T10:34:18.198960:6f8da0d4-e7c5-416e-8be9-02f6a404882b",
+        "highlight": false,
+        "language": "en",
+        "marked_for_not_publication": false,
+        "more_coming": false,
+        "operation": "update",
+        "order": 33,
+        "original_creator": "56cad43adfc3f600800d2b97",
+        "particular_type": "post",
+        "place": [],
+        "post_status": "open",
+        "priority": 3,
+        "published_date": "2016-03-29T10:34:18+00:00",
+        "publisher": {
+            "_created": "2016-02-22T09:26:18+00:00",
+            "_etag": "4ec12d6f5cb5b8dad6776c2ed17baee1f27f5500",
+            "_id": "56cad43adfc3f600800d2b97",
+            "_updated": "2016-03-29T10:12:16+00:00",
+            "active_privileges": {
+                "archive": 1,
+                "blogs": 1,
+                "desks": 1,
+                "global_preferences": 1,
+                "groups": 1,
+                "hold": 1,
+                "ingest": 1,
+                "ingest_providers": 1,
+                "legal_archive": 1,
+                "metadata_uniquename": 1,
+                "posts": 1,
+                "publish_post": 1,
+                "request_membership": 1,
+                "restore": 1,
+                "rewrite": 1,
+                "roles": 1,
+                "saved_searches": 1,
+                "spike": 1,
+                "submit_post": 1,
+                "tasks": 1,
+                "unlock": 1,
+                "unspike": 1,
+                "users": 1
+            },
+            "avatar": "56e6cdea4f4cb600e86928ae",
+            "display_name": "dpa \u30fblive Desk",
+            "email": "sueleyman.artiisik@dpa-info.com",
+            "first_name": "dpa \u30fblive",
+            "is_active": true,
+            "is_enabled": true,
+            "last_name": "Desk",
+            "needs_activation": false,
+            "picture_url": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/a4e7b72c7955fb9151af778dd07eaa3ae50cab3a5491e22a972c4dc1a3d87dee",
+            "role": "54e64cde1024542de2649be9",
+            "session_preferences": {
+                "56fa53740e8fda00f31bbf13": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa55570e8fda00e9a83ab1": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                }
+            },
+            "sign_off": "art",
+            "user_preferences": {
+                "agg:view": {
+                    "active": {}
+                },
+                "archive:view": {
+                    "allowed": ["mgrid", "compact"],
+                    "category": "archive",
+                    "default": "mgrid",
+                    "label": "Users archive view format",
+                    "type": "string",
+                    "view": "mgrid"
+                },
+                "article:default:place": {
+                    "category": "article_defaults",
+                    "label": "Place",
+                    "place": [],
+                    "type": "list"
+                },
+                "categories:preferred": {
+                    "category": "categories",
+                    "label": "Preferred Categories",
+                    "selected": {},
+                    "type": "dict"
+                },
+                "dashboard:ingest": {
+                    "providers": []
+                },
+                "dateline:located": {
+                    "category": "article_defaults",
+                    "label": "Located",
+                    "type": "dict"
+                },
+                "editor:theme": {
+                    "theme": "",
+                    "type": "string"
+                },
+                "email:notification": {
+                    "category": "notifications",
+                    "default": true,
+                    "enabled": true,
+                    "label": "Send notifications via email",
+                    "type": "bool"
+                },
+                "feature:preview": {
+                    "category": "feature",
+                    "default": false,
+                    "enabled": false,
+                    "label": "Enable Feature Preview",
+                    "type": "bool"
+                },
+                "templates:recent": {},
+                "workqueue:items": {
+                    "items": []
+                }
+            },
+            "user_type": "administrator",
+            "username": "sartiisik"
+        },
+        "pubstatus": "usable",
+        "sign_off": "art",
+        "source": "Liveblog",
+        "state": "draft",
+        "sticky": false,
+        "type": "composite",
+        "unique_id": 128,
+        "unique_name": "#128",
+        "urgency": 3,
+        "version": 2,
+        "version_creator": "56cad43adfc3f600800d2b97",
+        "versioncreated": "2016-03-29T13:37:49+00:00"
+    }, {
+        "_created": "2016-03-29T10:26:44+00:00",
+        "_current_version": 2,
+        "_etag": "1e4e72a800af59c6eb10611f80bc8db31371ec78",
+        "_id": "urn:newsml:localhost:2016-03-29T10:26:44.372590:5a61b045-fac1-4d61-ad82-70aa7548dafd",
+        "_links": {
+            "self": {
+                "href": "/posts/urn:newsml:localhost:2016-03-29T10:26:44.372590:5a61b045-fac1-4d61-ad82-70aa7548dafd",
+                "title": "Posts"
+            }
+        },
+        "_type": "archive",
+        "_updated": "2016-03-29T13:38:48+00:00",
+        "blog": "56c5b34120dc360081f8e518",
+        "dateline": {
+            "date": "2016-03-29T10:26:44+00:00",
+            "located": null,
+            "source": "SF",
+            "text": null
+        },
+        "deleted": false,
+        "event_id": "tag:localhost:2016:fdc1e6be-e95c-417a-8f0d-fa9930e705c7",
+        "expiry": "2016-04-28T13:38:48+00:00",
+        "family_id": "urn:newsml:localhost:2016-03-29T10:26:44.372590:5a61b045-fac1-4d61-ad82-70aa7548dafd",
+        "firstcreated": "2016-03-29T10:26:44+00:00",
+        "groups": [{
+            "id": "root",
+            "refs": [{
+                "idRef": "main"
+            }],
+            "role": "grpRole:NEP"
+        }, {
+            "id": "main",
+            "refs": [{
+                "guid": "urn:newsml:localhost:2016-03-29T13:38:48.611186:8ba3a88d-a03a-4645-998c-cb1ae30943c7",
+                "item": {
+                    "_created": "2016-03-29T13:38:48+00:00",
+                    "_current_version": 1,
+                    "_etag": "b1acba0dc5c4b8435ea5fcadaca98d80777281a5",
+                    "_id": "urn:newsml:localhost:2016-03-29T13:38:48.611186:8ba3a88d-a03a-4645-998c-cb1ae30943c7",
+                    "_updated": "2016-03-29T13:38:48+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T13:38:48+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:7834a1a0-700e-42d2-9724-2f0c55298bde",
+                    "expiry": "2016-04-28T13:38:48+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T13:38:48.611186:8ba3a88d-a03a-4645-998c-cb1ae30943c7",
+                    "firstcreated": "2016-03-29T13:38:48+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T13:38:48.611186:8ba3a88d-a03a-4645-998c-cb1ae30943c7",
+                    "item_type": "text",
+                    "language": "en",
+                    "linked_in_packages": [{
+                        "package": "urn:newsml:localhost:2016-03-29T10:26:44.372590:5a61b045-fac1-4d61-ad82-70aa7548dafd"
+                    }],
+                    "marked_for_not_publication": false,
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "Facebook-Post mit Text dr\u00fcber. <b>K\u00f6nnen wir die Breite hier \u00e4ndern? Links und rechts ist in der Live-Ansicht viel wei\u00dfe Fl\u00e4che...</b>",
+                    "type": "text",
+                    "unique_id": 147,
+                    "unique_name": "#147",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T13:38:48+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T13:38:48.611186:8ba3a88d-a03a-4645-998c-cb1ae30943c7",
+                "type": "text"
+            }, {
+                "guid": "urn:newsml:localhost:2016-03-29T13:38:48.678302:63c1c330-c614-444d-b6d7-c277ca1c8377",
+                "item": {
+                    "_created": "2016-03-29T13:38:48+00:00",
+                    "_current_version": 1,
+                    "_etag": "8bcc830dcd826c9c81eee610ea4cddd73de27e4f",
+                    "_id": "urn:newsml:localhost:2016-03-29T13:38:48.678302:63c1c330-c614-444d-b6d7-c277ca1c8377",
+                    "_updated": "2016-03-29T13:38:48+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T13:38:48+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:008c77c5-4c67-4c0c-9eae-eed958870852",
+                    "expiry": "2016-04-28T13:38:48+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T13:38:48.678302:63c1c330-c614-444d-b6d7-c277ca1c8377",
+                    "firstcreated": "2016-03-29T13:38:48+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T13:38:48.678302:63c1c330-c614-444d-b6d7-c277ca1c8377",
+                    "item_type": "embed",
+                    "language": "en",
+                    "linked_in_packages": [{
+                        "package": "urn:newsml:localhost:2016-03-29T10:26:44.372590:5a61b045-fac1-4d61-ad82-70aa7548dafd"
+                    }],
+                    "marked_for_not_publication": false,
+                    "meta": {
+                        "_created": "2016-03-29T10:26:44+00:00",
+                        "_current_version": 1,
+                        "_etag": "0b8a0a31dabda15df6b59284921a7464f085aff2",
+                        "_id": "urn:newsml:localhost:2016-03-29T10:26:44.293275:9c57b58f-e47e-4eae-ada0-c222dd36bb84",
+                        "_updated": "2016-03-29T10:26:44+00:00",
+                        "author_name": "spiegelonline",
+                        "author_url": "https://www.facebook.com/spiegelonline",
+                        "blog": "56c5b34120dc360081f8e518",
+                        "credit": "Facebook | by spiegelonline",
+                        "dateline": {
+                            "date": "2016-03-29T10:26:44+00:00",
+                            "located": null,
+                            "source": "SF",
+                            "text": null
+                        },
+                        "event_id": "tag:localhost:2016:0c62892b-ce55-4678-ad38-9f4ad80d4651",
+                        "expiry": "2016-04-28T10:26:44+00:00",
+                        "family_id": "urn:newsml:localhost:2016-03-29T10:26:44.293275:9c57b58f-e47e-4eae-ada0-c222dd36bb84",
+                        "firstcreated": "2016-03-29T10:26:44+00:00",
+                        "guid": "urn:newsml:localhost:2016-03-29T10:26:44.293275:9c57b58f-e47e-4eae-ada0-c222dd36bb84",
+                        "html": "<script type=\"text/javascript\" src=\"https://connect.facebook.net/en_US/all.js#xfbml=1&status=0&appId=\"></script><div id=\"_my1sipi6s\"><div class=\"fb-post\" data-width=\"350\" data-href=\"https://www.facebook.com/spiegelonline/posts/10154078322109869\"><div class=\"fb-xfbml-parse-ignore\"><a href=\"https://www.facebook.com/spiegelonline/posts/10154078322109869\">Post</a> by <a href=\"https://www.facebook.com/spiegelonline\">spiegelonline</a>.</div></div></div><script>  if(window.FB !== undefined) {    window.FB.XFBML.parse(document.getElementById(\"_my1sipi6s\"));  }</script>",
+                        "item_type": "embed",
+                        "language": "en",
+                        "linked_in_packages": [{
+                            "package": "urn:newsml:localhost:2016-03-29T10:26:44.372590:5a61b045-fac1-4d61-ad82-70aa7548dafd"
+                        }],
+                        "marked_for_not_publication": false,
+                        "meta": {
+                            "author_name": "spiegelonline",
+                            "author_url": "https://www.facebook.com/spiegelonline",
+                            "html": "<script type=\"text/javascript\" src=\"https://connect.facebook.net/en_US/all.js#xfbml=1&status=0&appId=\"></script><div id=\"_my1sipi6s\"><div class=\"fb-post\" data-width=\"350\" data-href=\"https://www.facebook.com/spiegelonline/posts/10154078322109869\"><div class=\"fb-xfbml-parse-ignore\"><a href=\"https://www.facebook.com/spiegelonline/posts/10154078322109869\">Post</a> by <a href=\"https://www.facebook.com/spiegelonline\">spiegelonline</a>.</div></div></div><script>  if(window.FB !== undefined) {    window.FB.XFBML.parse(document.getElementById(\"_my1sipi6s\"));  }</script>",
+                            "original_url": "https://www.facebook.com/spiegelonline/posts/10154078322109869",
+                            "provider_name": "Facebook",
+                            "provider_url": "http://www.facebook.com",
+                            "type": "rich",
+                            "version": "1.0"
+                        },
+                        "more_coming": false,
+                        "operation": "create",
+                        "original_creator": "56cad43adfc3f600800d2b97",
+                        "original_url": "https://www.facebook.com/spiegelonline/posts/10154078322109869",
+                        "particular_type": "item",
+                        "place": [],
+                        "priority": 3,
+                        "provider_name": "Facebook",
+                        "provider_url": "http://www.facebook.com",
+                        "pubstatus": "usable",
+                        "sign_off": "art",
+                        "source": "Liveblog",
+                        "state": "draft",
+                        "text": "<div class=\"liveblog--card\">\n  <div class=\"st-embed-block embed-preview\"><script type=\"text/javascript\" src=\"https://connect.facebook.net/en_US/all.js#xfbml=1&amp;status=0&amp;appId=\"></script><div id=\"_my1sipi6s\"><div class=\"fb-post\" data-width=\"350\" data-href=\"https://www.facebook.com/spiegelonline/posts/10154078322109869\"><div class=\"fb-xfbml-parse-ignore\"><a href=\"https://www.facebook.com/spiegelonline/posts/10154078322109869\">Post</a> by <a href=\"https://www.facebook.com/spiegelonline\">spiegelonline</a>.</div></div></div><script>  if(window.FB !== undefined) {    window.FB.XFBML.parse(document.getElementById(\"_my1sipi6s\"));  }</script></div>\n  <div class=\"hidden st-embed-block cover-preview-handler\">\n    <div class=\"st-embed-block cover-preview\"></div>\n  </div>\n  <div class=\"st-embed-block title-preview\"></div>\n  <div class=\"st-embed-block description-preview\"></div>\n  <div class=\"st-embed-block credit-preview\">Facebook | by <a href=\"https://www.facebook.com/spiegelonline\" target=\"_blank\">spiegelonline</a></div>\n  \n",
+                        "type": "rich",
+                        "unique_id": 119,
+                        "unique_name": "#119",
+                        "urgency": 3,
+                        "version": "1.0",
+                        "version_creator": "56cad43adfc3f600800d2b97",
+                        "versioncreated": "2016-03-29T10:26:44+00:00"
+                    },
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "<div class=\"liveblog--card\">\n  <div class=\"st-embed-block embed-preview\"><script type=\"text/javascript\" src=\"https://connect.facebook.net/en_US/all.js#xfbml=1&amp;status=0&amp;appId=\"></script><div id=\"_my1sipi6s\"><div class=\"fb-post\" data-width=\"350\" data-href=\"https://www.facebook.com/spiegelonline/posts/10154078322109869\"><div class=\"fb-xfbml-parse-ignore\"><a href=\"https://www.facebook.com/spiegelonline/posts/10154078322109869\">Post</a> by <a href=\"https://www.facebook.com/spiegelonline\">spiegelonline</a>.</div></div></div><script>  if(window.FB !== undefined) {    window.FB.XFBML.parse(document.getElementById(\"_my1sipi6s\"));  }</script></div>\n  <div class=\"hidden st-embed-block cover-preview-handler\">\n    <div class=\"st-embed-block cover-preview\"></div>\n  </div>\n  <div class=\"st-embed-block title-preview\"></div>\n  <div class=\"st-embed-block description-preview\"></div>\n  <div class=\"st-embed-block credit-preview\">Facebook | by <a href=\"https://www.facebook.com/spiegelonline\" target=\"_blank\">spiegelonline</a></div>\n  \n",
+                    "type": "text",
+                    "unique_id": 148,
+                    "unique_name": "#148",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T13:38:48+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T13:38:48.678302:63c1c330-c614-444d-b6d7-c277ca1c8377",
+                "type": "text"
+            }],
+            "role": "grpRole:Main"
+        }],
+        "guid": "urn:newsml:localhost:2016-03-29T10:26:44.372590:5a61b045-fac1-4d61-ad82-70aa7548dafd",
+        "highlight": false,
+        "language": "en",
+        "marked_for_not_publication": false,
+        "more_coming": false,
+        "operation": "update",
+        "order": 30,
+        "original_creator": "56cad43adfc3f600800d2b97",
+        "particular_type": "post",
+        "place": [],
+        "post_status": "open",
+        "priority": 3,
+        "published_date": "2016-03-29T10:26:44+00:00",
+        "publisher": {
+            "_created": "2016-02-22T09:26:18+00:00",
+            "_etag": "4ec12d6f5cb5b8dad6776c2ed17baee1f27f5500",
+            "_id": "56cad43adfc3f600800d2b97",
+            "_updated": "2016-03-29T10:12:16+00:00",
+            "active_privileges": {
+                "archive": 1,
+                "blogs": 1,
+                "desks": 1,
+                "global_preferences": 1,
+                "groups": 1,
+                "hold": 1,
+                "ingest": 1,
+                "ingest_providers": 1,
+                "legal_archive": 1,
+                "metadata_uniquename": 1,
+                "posts": 1,
+                "publish_post": 1,
+                "request_membership": 1,
+                "restore": 1,
+                "rewrite": 1,
+                "roles": 1,
+                "saved_searches": 1,
+                "spike": 1,
+                "submit_post": 1,
+                "tasks": 1,
+                "unlock": 1,
+                "unspike": 1,
+                "users": 1
+            },
+            "avatar": "56e6cdea4f4cb600e86928ae",
+            "display_name": "dpa \u30fblive Desk",
+            "email": "sueleyman.artiisik@dpa-info.com",
+            "first_name": "dpa \u30fblive",
+            "is_active": true,
+            "is_enabled": true,
+            "last_name": "Desk",
+            "needs_activation": false,
+            "picture_url": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/a4e7b72c7955fb9151af778dd07eaa3ae50cab3a5491e22a972c4dc1a3d87dee",
+            "role": "54e64cde1024542de2649be9",
+            "session_preferences": {
+                "56fa53740e8fda00f31bbf13": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa55570e8fda00e9a83ab1": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                }
+            },
+            "sign_off": "art",
+            "user_preferences": {
+                "agg:view": {
+                    "active": {}
+                },
+                "archive:view": {
+                    "allowed": ["mgrid", "compact"],
+                    "category": "archive",
+                    "default": "mgrid",
+                    "label": "Users archive view format",
+                    "type": "string",
+                    "view": "mgrid"
+                },
+                "article:default:place": {
+                    "category": "article_defaults",
+                    "label": "Place",
+                    "place": [],
+                    "type": "list"
+                },
+                "categories:preferred": {
+                    "category": "categories",
+                    "label": "Preferred Categories",
+                    "selected": {},
+                    "type": "dict"
+                },
+                "dashboard:ingest": {
+                    "providers": []
+                },
+                "dateline:located": {
+                    "category": "article_defaults",
+                    "label": "Located",
+                    "type": "dict"
+                },
+                "editor:theme": {
+                    "theme": "",
+                    "type": "string"
+                },
+                "email:notification": {
+                    "category": "notifications",
+                    "default": true,
+                    "enabled": true,
+                    "label": "Send notifications via email",
+                    "type": "bool"
+                },
+                "feature:preview": {
+                    "category": "feature",
+                    "default": false,
+                    "enabled": false,
+                    "label": "Enable Feature Preview",
+                    "type": "bool"
+                },
+                "templates:recent": {},
+                "workqueue:items": {
+                    "items": []
+                }
+            },
+            "user_type": "administrator",
+            "username": "sartiisik"
+        },
+        "pubstatus": "usable",
+        "sign_off": "art",
+        "source": "Liveblog",
+        "state": "draft",
+        "sticky": false,
+        "type": "composite",
+        "unique_id": 120,
+        "unique_name": "#120",
+        "urgency": 3,
+        "version": 2,
+        "version_creator": "56cad43adfc3f600800d2b97",
+        "versioncreated": "2016-03-29T13:38:48+00:00"
+    }, {
+        "_created": "2016-03-29T10:25:51+00:00",
+        "_current_version": 1,
+        "_etag": "012e2877c6ad1321e35fc04a53d86bbfd94325f6",
+        "_id": "urn:newsml:localhost:2016-03-29T10:25:51.285065:5d68e48a-402a-4dce-811f-ce98fe0f33b3",
+        "_links": {
+            "self": {
+                "href": "/posts/urn:newsml:localhost:2016-03-29T10:25:51.285065:5d68e48a-402a-4dce-811f-ce98fe0f33b3",
+                "title": "Posts"
+            }
+        },
+        "_type": "archive",
+        "_updated": "2016-03-29T10:25:51+00:00",
+        "blog": "56c5b34120dc360081f8e518",
+        "dateline": {
+            "date": "2016-03-29T10:25:51+00:00",
+            "located": null,
+            "source": "SF",
+            "text": null
+        },
+        "deleted": false,
+        "event_id": "tag:localhost:2016:8da4a220-ba28-4c5d-b1f5-e0af36ff2b09",
+        "expiry": "2016-04-28T10:25:51+00:00",
+        "family_id": "urn:newsml:localhost:2016-03-29T10:25:51.285065:5d68e48a-402a-4dce-811f-ce98fe0f33b3",
+        "firstcreated": "2016-03-29T10:25:51+00:00",
+        "groups": [{
+            "id": "root",
+            "refs": [{
+                "idRef": "main"
+            }],
+            "role": "grpRole:NEP"
+        }, {
+            "id": "main",
+            "refs": [{
+                "guid": "urn:newsml:localhost:2016-03-29T10:25:51.181908:b50ffc7a-d181-42ed-af6f-7020f097f63a",
+                "item": {
+                    "_created": "2016-03-29T10:25:51+00:00",
+                    "_current_version": 1,
+                    "_etag": "8bfa62a0f9579cd92ac9ddd40bfc7c9e041e79bb",
+                    "_id": "urn:newsml:localhost:2016-03-29T10:25:51.181908:b50ffc7a-d181-42ed-af6f-7020f097f63a",
+                    "_updated": "2016-03-29T10:25:51+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T10:25:51+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:6962e445-23a3-4be0-9c4c-295a5fb5dccf",
+                    "expiry": "2016-04-28T10:25:51+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T10:25:51.181908:b50ffc7a-d181-42ed-af6f-7020f097f63a",
+                    "firstcreated": "2016-03-29T10:25:51+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T10:25:51.181908:b50ffc7a-d181-42ed-af6f-7020f097f63a",
+                    "item_type": "text",
+                    "language": "en",
+                    "linked_in_packages": [{
+                        "package": "urn:newsml:localhost:2016-03-29T10:25:51.285065:5d68e48a-402a-4dce-811f-ce98fe0f33b3"
+                    }],
+                    "marked_for_not_publication": false,
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "Facebook-Video mit Text \u00fcber dem Post.",
+                    "type": "text",
+                    "unique_id": 115,
+                    "unique_name": "#115",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T10:25:51+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T10:25:51.181908:b50ffc7a-d181-42ed-af6f-7020f097f63a",
+                "type": "text"
+            }, {
+                "guid": "urn:newsml:localhost:2016-03-29T10:25:51.184879:6c591fa1-8f07-413d-be1f-e5c85e250f0d",
+                "item": {
+                    "_created": "2016-03-29T10:25:51+00:00",
+                    "_current_version": 1,
+                    "_etag": "61b470eea417c2bede80a954e38aba61620c9af2",
+                    "_id": "urn:newsml:localhost:2016-03-29T10:25:51.184879:6c591fa1-8f07-413d-be1f-e5c85e250f0d",
+                    "_updated": "2016-03-29T10:25:51+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T10:25:51+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:35cecdc7-1b3a-4eb4-acb4-b2b5024db6b4",
+                    "expiry": "2016-04-28T10:25:51+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T10:25:51.184879:6c591fa1-8f07-413d-be1f-e5c85e250f0d",
+                    "firstcreated": "2016-03-29T10:25:51+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T10:25:51.184879:6c591fa1-8f07-413d-be1f-e5c85e250f0d",
+                    "item_type": "embed",
+                    "language": "en",
+                    "linked_in_packages": [{
+                        "package": "urn:newsml:localhost:2016-03-29T10:25:51.285065:5d68e48a-402a-4dce-811f-ce98fe0f33b3"
+                    }],
+                    "marked_for_not_publication": false,
+                    "meta": {
+                        "height": 197,
+                        "html": "<iframe class=\"embedly-embed\" src=\"//cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.facebook.com%2Fvideo%2Fembed%3Fvideo_id%3D1686526368268755&url=https%3A%2F%2Fwww.facebook.com%2Fbuzzfeednifty%2Fvideos%2F1686526368268755%2F&image=https%3A%2F%2Fscontent.xx.fbcdn.net%2Fhvthumb-xap1%2Fv%2Ft15.0-10%2Fs110x80%2F12378257_1747929968826562_571665723_n.jpg%3Foh%3Dfba5dc46fd4dcad424f4b742efd3a667%26oe%3D578AB97E&key=d7e3b7a7ee1f4c809024dd036d2e2eea&type=text%2Fhtml&schema=facebook\" width=\"350\" height=\"197\" scrolling=\"no\" frameborder=\"0\" allowfullscreen></iframe></div><script>  if(window.FB !== undefined) {    window.FB.XFBML.parse(document.getElementById(\"_uc2dm8l5g\"));  }</script>",
+                        "original_url": "https://www.facebook.com/buzzfeednifty/videos/1686526368268755/",
+                        "provider_name": "Facebook",
+                        "provider_url": "http://www.facebook.com",
+                        "thumbnail_height": 61,
+                        "thumbnail_url": "https://scontent.xx.fbcdn.net/hvthumb-xap1/v/t15.0-10/s110x80/12378257_1747929968826562_571665723_n.jpg?oh=fba5dc46fd4dcad424f4b742efd3a667&oe=578AB97E",
+                        "thumbnail_width": 110,
+                        "type": "video",
+                        "version": "1.0",
+                        "width": 350
+                    },
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "<div class=\"liveblog--card\">\n  <div class=\"st-embed-block embed-preview\"><iframe class=\"embedly-embed\" src=\"//cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.facebook.com%2Fvideo%2Fembed%3Fvideo_id%3D1686526368268755&amp;url=https%3A%2F%2Fwww.facebook.com%2Fbuzzfeednifty%2Fvideos%2F1686526368268755%2F&amp;image=https%3A%2F%2Fscontent.xx.fbcdn.net%2Fhvthumb-xap1%2Fv%2Ft15.0-10%2Fs110x80%2F12378257_1747929968826562_571665723_n.jpg%3Foh%3Dfba5dc46fd4dcad424f4b742efd3a667%26oe%3D578AB97E&amp;key=d7e3b7a7ee1f4c809024dd036d2e2eea&amp;type=text%2Fhtml&amp;schema=facebook\" width=\"350\" height=\"197\" scrolling=\"no\" frameborder=\"0\" allowfullscreen=\"\"></iframe><script>  if(window.FB !== undefined) {    window.FB.XFBML.parse(document.getElementById(\"_uc2dm8l5g\"));  }</script></div>\n  <div class=\"hidden st-embed-block cover-preview-handler\">\n    <div class=\"st-embed-block cover-preview\"></div>\n  </div>\n  <div class=\"st-embed-block title-preview\"></div>\n  <div class=\"st-embed-block description-preview\"></div>\n  <div class=\"st-embed-block credit-preview\">Facebook</div>\n  \n",
+                    "type": "text",
+                    "unique_id": 116,
+                    "unique_name": "#116",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T10:25:51+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T10:25:51.184879:6c591fa1-8f07-413d-be1f-e5c85e250f0d",
+                "type": "text"
+            }],
+            "role": "grpRole:Main"
+        }],
+        "guid": "urn:newsml:localhost:2016-03-29T10:25:51.285065:5d68e48a-402a-4dce-811f-ce98fe0f33b3",
+        "highlight": false,
+        "language": "en",
+        "marked_for_not_publication": false,
+        "more_coming": false,
+        "operation": "create",
+        "order": 29,
+        "original_creator": "56cad43adfc3f600800d2b97",
+        "particular_type": "post",
+        "place": [],
+        "post_status": "open",
+        "priority": 3,
+        "published_date": "2016-03-29T10:25:51+00:00",
+        "publisher": {
+            "_created": "2016-02-22T09:26:18+00:00",
+            "_etag": "4ec12d6f5cb5b8dad6776c2ed17baee1f27f5500",
+            "_id": "56cad43adfc3f600800d2b97",
+            "_updated": "2016-03-29T10:12:16+00:00",
+            "active_privileges": {
+                "archive": 1,
+                "blogs": 1,
+                "desks": 1,
+                "global_preferences": 1,
+                "groups": 1,
+                "hold": 1,
+                "ingest": 1,
+                "ingest_providers": 1,
+                "legal_archive": 1,
+                "metadata_uniquename": 1,
+                "posts": 1,
+                "publish_post": 1,
+                "request_membership": 1,
+                "restore": 1,
+                "rewrite": 1,
+                "roles": 1,
+                "saved_searches": 1,
+                "spike": 1,
+                "submit_post": 1,
+                "tasks": 1,
+                "unlock": 1,
+                "unspike": 1,
+                "users": 1
+            },
+            "avatar": "56e6cdea4f4cb600e86928ae",
+            "display_name": "dpa \u30fblive Desk",
+            "email": "sueleyman.artiisik@dpa-info.com",
+            "first_name": "dpa \u30fblive",
+            "is_active": true,
+            "is_enabled": true,
+            "last_name": "Desk",
+            "needs_activation": false,
+            "picture_url": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/a4e7b72c7955fb9151af778dd07eaa3ae50cab3a5491e22a972c4dc1a3d87dee",
+            "role": "54e64cde1024542de2649be9",
+            "session_preferences": {
+                "56fa53740e8fda00f31bbf13": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa55570e8fda00e9a83ab1": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                }
+            },
+            "sign_off": "art",
+            "user_preferences": {
+                "agg:view": {
+                    "active": {}
+                },
+                "archive:view": {
+                    "allowed": ["mgrid", "compact"],
+                    "category": "archive",
+                    "default": "mgrid",
+                    "label": "Users archive view format",
+                    "type": "string",
+                    "view": "mgrid"
+                },
+                "article:default:place": {
+                    "category": "article_defaults",
+                    "label": "Place",
+                    "place": [],
+                    "type": "list"
+                },
+                "categories:preferred": {
+                    "category": "categories",
+                    "label": "Preferred Categories",
+                    "selected": {},
+                    "type": "dict"
+                },
+                "dashboard:ingest": {
+                    "providers": []
+                },
+                "dateline:located": {
+                    "category": "article_defaults",
+                    "label": "Located",
+                    "type": "dict"
+                },
+                "editor:theme": {
+                    "theme": "",
+                    "type": "string"
+                },
+                "email:notification": {
+                    "category": "notifications",
+                    "default": true,
+                    "enabled": true,
+                    "label": "Send notifications via email",
+                    "type": "bool"
+                },
+                "feature:preview": {
+                    "category": "feature",
+                    "default": false,
+                    "enabled": false,
+                    "label": "Enable Feature Preview",
+                    "type": "bool"
+                },
+                "templates:recent": {},
+                "workqueue:items": {
+                    "items": []
+                }
+            },
+            "user_type": "administrator",
+            "username": "sartiisik"
+        },
+        "pubstatus": "usable",
+        "sign_off": "art",
+        "source": "Liveblog",
+        "state": "draft",
+        "sticky": false,
+        "type": "composite",
+        "unique_id": 117,
+        "unique_name": "#117",
+        "urgency": 3,
+        "version_creator": "56cad43adfc3f600800d2b97",
+        "versioncreated": "2016-03-29T10:25:51+00:00"
+    }, {
+        "_created": "2016-03-29T10:24:28+00:00",
+        "_current_version": 1,
+        "_etag": "d0d95ece6ac0a241ab83ca3c0858184034dd754a",
+        "_id": "urn:newsml:localhost:2016-03-29T10:24:28.790195:d0738252-85e7-45c0-bc84-139340c22cfc",
+        "_links": {
+            "self": {
+                "href": "/posts/urn:newsml:localhost:2016-03-29T10:24:28.790195:d0738252-85e7-45c0-bc84-139340c22cfc",
+                "title": "Posts"
+            }
+        },
+        "_type": "archive",
+        "_updated": "2016-03-29T10:24:28+00:00",
+        "blog": "56c5b34120dc360081f8e518",
+        "dateline": {
+            "date": "2016-03-29T10:24:28+00:00",
+            "located": null,
+            "source": "SF",
+            "text": null
+        },
+        "deleted": false,
+        "event_id": "tag:localhost:2016:5461d9d2-294e-4f86-8b0a-59cab790bd90",
+        "expiry": "2016-04-28T10:24:28+00:00",
+        "family_id": "urn:newsml:localhost:2016-03-29T10:24:28.790195:d0738252-85e7-45c0-bc84-139340c22cfc",
+        "firstcreated": "2016-03-29T10:24:28+00:00",
+        "groups": [{
+            "id": "root",
+            "refs": [{
+                "idRef": "main"
+            }],
+            "role": "grpRole:NEP"
+        }, {
+            "id": "main",
+            "refs": [{
+                "guid": "urn:newsml:localhost:2016-03-29T10:24:28.699847:a4c17ffd-f3e7-4073-bddb-b619c5f3347a",
+                "item": {
+                    "_created": "2016-03-29T10:24:28+00:00",
+                    "_current_version": 1,
+                    "_etag": "ce75e85cf4eaa59e2a36315603f85518f77eb179",
+                    "_id": "urn:newsml:localhost:2016-03-29T10:24:28.699847:a4c17ffd-f3e7-4073-bddb-b619c5f3347a",
+                    "_updated": "2016-03-29T10:24:28+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T10:24:28+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:54358009-9cc9-4600-9200-3b9d328fc18a",
+                    "expiry": "2016-04-28T10:24:28+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T10:24:28.699847:a4c17ffd-f3e7-4073-bddb-b619c5f3347a",
+                    "firstcreated": "2016-03-29T10:24:28+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T10:24:28.699847:a4c17ffd-f3e7-4073-bddb-b619c5f3347a",
+                    "item_type": "text",
+                    "language": "en",
+                    "linked_in_packages": [{
+                        "package": "urn:newsml:localhost:2016-03-29T10:24:28.790195:d0738252-85e7-45c0-bc84-139340c22cfc"
+                    }],
+                    "marked_for_not_publication": false,
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "YouTube mit Text \u00fcber dem Post.",
+                    "type": "text",
+                    "unique_id": 112,
+                    "unique_name": "#112",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T10:24:28+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T10:24:28.699847:a4c17ffd-f3e7-4073-bddb-b619c5f3347a",
+                "type": "text"
+            }, {
+                "guid": "urn:newsml:localhost:2016-03-29T10:24:28.726980:4fc70e50-32bf-4e9c-a1e4-0a8bde3f4fca",
+                "item": {
+                    "_created": "2016-03-29T10:24:28+00:00",
+                    "_current_version": 1,
+                    "_etag": "69c7b3fdc14bdf53b0b185c69e37350202fd0011",
+                    "_id": "urn:newsml:localhost:2016-03-29T10:24:28.726980:4fc70e50-32bf-4e9c-a1e4-0a8bde3f4fca",
+                    "_updated": "2016-03-29T10:24:28+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T10:24:28+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:9038edf2-fe8b-4dac-b5de-e3a9e51d5358",
+                    "expiry": "2016-04-28T10:24:28+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T10:24:28.726980:4fc70e50-32bf-4e9c-a1e4-0a8bde3f4fca",
+                    "firstcreated": "2016-03-29T10:24:28+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T10:24:28.726980:4fc70e50-32bf-4e9c-a1e4-0a8bde3f4fca",
+                    "item_type": "embed",
+                    "language": "en",
+                    "linked_in_packages": [{
+                        "package": "urn:newsml:localhost:2016-03-29T10:24:28.790195:d0738252-85e7-45c0-bc84-139340c22cfc"
+                    }],
+                    "marked_for_not_publication": false,
+                    "meta": {
+                        "html": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/VZZqGT7Ug84?rel=0\" frameborder=\"0\" allowfullscreen></iframe>"
+                    },
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "<div class=\"liveblog--card\">\n  <div class=\"st-embed-block embed-preview\"><iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/VZZqGT7Ug84?rel=0\" frameborder=\"0\" allowfullscreen=\"\"></iframe></div>\n  <div class=\"hidden st-embed-block cover-preview-handler\">\n    <div class=\"st-embed-block cover-preview\"></div>\n  </div>\n  <div class=\"st-embed-block title-preview\"></div>\n  <div class=\"st-embed-block description-preview\"></div>\n  <div class=\"st-embed-block credit-preview\"></div>\n  <a class=\"hidden st-embed-block link-preview\" target=\"_blank\"></a>\n",
+                    "type": "text",
+                    "unique_id": 113,
+                    "unique_name": "#113",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T10:24:28+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T10:24:28.726980:4fc70e50-32bf-4e9c-a1e4-0a8bde3f4fca",
+                "type": "text"
+            }],
+            "role": "grpRole:Main"
+        }],
+        "guid": "urn:newsml:localhost:2016-03-29T10:24:28.790195:d0738252-85e7-45c0-bc84-139340c22cfc",
+        "highlight": false,
+        "language": "en",
+        "marked_for_not_publication": false,
+        "more_coming": false,
+        "operation": "create",
+        "order": 28,
+        "original_creator": "56cad43adfc3f600800d2b97",
+        "particular_type": "post",
+        "place": [],
+        "post_status": "open",
+        "priority": 3,
+        "published_date": "2016-03-29T10:24:28+00:00",
+        "publisher": {
+            "_created": "2016-02-22T09:26:18+00:00",
+            "_etag": "4ec12d6f5cb5b8dad6776c2ed17baee1f27f5500",
+            "_id": "56cad43adfc3f600800d2b97",
+            "_updated": "2016-03-29T10:12:16+00:00",
+            "active_privileges": {
+                "archive": 1,
+                "blogs": 1,
+                "desks": 1,
+                "global_preferences": 1,
+                "groups": 1,
+                "hold": 1,
+                "ingest": 1,
+                "ingest_providers": 1,
+                "legal_archive": 1,
+                "metadata_uniquename": 1,
+                "posts": 1,
+                "publish_post": 1,
+                "request_membership": 1,
+                "restore": 1,
+                "rewrite": 1,
+                "roles": 1,
+                "saved_searches": 1,
+                "spike": 1,
+                "submit_post": 1,
+                "tasks": 1,
+                "unlock": 1,
+                "unspike": 1,
+                "users": 1
+            },
+            "avatar": "56e6cdea4f4cb600e86928ae",
+            "display_name": "dpa \u30fblive Desk",
+            "email": "sueleyman.artiisik@dpa-info.com",
+            "first_name": "dpa \u30fblive",
+            "is_active": true,
+            "is_enabled": true,
+            "last_name": "Desk",
+            "needs_activation": false,
+            "picture_url": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/a4e7b72c7955fb9151af778dd07eaa3ae50cab3a5491e22a972c4dc1a3d87dee",
+            "role": "54e64cde1024542de2649be9",
+            "session_preferences": {
+                "56fa53740e8fda00f31bbf13": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa55570e8fda00e9a83ab1": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                }
+            },
+            "sign_off": "art",
+            "user_preferences": {
+                "agg:view": {
+                    "active": {}
+                },
+                "archive:view": {
+                    "allowed": ["mgrid", "compact"],
+                    "category": "archive",
+                    "default": "mgrid",
+                    "label": "Users archive view format",
+                    "type": "string",
+                    "view": "mgrid"
+                },
+                "article:default:place": {
+                    "category": "article_defaults",
+                    "label": "Place",
+                    "place": [],
+                    "type": "list"
+                },
+                "categories:preferred": {
+                    "category": "categories",
+                    "label": "Preferred Categories",
+                    "selected": {},
+                    "type": "dict"
+                },
+                "dashboard:ingest": {
+                    "providers": []
+                },
+                "dateline:located": {
+                    "category": "article_defaults",
+                    "label": "Located",
+                    "type": "dict"
+                },
+                "editor:theme": {
+                    "theme": "",
+                    "type": "string"
+                },
+                "email:notification": {
+                    "category": "notifications",
+                    "default": true,
+                    "enabled": true,
+                    "label": "Send notifications via email",
+                    "type": "bool"
+                },
+                "feature:preview": {
+                    "category": "feature",
+                    "default": false,
+                    "enabled": false,
+                    "label": "Enable Feature Preview",
+                    "type": "bool"
+                },
+                "templates:recent": {},
+                "workqueue:items": {
+                    "items": []
+                }
+            },
+            "user_type": "administrator",
+            "username": "sartiisik"
+        },
+        "pubstatus": "usable",
+        "sign_off": "art",
+        "source": "Liveblog",
+        "state": "draft",
+        "sticky": false,
+        "type": "composite",
+        "unique_id": 114,
+        "unique_name": "#114",
+        "urgency": 3,
+        "version_creator": "56cad43adfc3f600800d2b97",
+        "versioncreated": "2016-03-29T10:24:28+00:00"
+    }, {
+        "_created": "2016-03-29T13:35:37+00:00",
+        "_current_version": 2,
+        "_etag": "b6fb95b1f75a7dcd4e8c9e11e2c2c950b15ffeb9",
+        "_id": "urn:newsml:localhost:2016-03-29T13:35:37.166482:cae54227-b8aa-4821-908f-4a0ee44bd267",
+        "_links": {
+            "self": {
+                "href": "/posts/urn:newsml:localhost:2016-03-29T13:35:37.166482:cae54227-b8aa-4821-908f-4a0ee44bd267",
+                "title": "Posts"
+            }
+        },
+        "_type": "archive",
+        "_updated": "2016-03-29T13:36:00+00:00",
+        "blog": "56c5b34120dc360081f8e518",
+        "dateline": {
+            "date": "2016-03-29T13:35:37+00:00",
+            "located": null,
+            "source": "SF",
+            "text": null
+        },
+        "deleted": false,
+        "event_id": "tag:localhost:2016:50a04c9b-efce-4c82-94ca-fc9331b447bf",
+        "expiry": "2016-04-28T13:36:00+00:00",
+        "family_id": "urn:newsml:localhost:2016-03-29T13:35:37.166482:cae54227-b8aa-4821-908f-4a0ee44bd267",
+        "firstcreated": "2016-03-29T13:35:37+00:00",
+        "groups": [{
+            "id": "root",
+            "refs": [{
+                "idRef": "main"
+            }],
+            "role": "grpRole:NEP"
+        }, {
+            "id": "main",
+            "refs": [{
+                "guid": "urn:newsml:localhost:2016-03-29T13:35:37.076014:b42b81ea-d8c2-4747-b910-00ffebbf1ddd",
+                "item": {
+                    "_created": "2016-03-29T13:35:37+00:00",
+                    "_current_version": 1,
+                    "_etag": "4eff810ca1b1b68b5ab072a5848c3248226ba45a",
+                    "_id": "urn:newsml:localhost:2016-03-29T13:35:37.076014:b42b81ea-d8c2-4747-b910-00ffebbf1ddd",
+                    "_updated": "2016-03-29T13:35:37+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T13:35:37+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:4299e08b-a52c-41db-9e8d-4b00b4255b9f",
+                    "expiry": "2016-04-28T13:35:37+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T13:35:37.076014:b42b81ea-d8c2-4747-b910-00ffebbf1ddd",
+                    "firstcreated": "2016-03-29T13:35:37+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T13:35:37.076014:b42b81ea-d8c2-4747-b910-00ffebbf1ddd",
+                    "item_type": "text",
+                    "language": "en",
+                    "linked_in_packages": [],
+                    "marked_for_not_publication": false,
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "Instagram mit Text dr\u00fcber.",
+                    "type": "text",
+                    "unique_id": 142,
+                    "unique_name": "#142",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T13:35:37+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T13:35:37.076014:b42b81ea-d8c2-4747-b910-00ffebbf1ddd",
+                "type": "text"
+            }, {
+                "guid": "urn:newsml:localhost:2016-03-29T13:35:37.082459:b533cd18-b247-4937-914b-16e25ec81a7b",
+                "item": {
+                    "_created": "2016-03-29T13:35:37+00:00",
+                    "_current_version": 1,
+                    "_etag": "598bb4c7151b9641d1230c4990cd075982768793",
+                    "_id": "urn:newsml:localhost:2016-03-29T13:35:37.082459:b533cd18-b247-4937-914b-16e25ec81a7b",
+                    "_updated": "2016-03-29T13:35:37+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T13:35:37+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:94fb0552-b01f-4fa2-8565-5161189773af",
+                    "expiry": "2016-04-28T13:35:37+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T13:35:37.082459:b533cd18-b247-4937-914b-16e25ec81a7b",
+                    "firstcreated": "2016-03-29T13:35:37+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T13:35:37.082459:b533cd18-b247-4937-914b-16e25ec81a7b",
+                    "item_type": "embed",
+                    "language": "en",
+                    "linked_in_packages": [],
+                    "marked_for_not_publication": false,
+                    "meta": {
+                        "html": "<blockquote class=\"instagram-media\" data-instgrm-version=\"6\" style=\" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);\"><div style=\"padding:8px;\"> <div style=\" background:#F8F8F8; line-height:0; margin-top:40px; padding:50.0% 0; text-align:center; width:100%;\"> <div style=\" background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAAGFBMVEUiIiI9PT0eHh4gIB4hIBkcHBwcHBwcHBydr+JQAAAACHRSTlMABA4YHyQsM5jtaMwAAADfSURBVDjL7ZVBEgMhCAQBAf//42xcNbpAqakcM0ftUmFAAIBE81IqBJdS3lS6zs3bIpB9WED3YYXFPmHRfT8sgyrCP1x8uEUxLMzNWElFOYCV6mHWWwMzdPEKHlhLw7NWJqkHc4uIZphavDzA2JPzUDsBZziNae2S6owH8xPmX8G7zzgKEOPUoYHvGz1TBCxMkd3kwNVbU0gKHkx+iZILf77IofhrY1nYFnB/lQPb79drWOyJVa/DAvg9B/rLB4cC+Nqgdz/TvBbBnr6GBReqn/nRmDgaQEej7WhonozjF+Y2I/fZou/qAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;\"></div></div><p style=\" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;\"><a href=\"https://www.instagram.com/p/BDeU9xTAw9V/\" style=\" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;\" target=\"_blank\">Ein von Bernie Sanders (@berniesanders) gepostetes Foto</a> am <time style=\" font-family:Arial,sans-serif; font-size:14px; line-height:17px;\" datetime=\"2016-03-27T22:50:50+00:00\">27. M\u00e4r 2016 um 15:50 Uhr</time></p></div></blockquote><script async defer src=\"//platform.instagram.com/en_US/embeds.js\"></script>"
+                    },
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "<div class=\"liveblog--card\">\n  <div class=\"st-embed-block embed-preview\"><blockquote class=\"instagram-media\" data-instgrm-version=\"6\" style=\" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);\"><div style=\"padding:8px;\"> <div style=\" background:#F8F8F8; line-height:0; margin-top:40px; padding:50.0% 0; text-align:center; width:100%;\"> <div style=\" background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAAGFBMVEUiIiI9PT0eHh4gIB4hIBkcHBwcHBwcHBydr+JQAAAACHRSTlMABA4YHyQsM5jtaMwAAADfSURBVDjL7ZVBEgMhCAQBAf//42xcNbpAqakcM0ftUmFAAIBE81IqBJdS3lS6zs3bIpB9WED3YYXFPmHRfT8sgyrCP1x8uEUxLMzNWElFOYCV6mHWWwMzdPEKHlhLw7NWJqkHc4uIZphavDzA2JPzUDsBZziNae2S6owH8xPmX8G7zzgKEOPUoYHvGz1TBCxMkd3kwNVbU0gKHkx+iZILf77IofhrY1nYFnB/lQPb79drWOyJVa/DAvg9B/rLB4cC+Nqgdz/TvBbBnr6GBReqn/nRmDgaQEej7WhonozjF+Y2I/fZou/qAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;\"></div></div><p style=\" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;\"><a href=\"https://www.instagram.com/p/BDeU9xTAw9V/\" style=\" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;\" target=\"_blank\">Ein von Bernie Sanders (@berniesanders) gepostetes Foto</a> am <time style=\" font-family:Arial,sans-serif; font-size:14px; line-height:17px;\" datetime=\"2016-03-27T22:50:50+00:00\">27. M\u00e4r 2016 um 15:50 Uhr</time></p></div></blockquote><script async=\"\" defer=\"\" src=\"//platform.instagram.com/en_US/embeds.js\"></script></div>\n  <div class=\"hidden st-embed-block cover-preview-handler\">\n    <div class=\"st-embed-block cover-preview\"></div>\n  </div>\n  <div class=\"st-embed-block title-preview\"></div>\n  <div class=\"st-embed-block description-preview\"></div>\n  <div class=\"st-embed-block credit-preview\"></div>\n  <a class=\"hidden st-embed-block link-preview\" target=\"_blank\"></a>\n",
+                    "type": "text",
+                    "unique_id": 143,
+                    "unique_name": "#143",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T13:35:37+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T13:35:37.082459:b533cd18-b247-4937-914b-16e25ec81a7b",
+                "type": "text"
+            }],
+            "role": "grpRole:Main"
+        }],
+        "guid": "urn:newsml:localhost:2016-03-29T13:35:37.166482:cae54227-b8aa-4821-908f-4a0ee44bd267",
+        "highlight": false,
+        "language": "en",
+        "marked_for_not_publication": false,
+        "more_coming": false,
+        "operation": "update",
+        "order": 27.125,
+        "original_creator": "56cad43adfc3f600800d2b97",
+        "particular_type": "post",
+        "place": [],
+        "post_status": "open",
+        "priority": 3,
+        "published_date": "2016-03-29T13:35:37+00:00",
+        "publisher": {
+            "_created": "2016-02-22T09:26:18+00:00",
+            "_etag": "4ec12d6f5cb5b8dad6776c2ed17baee1f27f5500",
+            "_id": "56cad43adfc3f600800d2b97",
+            "_updated": "2016-03-29T10:12:16+00:00",
+            "active_privileges": {
+                "archive": 1,
+                "blogs": 1,
+                "desks": 1,
+                "global_preferences": 1,
+                "groups": 1,
+                "hold": 1,
+                "ingest": 1,
+                "ingest_providers": 1,
+                "legal_archive": 1,
+                "metadata_uniquename": 1,
+                "posts": 1,
+                "publish_post": 1,
+                "request_membership": 1,
+                "restore": 1,
+                "rewrite": 1,
+                "roles": 1,
+                "saved_searches": 1,
+                "spike": 1,
+                "submit_post": 1,
+                "tasks": 1,
+                "unlock": 1,
+                "unspike": 1,
+                "users": 1
+            },
+            "avatar": "56e6cdea4f4cb600e86928ae",
+            "display_name": "dpa \u30fblive Desk",
+            "email": "sueleyman.artiisik@dpa-info.com",
+            "first_name": "dpa \u30fblive",
+            "is_active": true,
+            "is_enabled": true,
+            "last_name": "Desk",
+            "needs_activation": false,
+            "picture_url": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/a4e7b72c7955fb9151af778dd07eaa3ae50cab3a5491e22a972c4dc1a3d87dee",
+            "role": "54e64cde1024542de2649be9",
+            "session_preferences": {
+                "56fa53740e8fda00f31bbf13": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa55570e8fda00e9a83ab1": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa821c0e8fda00e7518415": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                }
+            },
+            "sign_off": "art",
+            "user_preferences": {
+                "agg:view": {
+                    "active": {}
+                },
+                "archive:view": {
+                    "allowed": ["mgrid", "compact"],
+                    "category": "archive",
+                    "default": "mgrid",
+                    "label": "Users archive view format",
+                    "type": "string",
+                    "view": "mgrid"
+                },
+                "article:default:place": {
+                    "category": "article_defaults",
+                    "label": "Place",
+                    "place": [],
+                    "type": "list"
+                },
+                "categories:preferred": {
+                    "category": "categories",
+                    "label": "Preferred Categories",
+                    "selected": {},
+                    "type": "dict"
+                },
+                "dashboard:ingest": {
+                    "providers": []
+                },
+                "dateline:located": {
+                    "category": "article_defaults",
+                    "label": "Located",
+                    "type": "dict"
+                },
+                "editor:theme": {
+                    "theme": "",
+                    "type": "string"
+                },
+                "email:notification": {
+                    "category": "notifications",
+                    "default": true,
+                    "enabled": true,
+                    "label": "Send notifications via email",
+                    "type": "bool"
+                },
+                "feature:preview": {
+                    "category": "feature",
+                    "default": false,
+                    "enabled": false,
+                    "label": "Enable Feature Preview",
+                    "type": "bool"
+                },
+                "templates:recent": {},
+                "workqueue:items": {
+                    "items": []
+                }
+            },
+            "user_type": "administrator",
+            "username": "sartiisik"
+        },
+        "pubstatus": "usable",
+        "sign_off": "art",
+        "source": "Liveblog",
+        "state": "draft",
+        "sticky": false,
+        "type": "composite",
+        "unique_id": 144,
+        "unique_name": "#144",
+        "urgency": 3,
+        "version": 2,
+        "version_creator": "56cad43adfc3f600800d2b97",
+        "versioncreated": "2016-03-29T13:36:00+00:00"
+    }, {
+        "_created": "2016-03-29T10:28:15+00:00",
+        "_current_version": 2,
+        "_etag": "7d10b4d27384a4c816f21abd1083343632ec3101",
+        "_id": "urn:newsml:localhost:2016-03-29T10:28:15.917917:d5fdb802-4e72-48de-b08a-6eb81b553d54",
+        "_links": {
+            "self": {
+                "href": "/posts/urn:newsml:localhost:2016-03-29T10:28:15.917917:d5fdb802-4e72-48de-b08a-6eb81b553d54",
+                "title": "Posts"
+            }
+        },
+        "_type": "archive",
+        "_updated": "2016-03-29T10:29:14+00:00",
+        "blog": "56c5b34120dc360081f8e518",
+        "dateline": {
+            "date": "2016-03-29T10:28:15+00:00",
+            "located": null,
+            "source": "SF",
+            "text": null
+        },
+        "deleted": false,
+        "event_id": "tag:localhost:2016:e5e2a854-fbfa-4a78-ae4b-4f865d66b4aa",
+        "expiry": "2016-04-28T10:29:14+00:00",
+        "family_id": "urn:newsml:localhost:2016-03-29T10:28:15.917917:d5fdb802-4e72-48de-b08a-6eb81b553d54",
+        "firstcreated": "2016-03-29T10:28:15+00:00",
+        "groups": [{
+            "id": "root",
+            "refs": [{
+                "idRef": "main"
+            }],
+            "role": "grpRole:NEP"
+        }, {
+            "id": "main",
+            "refs": [{
+                "guid": "urn:newsml:localhost:2016-03-29T10:28:15.803185:a95d20f6-cd9e-4d1b-9752-af817c755846",
+                "item": {
+                    "_created": "2016-03-29T10:28:15+00:00",
+                    "_current_version": 1,
+                    "_etag": "97e4650a2a919d2c25c82866ceb78d15e81826e7",
+                    "_id": "urn:newsml:localhost:2016-03-29T10:28:15.803185:a95d20f6-cd9e-4d1b-9752-af817c755846",
+                    "_updated": "2016-03-29T10:28:15+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T10:28:15+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:4f0b405a-aca4-4c37-952b-0a2cd9d5d08c",
+                    "expiry": "2016-04-28T10:28:15+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T10:28:15.803185:a95d20f6-cd9e-4d1b-9752-af817c755846",
+                    "firstcreated": "2016-03-29T10:28:15+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T10:28:15.803185:a95d20f6-cd9e-4d1b-9752-af817c755846",
+                    "item_type": "text",
+                    "language": "en",
+                    "linked_in_packages": [],
+                    "marked_for_not_publication": false,
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "Instagram-Video mit Text dar\u00fcber.",
+                    "type": "text",
+                    "unique_id": 121,
+                    "unique_name": "#121",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T10:28:15+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T10:28:15.803185:a95d20f6-cd9e-4d1b-9752-af817c755846",
+                "type": "text"
+            }, {
+                "guid": "urn:newsml:localhost:2016-03-29T10:28:15.837673:e5b248b9-333a-4b35-b529-3aa79491179f",
+                "item": {
+                    "_created": "2016-03-29T10:28:15+00:00",
+                    "_current_version": 1,
+                    "_etag": "b4d80a8b7a4e7ff6f0d0fa0d1f73f0d621e1e705",
+                    "_id": "urn:newsml:localhost:2016-03-29T10:28:15.837673:e5b248b9-333a-4b35-b529-3aa79491179f",
+                    "_updated": "2016-03-29T10:28:15+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T10:28:15+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:470a10c2-c2ba-41fa-ba84-4277e7f0734b",
+                    "expiry": "2016-04-28T10:28:15+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T10:28:15.837673:e5b248b9-333a-4b35-b529-3aa79491179f",
+                    "firstcreated": "2016-03-29T10:28:15+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T10:28:15.837673:e5b248b9-333a-4b35-b529-3aa79491179f",
+                    "item_type": "embed",
+                    "language": "en",
+                    "linked_in_packages": [],
+                    "marked_for_not_publication": false,
+                    "meta": {
+                        "html": "<blockquote class=\"instagram-media\" data-instgrm-version=\"6\" style=\" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);\"><div style=\"padding:8px;\"> <div style=\" background:#F8F8F8; line-height:0; margin-top:40px; padding:50.0% 0; text-align:center; width:100%;\"> <div style=\" background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAAGFBMVEUiIiI9PT0eHh4gIB4hIBkcHBwcHBwcHBydr+JQAAAACHRSTlMABA4YHyQsM5jtaMwAAADfSURBVDjL7ZVBEgMhCAQBAf//42xcNbpAqakcM0ftUmFAAIBE81IqBJdS3lS6zs3bIpB9WED3YYXFPmHRfT8sgyrCP1x8uEUxLMzNWElFOYCV6mHWWwMzdPEKHlhLw7NWJqkHc4uIZphavDzA2JPzUDsBZziNae2S6owH8xPmX8G7zzgKEOPUoYHvGz1TBCxMkd3kwNVbU0gKHkx+iZILf77IofhrY1nYFnB/lQPb79drWOyJVa/DAvg9B/rLB4cC+Nqgdz/TvBbBnr6GBReqn/nRmDgaQEej7WhonozjF+Y2I/fZou/qAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;\"></div></div><p style=\" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;\"><a href=\"https://www.instagram.com/p/BDiECddsoEC/\" style=\" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;\" target=\"_blank\">Ein von Sky News (@skynews) gepostetes Video</a> am <time style=\" font-family:Arial,sans-serif; font-size:14px; line-height:17px;\" datetime=\"2016-03-29T09:39:54+00:00\">29. M\u00e4r 2016 um 2:39 Uhr</time></p></div></blockquote><script async defer src=\"//platform.instagram.com/en_US/embeds.js\"></script>"
+                    },
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "<div class=\"liveblog--card\">\n  <div class=\"st-embed-block embed-preview\"><blockquote class=\"instagram-media\" data-instgrm-version=\"6\" style=\" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);\"><div style=\"padding:8px;\"> <div style=\" background:#F8F8F8; line-height:0; margin-top:40px; padding:50.0% 0; text-align:center; width:100%;\"> <div style=\" background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAAGFBMVEUiIiI9PT0eHh4gIB4hIBkcHBwcHBwcHBydr+JQAAAACHRSTlMABA4YHyQsM5jtaMwAAADfSURBVDjL7ZVBEgMhCAQBAf//42xcNbpAqakcM0ftUmFAAIBE81IqBJdS3lS6zs3bIpB9WED3YYXFPmHRfT8sgyrCP1x8uEUxLMzNWElFOYCV6mHWWwMzdPEKHlhLw7NWJqkHc4uIZphavDzA2JPzUDsBZziNae2S6owH8xPmX8G7zzgKEOPUoYHvGz1TBCxMkd3kwNVbU0gKHkx+iZILf77IofhrY1nYFnB/lQPb79drWOyJVa/DAvg9B/rLB4cC+Nqgdz/TvBbBnr6GBReqn/nRmDgaQEej7WhonozjF+Y2I/fZou/qAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;\"></div></div><p style=\" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;\"><a href=\"https://www.instagram.com/p/BDiECddsoEC/\" style=\" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;\" target=\"_blank\">Ein von Sky News (@skynews) gepostetes Video</a> am <time style=\" font-family:Arial,sans-serif; font-size:14px; line-height:17px;\" datetime=\"2016-03-29T09:39:54+00:00\">29. M\u00e4r 2016 um 2:39 Uhr</time></p></div></blockquote><script async=\"\" defer=\"\" src=\"//platform.instagram.com/en_US/embeds.js\"></script></div>\n  <div class=\"hidden st-embed-block cover-preview-handler\">\n    <div class=\"st-embed-block cover-preview\"></div>\n  </div>\n  <div class=\"st-embed-block title-preview\"></div>\n  <div class=\"st-embed-block description-preview\"></div>\n  <div class=\"st-embed-block credit-preview\"></div>\n  <a class=\"hidden st-embed-block link-preview\" target=\"_blank\"></a>\n",
+                    "type": "text",
+                    "unique_id": 122,
+                    "unique_name": "#122",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T10:28:15+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T10:28:15.837673:e5b248b9-333a-4b35-b529-3aa79491179f",
+                "type": "text"
+            }],
+            "role": "grpRole:Main"
+        }],
+        "guid": "urn:newsml:localhost:2016-03-29T10:28:15.917917:d5fdb802-4e72-48de-b08a-6eb81b553d54",
+        "highlight": false,
+        "language": "en",
+        "marked_for_not_publication": false,
+        "more_coming": false,
+        "operation": "update",
+        "order": 27.5,
+        "original_creator": "56cad43adfc3f600800d2b97",
+        "particular_type": "post",
+        "place": [],
+        "post_status": "open",
+        "priority": 3,
+        "published_date": "2016-03-29T10:28:15+00:00",
+        "publisher": {
+            "_created": "2016-02-22T09:26:18+00:00",
+            "_etag": "4ec12d6f5cb5b8dad6776c2ed17baee1f27f5500",
+            "_id": "56cad43adfc3f600800d2b97",
+            "_updated": "2016-03-29T10:12:16+00:00",
+            "active_privileges": {
+                "archive": 1,
+                "blogs": 1,
+                "desks": 1,
+                "global_preferences": 1,
+                "groups": 1,
+                "hold": 1,
+                "ingest": 1,
+                "ingest_providers": 1,
+                "legal_archive": 1,
+                "metadata_uniquename": 1,
+                "posts": 1,
+                "publish_post": 1,
+                "request_membership": 1,
+                "restore": 1,
+                "rewrite": 1,
+                "roles": 1,
+                "saved_searches": 1,
+                "spike": 1,
+                "submit_post": 1,
+                "tasks": 1,
+                "unlock": 1,
+                "unspike": 1,
+                "users": 1
+            },
+            "avatar": "56e6cdea4f4cb600e86928ae",
+            "display_name": "dpa \u30fblive Desk",
+            "email": "sueleyman.artiisik@dpa-info.com",
+            "first_name": "dpa \u30fblive",
+            "is_active": true,
+            "is_enabled": true,
+            "last_name": "Desk",
+            "needs_activation": false,
+            "picture_url": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/a4e7b72c7955fb9151af778dd07eaa3ae50cab3a5491e22a972c4dc1a3d87dee",
+            "role": "54e64cde1024542de2649be9",
+            "session_preferences": {
+                "56fa53740e8fda00f31bbf13": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa55570e8fda00e9a83ab1": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                }
+            },
+            "sign_off": "art",
+            "user_preferences": {
+                "agg:view": {
+                    "active": {}
+                },
+                "archive:view": {
+                    "allowed": ["mgrid", "compact"],
+                    "category": "archive",
+                    "default": "mgrid",
+                    "label": "Users archive view format",
+                    "type": "string",
+                    "view": "mgrid"
+                },
+                "article:default:place": {
+                    "category": "article_defaults",
+                    "label": "Place",
+                    "place": [],
+                    "type": "list"
+                },
+                "categories:preferred": {
+                    "category": "categories",
+                    "label": "Preferred Categories",
+                    "selected": {},
+                    "type": "dict"
+                },
+                "dashboard:ingest": {
+                    "providers": []
+                },
+                "dateline:located": {
+                    "category": "article_defaults",
+                    "label": "Located",
+                    "type": "dict"
+                },
+                "editor:theme": {
+                    "theme": "",
+                    "type": "string"
+                },
+                "email:notification": {
+                    "category": "notifications",
+                    "default": true,
+                    "enabled": true,
+                    "label": "Send notifications via email",
+                    "type": "bool"
+                },
+                "feature:preview": {
+                    "category": "feature",
+                    "default": false,
+                    "enabled": false,
+                    "label": "Enable Feature Preview",
+                    "type": "bool"
+                },
+                "templates:recent": {},
+                "workqueue:items": {
+                    "items": []
+                }
+            },
+            "user_type": "administrator",
+            "username": "sartiisik"
+        },
+        "pubstatus": "usable",
+        "sign_off": "art",
+        "source": "Liveblog",
+        "state": "draft",
+        "sticky": false,
+        "type": "composite",
+        "unique_id": 123,
+        "unique_name": "#123",
+        "urgency": 3,
+        "version": 2,
+        "version_creator": "56cad43adfc3f600800d2b97",
+        "versioncreated": "2016-03-29T10:29:14+00:00"
+    }, {
+        "_created": "2016-03-29T13:33:12+00:00",
+        "_current_version": 3,
+        "_etag": "5eabd2d8c786a4a307c1cf2dd8315bf2faee242d",
+        "_id": "urn:newsml:localhost:2016-03-29T13:33:12.936532:71b3d125-de6b-4eb7-9980-9bac74bc0595",
+        "_links": {
+            "self": {
+                "href": "/posts/urn:newsml:localhost:2016-03-29T13:33:12.936532:71b3d125-de6b-4eb7-9980-9bac74bc0595",
+                "title": "Posts"
+            }
+        },
+        "_type": "archive",
+        "_updated": "2016-03-29T13:39:10+00:00",
+        "blog": "56c5b34120dc360081f8e518",
+        "dateline": {
+            "date": "2016-03-29T13:33:12+00:00",
+            "located": null,
+            "source": "SF",
+            "text": null
+        },
+        "deleted": false,
+        "event_id": "tag:localhost:2016:673c23af-8b8a-4d70-8f6a-24534bf1e562",
+        "expiry": "2016-04-28T13:39:10+00:00",
+        "family_id": "urn:newsml:localhost:2016-03-29T13:33:12.936532:71b3d125-de6b-4eb7-9980-9bac74bc0595",
+        "firstcreated": "2016-03-29T13:33:12+00:00",
+        "groups": [{
+            "id": "root",
+            "refs": [{
+                "idRef": "main"
+            }],
+            "role": "grpRole:NEP"
+        }, {
+            "id": "main",
+            "refs": [{
+                "guid": "urn:newsml:localhost:2016-03-29T13:39:09.889285:a7c97598-0535-49a6-b947-9f0ac85fb722",
+                "item": {
+                    "_created": "2016-03-29T13:39:09+00:00",
+                    "_current_version": 1,
+                    "_etag": "fd574644f7d34045923958357b52788c148bbad2",
+                    "_id": "urn:newsml:localhost:2016-03-29T13:39:09.889285:a7c97598-0535-49a6-b947-9f0ac85fb722",
+                    "_updated": "2016-03-29T13:39:09+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T13:39:09+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:74b797fb-68ce-4424-9d7c-698f18334105",
+                    "expiry": "2016-04-28T13:39:09+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T13:39:09.889285:a7c97598-0535-49a6-b947-9f0ac85fb722",
+                    "firstcreated": "2016-03-29T13:39:09+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T13:39:09.889285:a7c97598-0535-49a6-b947-9f0ac85fb722",
+                    "item_type": "text",
+                    "language": "en",
+                    "linked_in_packages": [{
+                        "package": "urn:newsml:localhost:2016-03-29T13:33:12.936532:71b3d125-de6b-4eb7-9980-9bac74bc0595"
+                    }],
+                    "marked_for_not_publication": false,
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "Tweet mit Foto mit Text dr\u00fcber.",
+                    "type": "text",
+                    "unique_id": 149,
+                    "unique_name": "#149",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T13:39:09+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T13:39:09.889285:a7c97598-0535-49a6-b947-9f0ac85fb722",
+                "type": "text"
+            }, {
+                "guid": "urn:newsml:localhost:2016-03-29T13:39:09.970101:9657e08f-d8f1-4d7d-a416-5da4c1375057",
+                "item": {
+                    "_created": "2016-03-29T13:39:09+00:00",
+                    "_current_version": 1,
+                    "_etag": "f8fe6068080d5d1d570751474808187dc82a3a56",
+                    "_id": "urn:newsml:localhost:2016-03-29T13:39:09.970101:9657e08f-d8f1-4d7d-a416-5da4c1375057",
+                    "_updated": "2016-03-29T13:39:09+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T13:39:09+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:015fd345-212a-4057-8aff-729846b75cf4",
+                    "expiry": "2016-04-28T13:39:09+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T13:39:09.970101:9657e08f-d8f1-4d7d-a416-5da4c1375057",
+                    "firstcreated": "2016-03-29T13:39:09+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T13:39:09.970101:9657e08f-d8f1-4d7d-a416-5da4c1375057",
+                    "item_type": "embed",
+                    "language": "en",
+                    "linked_in_packages": [{
+                        "package": "urn:newsml:localhost:2016-03-29T13:33:12.936532:71b3d125-de6b-4eb7-9980-9bac74bc0595"
+                    }],
+                    "marked_for_not_publication": false,
+                    "meta": {
+                        "_created": "2016-03-29T13:33:12+00:00",
+                        "_current_version": 1,
+                        "_etag": "28339c5759bf4310e9a42b2a907abedeba384aaf",
+                        "_id": "urn:newsml:localhost:2016-03-29T13:33:12.860151:880f6a46-2f6f-48ff-b3e6-0ed3722b91fd",
+                        "_updated": "2016-03-29T13:33:12+00:00",
+                        "blog": "56c5b34120dc360081f8e518",
+                        "dateline": {
+                            "date": "2016-03-29T13:33:12+00:00",
+                            "located": null,
+                            "source": "SF",
+                            "text": null
+                        },
+                        "event_id": "tag:localhost:2016:5dfbea26-f614-460f-88d9-7305a689c347",
+                        "expiry": "2016-04-28T13:33:12+00:00",
+                        "family_id": "urn:newsml:localhost:2016-03-29T13:33:12.860151:880f6a46-2f6f-48ff-b3e6-0ed3722b91fd",
+                        "firstcreated": "2016-03-29T13:33:12+00:00",
+                        "guid": "urn:newsml:localhost:2016-03-29T13:33:12.860151:880f6a46-2f6f-48ff-b3e6-0ed3722b91fd",
+                        "html": "<blockquote class=\"twitter-tweet\" data-lang=\"de\"><p lang=\"de\" dir=\"ltr\">T\u00fcrkei fordert, Ver\u00f6ffentlichung der <a href=\"https://twitter.com/extra3\">@extra3</a>-Satire zu stoppen <a href=\"https://t.co/lGlRElLBYB\">https://t.co/lGlRElLBYB</a> <a href=\"https://twitter.com/SZ\">@SZ</a> (fho) <a href=\"https://t.co/lNTHrqMTgR\">pic.twitter.com/lNTHrqMTgR</a></p>&mdash; dpa (@dpa) <a href=\"https://twitter.com/dpa/status/714764384812269568\">29. M\u00e4rz 2016</a></blockquote><script async src=\"//platform.twitter.com/widgets.js\" charset=\"utf-8\"></script>",
+                        "item_type": "embed",
+                        "language": "en",
+                        "linked_in_packages": [],
+                        "marked_for_not_publication": false,
+                        "meta": {
+                            "html": "<blockquote class=\"twitter-tweet\" data-lang=\"de\"><p lang=\"de\" dir=\"ltr\">T\u00fcrkei fordert, Ver\u00f6ffentlichung der <a href=\"https://twitter.com/extra3\">@extra3</a>-Satire zu stoppen <a href=\"https://t.co/lGlRElLBYB\">https://t.co/lGlRElLBYB</a> <a href=\"https://twitter.com/SZ\">@SZ</a> (fho) <a href=\"https://t.co/lNTHrqMTgR\">pic.twitter.com/lNTHrqMTgR</a></p>&mdash; dpa (@dpa) <a href=\"https://twitter.com/dpa/status/714764384812269568\">29. M\u00e4rz 2016</a></blockquote><script async src=\"//platform.twitter.com/widgets.js\" charset=\"utf-8\"></script>"
+                        },
+                        "more_coming": false,
+                        "operation": "create",
+                        "original_creator": "56cad43adfc3f600800d2b97",
+                        "particular_type": "item",
+                        "place": [],
+                        "priority": 3,
+                        "pubstatus": "usable",
+                        "sign_off": "art",
+                        "source": "Liveblog",
+                        "state": "draft",
+                        "text": "<div class=\"liveblog--card\">\n  <div class=\"st-embed-block embed-preview\"><blockquote class=\"twitter-tweet\" data-lang=\"de\"><p lang=\"de\" dir=\"ltr\">T\u00fcrkei fordert, Ver\u00f6ffentlichung der <a href=\"https://twitter.com/extra3\">@extra3</a>-Satire zu stoppen <a href=\"https://t.co/lGlRElLBYB\">https://t.co/lGlRElLBYB</a> <a href=\"https://twitter.com/SZ\">@SZ</a> (fho) <a href=\"https://t.co/lNTHrqMTgR\">pic.twitter.com/lNTHrqMTgR</a></p>\u2014 dpa (@dpa) <a href=\"https://twitter.com/dpa/status/714764384812269568\">29. M\u00e4rz 2016</a></blockquote><script async=\"\" src=\"//platform.twitter.com/widgets.js\" charset=\"utf-8\"></script></div>\n  <div class=\"hidden st-embed-block cover-preview-handler\">\n    <div class=\"st-embed-block cover-preview\"></div>\n  </div>\n  <div class=\"st-embed-block title-preview\"></div>\n  <div class=\"st-embed-block description-preview\"></div>\n  <div class=\"st-embed-block credit-preview\"></div>\n  <a class=\"hidden st-embed-block link-preview\" target=\"_blank\"></a>\n",
+                        "type": "text",
+                        "unique_id": 140,
+                        "unique_name": "#140",
+                        "urgency": 3,
+                        "version_creator": "56cad43adfc3f600800d2b97",
+                        "versioncreated": "2016-03-29T13:33:12+00:00"
+                    },
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "<div class=\"liveblog--card\">\n  <div class=\"st-embed-block embed-preview\"><blockquote class=\"twitter-tweet\" data-lang=\"de\"><p lang=\"de\" dir=\"ltr\">T\u00fcrkei fordert, Ver\u00f6ffentlichung der <a href=\"https://twitter.com/extra3\">@extra3</a>-Satire zu stoppen <a href=\"https://t.co/lGlRElLBYB\">https://t.co/lGlRElLBYB</a> <a href=\"https://twitter.com/SZ\">@SZ</a> (fho) <a href=\"https://t.co/lNTHrqMTgR\">pic.twitter.com/lNTHrqMTgR</a></p>\u2014 dpa (@dpa) <a href=\"https://twitter.com/dpa/status/714764384812269568\">29. M\u00e4rz 2016</a></blockquote><script async=\"\" src=\"//platform.twitter.com/widgets.js\" charset=\"utf-8\"></script></div>\n  <div class=\"hidden st-embed-block cover-preview-handler\">\n    <div class=\"st-embed-block cover-preview\"></div>\n  </div>\n  <div class=\"st-embed-block title-preview\"></div>\n  <div class=\"st-embed-block description-preview\"></div>\n  <div class=\"st-embed-block credit-preview\"></div>\n  <a class=\"hidden st-embed-block link-preview\" target=\"_blank\"></a>\n",
+                    "type": "text",
+                    "unique_id": 150,
+                    "unique_name": "#150",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T13:39:09+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T13:39:09.970101:9657e08f-d8f1-4d7d-a416-5da4c1375057",
+                "type": "text"
+            }],
+            "role": "grpRole:Main"
+        }],
+        "guid": "urn:newsml:localhost:2016-03-29T13:33:12.936532:71b3d125-de6b-4eb7-9980-9bac74bc0595",
+        "highlight": false,
+        "language": "en",
+        "marked_for_not_publication": false,
+        "more_coming": false,
+        "operation": "update",
+        "order": 26.75,
+        "original_creator": "56cad43adfc3f600800d2b97",
+        "particular_type": "post",
+        "place": [],
+        "post_status": "open",
+        "priority": 3,
+        "published_date": "2016-03-29T13:33:12+00:00",
+        "publisher": {
+            "_created": "2016-02-22T09:26:18+00:00",
+            "_etag": "4ec12d6f5cb5b8dad6776c2ed17baee1f27f5500",
+            "_id": "56cad43adfc3f600800d2b97",
+            "_updated": "2016-03-29T10:12:16+00:00",
+            "active_privileges": {
+                "archive": 1,
+                "blogs": 1,
+                "desks": 1,
+                "global_preferences": 1,
+                "groups": 1,
+                "hold": 1,
+                "ingest": 1,
+                "ingest_providers": 1,
+                "legal_archive": 1,
+                "metadata_uniquename": 1,
+                "posts": 1,
+                "publish_post": 1,
+                "request_membership": 1,
+                "restore": 1,
+                "rewrite": 1,
+                "roles": 1,
+                "saved_searches": 1,
+                "spike": 1,
+                "submit_post": 1,
+                "tasks": 1,
+                "unlock": 1,
+                "unspike": 1,
+                "users": 1
+            },
+            "avatar": "56e6cdea4f4cb600e86928ae",
+            "display_name": "dpa \u30fblive Desk",
+            "email": "sueleyman.artiisik@dpa-info.com",
+            "first_name": "dpa \u30fblive",
+            "is_active": true,
+            "is_enabled": true,
+            "last_name": "Desk",
+            "needs_activation": false,
+            "picture_url": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/a4e7b72c7955fb9151af778dd07eaa3ae50cab3a5491e22a972c4dc1a3d87dee",
+            "role": "54e64cde1024542de2649be9",
+            "session_preferences": {
+                "56fa53740e8fda00f31bbf13": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa55570e8fda00e9a83ab1": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa821c0e8fda00e7518415": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                }
+            },
+            "sign_off": "art",
+            "user_preferences": {
+                "agg:view": {
+                    "active": {}
+                },
+                "archive:view": {
+                    "allowed": ["mgrid", "compact"],
+                    "category": "archive",
+                    "default": "mgrid",
+                    "label": "Users archive view format",
+                    "type": "string",
+                    "view": "mgrid"
+                },
+                "article:default:place": {
+                    "category": "article_defaults",
+                    "label": "Place",
+                    "place": [],
+                    "type": "list"
+                },
+                "categories:preferred": {
+                    "category": "categories",
+                    "label": "Preferred Categories",
+                    "selected": {},
+                    "type": "dict"
+                },
+                "dashboard:ingest": {
+                    "providers": []
+                },
+                "dateline:located": {
+                    "category": "article_defaults",
+                    "label": "Located",
+                    "type": "dict"
+                },
+                "editor:theme": {
+                    "theme": "",
+                    "type": "string"
+                },
+                "email:notification": {
+                    "category": "notifications",
+                    "default": true,
+                    "enabled": true,
+                    "label": "Send notifications via email",
+                    "type": "bool"
+                },
+                "feature:preview": {
+                    "category": "feature",
+                    "default": false,
+                    "enabled": false,
+                    "label": "Enable Feature Preview",
+                    "type": "bool"
+                },
+                "templates:recent": {},
+                "workqueue:items": {
+                    "items": []
+                }
+            },
+            "user_type": "administrator",
+            "username": "sartiisik"
+        },
+        "pubstatus": "usable",
+        "sign_off": "art",
+        "source": "Liveblog",
+        "state": "draft",
+        "sticky": false,
+        "type": "composite",
+        "unique_id": 141,
+        "unique_name": "#141",
+        "urgency": 3,
+        "version": 2,
+        "version_creator": "56cad43adfc3f600800d2b97",
+        "versioncreated": "2016-03-29T13:39:10+00:00"
+    }, {
+        "_created": "2016-03-29T10:33:19+00:00",
+        "_current_version": 2,
+        "_etag": "693f23f5a884f50dea33d4ee42ecd97d4491affe",
+        "_id": "urn:newsml:localhost:2016-03-29T10:33:19.982680:63022c9c-1e9c-4929-8401-ec462887a76d",
+        "_links": {
+            "self": {
+                "href": "/posts/urn:newsml:localhost:2016-03-29T10:33:19.982680:63022c9c-1e9c-4929-8401-ec462887a76d",
+                "title": "Posts"
+            }
+        },
+        "_type": "archive",
+        "_updated": "2016-03-29T10:33:27+00:00",
+        "blog": "56c5b34120dc360081f8e518",
+        "dateline": {
+            "date": "2016-03-29T10:33:19+00:00",
+            "located": null,
+            "source": "SF",
+            "text": null
+        },
+        "deleted": false,
+        "event_id": "tag:localhost:2016:f4165775-6347-4ee3-8b1d-66d4d6a740b4",
+        "expiry": "2016-04-28T10:33:27+00:00",
+        "family_id": "urn:newsml:localhost:2016-03-29T10:33:19.982680:63022c9c-1e9c-4929-8401-ec462887a76d",
+        "firstcreated": "2016-03-29T10:33:19+00:00",
+        "groups": [{
+            "id": "root",
+            "refs": [{
+                "idRef": "main"
+            }],
+            "role": "grpRole:NEP"
+        }, {
+            "id": "main",
+            "refs": [{
+                "guid": "urn:newsml:localhost:2016-03-29T10:33:19.873407:9ce3c51b-9eda-40cd-b5f6-b48d3d8d981e",
+                "item": {
+                    "_created": "2016-03-29T10:33:19+00:00",
+                    "_current_version": 1,
+                    "_etag": "8de7db57a617b36b43b0a9f8f5b30627333c0278",
+                    "_id": "urn:newsml:localhost:2016-03-29T10:33:19.873407:9ce3c51b-9eda-40cd-b5f6-b48d3d8d981e",
+                    "_updated": "2016-03-29T10:33:19+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T10:33:19+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:aacc6272-d494-4eda-865f-b9b69437ff4f",
+                    "expiry": "2016-04-28T10:33:19+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T10:33:19.873407:9ce3c51b-9eda-40cd-b5f6-b48d3d8d981e",
+                    "firstcreated": "2016-03-29T10:33:19+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T10:33:19.873407:9ce3c51b-9eda-40cd-b5f6-b48d3d8d981e",
+                    "item_type": "text",
+                    "language": "en",
+                    "linked_in_packages": [],
+                    "marked_for_not_publication": false,
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "Twitter-Video mit Text dar\u00fcber.&nbsp;",
+                    "type": "text",
+                    "unique_id": 124,
+                    "unique_name": "#124",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T10:33:19+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T10:33:19.873407:9ce3c51b-9eda-40cd-b5f6-b48d3d8d981e",
+                "type": "text"
+            }, {
+                "guid": "urn:newsml:localhost:2016-03-29T10:33:19.894509:1c9a9024-2172-4f35-a6a2-370d11234637",
+                "item": {
+                    "_created": "2016-03-29T10:33:19+00:00",
+                    "_current_version": 1,
+                    "_etag": "0b33dac75302b342b65f8c6f903d3aaa8919987f",
+                    "_id": "urn:newsml:localhost:2016-03-29T10:33:19.894509:1c9a9024-2172-4f35-a6a2-370d11234637",
+                    "_updated": "2016-03-29T10:33:19+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T10:33:19+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:ec39e313-e8fb-48b4-a2f2-4b736079a915",
+                    "expiry": "2016-04-28T10:33:19+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T10:33:19.894509:1c9a9024-2172-4f35-a6a2-370d11234637",
+                    "firstcreated": "2016-03-29T10:33:19+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T10:33:19.894509:1c9a9024-2172-4f35-a6a2-370d11234637",
+                    "item_type": "embed",
+                    "language": "en",
+                    "linked_in_packages": [],
+                    "marked_for_not_publication": false,
+                    "meta": {
+                        "html": "<blockquote class=\"twitter-video\" data-lang=\"de\"><p lang=\"en\" dir=\"ltr\">FOX NEWS ALERT: 7 people remain on board <a href=\"https://twitter.com/hashtag/EgyptAir?src=hash\">#EgyptAir</a> flight, including 3 passengers<a href=\"https://t.co/aYv4vtEYHV\">https://t.co/aYv4vtEYHV</a></p>&mdash; FOX &amp; Friends (@foxandfriends) <a href=\"https://twitter.com/foxandfriends/status/714760314374348800\">29. M\u00e4rz 2016</a></blockquote><script async src=\"//platform.twitter.com/widgets.js\" charset=\"utf-8\"></script>"
+                    },
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "<div class=\"liveblog--card\">\n  <div class=\"st-embed-block embed-preview\"><blockquote class=\"twitter-video\" data-lang=\"de\"><p lang=\"en\" dir=\"ltr\">FOX NEWS ALERT: 7 people remain on board <a href=\"https://twitter.com/hashtag/EgyptAir?src=hash\">#EgyptAir</a> flight, including 3 passengers<a href=\"https://t.co/aYv4vtEYHV\">https://t.co/aYv4vtEYHV</a></p>\u2014 FOX &amp; Friends (@foxandfriends) <a href=\"https://twitter.com/foxandfriends/status/714760314374348800\">29. M\u00e4rz 2016</a></blockquote><script async=\"\" src=\"//platform.twitter.com/widgets.js\" charset=\"utf-8\"></script></div>\n  <div class=\"hidden st-embed-block cover-preview-handler\">\n    <div class=\"st-embed-block cover-preview\"></div>\n  </div>\n  <div class=\"st-embed-block title-preview\"></div>\n  <div class=\"st-embed-block description-preview\"></div>\n  <div class=\"st-embed-block credit-preview\"></div>\n  <a class=\"hidden st-embed-block link-preview\" target=\"_blank\"></a>\n",
+                    "type": "text",
+                    "unique_id": 125,
+                    "unique_name": "#125",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T10:33:19+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T10:33:19.894509:1c9a9024-2172-4f35-a6a2-370d11234637",
+                "type": "text"
+            }],
+            "role": "grpRole:Main"
+        }],
+        "guid": "urn:newsml:localhost:2016-03-29T10:33:19.982680:63022c9c-1e9c-4929-8401-ec462887a76d",
+        "highlight": false,
+        "language": "en",
+        "marked_for_not_publication": false,
+        "more_coming": false,
+        "operation": "update",
+        "order": 26.5,
+        "original_creator": "56cad43adfc3f600800d2b97",
+        "particular_type": "post",
+        "place": [],
+        "post_status": "open",
+        "priority": 3,
+        "published_date": "2016-03-29T10:33:19+00:00",
+        "publisher": {
+            "_created": "2016-02-22T09:26:18+00:00",
+            "_etag": "4ec12d6f5cb5b8dad6776c2ed17baee1f27f5500",
+            "_id": "56cad43adfc3f600800d2b97",
+            "_updated": "2016-03-29T10:12:16+00:00",
+            "active_privileges": {
+                "archive": 1,
+                "blogs": 1,
+                "desks": 1,
+                "global_preferences": 1,
+                "groups": 1,
+                "hold": 1,
+                "ingest": 1,
+                "ingest_providers": 1,
+                "legal_archive": 1,
+                "metadata_uniquename": 1,
+                "posts": 1,
+                "publish_post": 1,
+                "request_membership": 1,
+                "restore": 1,
+                "rewrite": 1,
+                "roles": 1,
+                "saved_searches": 1,
+                "spike": 1,
+                "submit_post": 1,
+                "tasks": 1,
+                "unlock": 1,
+                "unspike": 1,
+                "users": 1
+            },
+            "avatar": "56e6cdea4f4cb600e86928ae",
+            "display_name": "dpa \u30fblive Desk",
+            "email": "sueleyman.artiisik@dpa-info.com",
+            "first_name": "dpa \u30fblive",
+            "is_active": true,
+            "is_enabled": true,
+            "last_name": "Desk",
+            "needs_activation": false,
+            "picture_url": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/a4e7b72c7955fb9151af778dd07eaa3ae50cab3a5491e22a972c4dc1a3d87dee",
+            "role": "54e64cde1024542de2649be9",
+            "session_preferences": {
+                "56fa53740e8fda00f31bbf13": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa55570e8fda00e9a83ab1": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                }
+            },
+            "sign_off": "art",
+            "user_preferences": {
+                "agg:view": {
+                    "active": {}
+                },
+                "archive:view": {
+                    "allowed": ["mgrid", "compact"],
+                    "category": "archive",
+                    "default": "mgrid",
+                    "label": "Users archive view format",
+                    "type": "string",
+                    "view": "mgrid"
+                },
+                "article:default:place": {
+                    "category": "article_defaults",
+                    "label": "Place",
+                    "place": [],
+                    "type": "list"
+                },
+                "categories:preferred": {
+                    "category": "categories",
+                    "label": "Preferred Categories",
+                    "selected": {},
+                    "type": "dict"
+                },
+                "dashboard:ingest": {
+                    "providers": []
+                },
+                "dateline:located": {
+                    "category": "article_defaults",
+                    "label": "Located",
+                    "type": "dict"
+                },
+                "editor:theme": {
+                    "theme": "",
+                    "type": "string"
+                },
+                "email:notification": {
+                    "category": "notifications",
+                    "default": true,
+                    "enabled": true,
+                    "label": "Send notifications via email",
+                    "type": "bool"
+                },
+                "feature:preview": {
+                    "category": "feature",
+                    "default": false,
+                    "enabled": false,
+                    "label": "Enable Feature Preview",
+                    "type": "bool"
+                },
+                "templates:recent": {},
+                "workqueue:items": {
+                    "items": []
+                }
+            },
+            "user_type": "administrator",
+            "username": "sartiisik"
+        },
+        "pubstatus": "usable",
+        "sign_off": "art",
+        "source": "Liveblog",
+        "state": "draft",
+        "sticky": false,
+        "type": "composite",
+        "unique_id": 126,
+        "unique_name": "#126",
+        "urgency": 3,
+        "version": 2,
+        "version_creator": "56cad43adfc3f600800d2b97",
+        "versioncreated": "2016-03-29T10:33:27+00:00"
+    }, {
+        "_created": "2016-03-29T10:10:09+00:00",
+        "_current_version": 4,
+        "_etag": "297d549ae45148dac72670510ead4e11893a347b",
+        "_id": "urn:newsml:localhost:2016-03-29T10:10:09.255893:16cf790c-aaa3-41f4-8474-9bfd6383969a",
+        "_links": {
+            "self": {
+                "href": "/posts/urn:newsml:localhost:2016-03-29T10:10:09.255893:16cf790c-aaa3-41f4-8474-9bfd6383969a",
+                "title": "Posts"
+            }
+        },
+        "_type": "archive",
+        "_updated": "2016-03-29T10:15:51+00:00",
+        "blog": "56c5b34120dc360081f8e518",
+        "dateline": {
+            "date": "2016-03-29T10:10:09+00:00",
+            "located": null,
+            "source": "SF",
+            "text": null
+        },
+        "deleted": false,
+        "event_id": "tag:localhost:2016:76157d28-dcc7-4ca3-a541-ec6785904127",
+        "expiry": "2016-04-28T10:15:51+00:00",
+        "family_id": "urn:newsml:localhost:2016-03-29T10:10:09.255893:16cf790c-aaa3-41f4-8474-9bfd6383969a",
+        "firstcreated": "2016-03-29T10:10:09+00:00",
+        "groups": [{
+            "id": "root",
+            "refs": [{
+                "idRef": "main"
+            }],
+            "role": "grpRole:NEP"
+        }, {
+            "id": "main",
+            "refs": [{
+                "guid": "urn:newsml:localhost:2016-03-29T10:11:40.145073:3936cdcd-4115-47e0-95c6-67c913b53bc9",
+                "item": {
+                    "_created": "2016-03-29T10:11:40+00:00",
+                    "_current_version": 1,
+                    "_etag": "cfecd08545732279eaea5c3bfe629cbfea98f298",
+                    "_id": "urn:newsml:localhost:2016-03-29T10:11:40.145073:3936cdcd-4115-47e0-95c6-67c913b53bc9",
+                    "_updated": "2016-03-29T10:11:40+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T10:11:40+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:ba224eff-bb71-4b9a-a152-e7853e3fd910",
+                    "expiry": "2016-04-28T10:11:40+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T10:11:40.145073:3936cdcd-4115-47e0-95c6-67c913b53bc9",
+                    "firstcreated": "2016-03-29T10:11:40+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T10:11:40.145073:3936cdcd-4115-47e0-95c6-67c913b53bc9",
+                    "item_type": "quote",
+                    "language": "en",
+                    "linked_in_packages": [],
+                    "marked_for_not_publication": false,
+                    "meta": {
+                        "credit": "Das Anf\u00fchrungszeichen ist abgeschnitten. Am besten in dpa-gr\u00fcn und in voller Pracht. In der Live-Ansicht ist noch ein Bullet-Point hier am Anfang zu sehen.",
+                        "quote": "Hier steht ein Zitat!"
+                    },
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "<blockquote><p>Hier steht ein Zitat!</p><ul><li>Das Anf\u00fchrungszeichen ist abgeschnitten. Am besten in dpa-gr\u00fcn und in voller Pracht. In der Live-Ansicht ist noch ein Bullet-Point hier am Anfang zu sehen.</li></ul></blockquote>",
+                    "type": "text",
+                    "unique_id": 105,
+                    "unique_name": "#105",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T10:11:40+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T10:11:40.145073:3936cdcd-4115-47e0-95c6-67c913b53bc9",
+                "type": "text"
+            }],
+            "role": "grpRole:Main"
+        }],
+        "guid": "urn:newsml:localhost:2016-03-29T10:10:09.255893:16cf790c-aaa3-41f4-8474-9bfd6383969a",
+        "highlight": false,
+        "language": "en",
+        "marked_for_not_publication": false,
+        "more_coming": false,
+        "operation": "update",
+        "order": 25,
+        "original_creator": "56cad43adfc3f600800d2b97",
+        "particular_type": "post",
+        "place": [],
+        "post_status": "open",
+        "priority": 3,
+        "published_date": "2016-03-29T10:10:09+00:00",
+        "publisher": {
+            "_created": "2016-02-22T09:26:18+00:00",
+            "_etag": "1386ed0820383d6ef60cbebdf001ff4f1f3895fc",
+            "_id": "56cad43adfc3f600800d2b97",
+            "_updated": "2016-03-14T14:42:52+00:00",
+            "active_privileges": {
+                "archive": 1,
+                "blogs": 1,
+                "desks": 1,
+                "global_preferences": 1,
+                "groups": 1,
+                "hold": 1,
+                "ingest": 1,
+                "ingest_providers": 1,
+                "legal_archive": 1,
+                "metadata_uniquename": 1,
+                "posts": 1,
+                "publish_post": 1,
+                "request_membership": 1,
+                "restore": 1,
+                "rewrite": 1,
+                "roles": 1,
+                "saved_searches": 1,
+                "spike": 1,
+                "submit_post": 1,
+                "tasks": 1,
+                "unlock": 1,
+                "unspike": 1,
+                "users": 1
+            },
+            "avatar": "56e6cdea4f4cb600e86928ae",
+            "display_name": "dpa\u30fblive Desk",
+            "email": "sueleyman.artiisik@dpa-info.com",
+            "first_name": "dpa\u30fblive",
+            "is_active": true,
+            "is_enabled": true,
+            "last_name": "Desk",
+            "needs_activation": false,
+            "picture_url": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/a4e7b72c7955fb9151af778dd07eaa3ae50cab3a5491e22a972c4dc1a3d87dee",
+            "role": "54e64cde1024542de2649be9",
+            "session_preferences": {
+                "56fa53740e8fda00f31bbf13": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                }
+            },
+            "sign_off": "art",
+            "user_preferences": {
+                "agg:view": {
+                    "active": {}
+                },
+                "archive:view": {
+                    "allowed": ["mgrid", "compact"],
+                    "category": "archive",
+                    "default": "mgrid",
+                    "label": "Users archive view format",
+                    "type": "string",
+                    "view": "mgrid"
+                },
+                "article:default:place": {
+                    "category": "article_defaults",
+                    "label": "Place",
+                    "place": [],
+                    "type": "list"
+                },
+                "categories:preferred": {
+                    "category": "categories",
+                    "label": "Preferred Categories",
+                    "selected": {},
+                    "type": "dict"
+                },
+                "dashboard:ingest": {
+                    "providers": []
+                },
+                "dateline:located": {
+                    "category": "article_defaults",
+                    "label": "Located",
+                    "type": "dict"
+                },
+                "editor:theme": {
+                    "theme": "",
+                    "type": "string"
+                },
+                "email:notification": {
+                    "category": "notifications",
+                    "default": true,
+                    "enabled": true,
+                    "label": "Send notifications via email",
+                    "type": "bool"
+                },
+                "feature:preview": {
+                    "category": "feature",
+                    "default": false,
+                    "enabled": false,
+                    "label": "Enable Feature Preview",
+                    "type": "bool"
+                },
+                "templates:recent": {},
+                "workqueue:items": {
+                    "items": []
+                }
+            },
+            "user_type": "administrator",
+            "username": "sartiisik"
+        },
+        "pubstatus": "usable",
+        "sign_off": "art",
+        "source": "Liveblog",
+        "state": "draft",
+        "sticky": false,
+        "type": "composite",
+        "unique_id": 104,
+        "unique_name": "#104",
+        "urgency": 3,
+        "version": 2,
+        "version_creator": "56cad43adfc3f600800d2b97",
+        "versioncreated": "2016-03-29T10:15:51+00:00"
+    }, {
+        "_created": "2016-03-29T13:40:01+00:00",
+        "_current_version": 2,
+        "_etag": "60296e8678b9af42953668cf6d691c90587ee6a7",
+        "_id": "urn:newsml:localhost:2016-03-29T13:40:01.940674:6834342a-2133-484a-93cc-c52a23e96d0c",
+        "_links": {
+            "self": {
+                "href": "/posts/urn:newsml:localhost:2016-03-29T13:40:01.940674:6834342a-2133-484a-93cc-c52a23e96d0c",
+                "title": "Posts"
+            }
+        },
+        "_type": "archive",
+        "_updated": "2016-03-29T13:40:44+00:00",
+        "blog": "56c5b34120dc360081f8e518",
+        "dateline": {
+            "date": "2016-03-29T13:40:01+00:00",
+            "located": null,
+            "source": "SF",
+            "text": null
+        },
+        "deleted": false,
+        "event_id": "tag:localhost:2016:a1e73d6b-bcec-4374-9e89-1e4f87ccfa00",
+        "expiry": "2016-04-28T13:40:44+00:00",
+        "family_id": "urn:newsml:localhost:2016-03-29T13:40:01.940674:6834342a-2133-484a-93cc-c52a23e96d0c",
+        "firstcreated": "2016-03-29T13:40:01+00:00",
+        "groups": [{
+            "id": "root",
+            "refs": [{
+                "idRef": "main"
+            }],
+            "role": "grpRole:NEP"
+        }, {
+            "id": "main",
+            "refs": [{
+                "guid": "urn:newsml:localhost:2016-03-29T13:40:01.870777:b2faa515-8dbf-49a9-aca5-c7c1d25c40dc",
+                "item": {
+                    "_created": "2016-03-29T13:40:01+00:00",
+                    "_current_version": 1,
+                    "_etag": "67372615518a6766c315e0f7a0d0419ebc85c10b",
+                    "_id": "urn:newsml:localhost:2016-03-29T13:40:01.870777:b2faa515-8dbf-49a9-aca5-c7c1d25c40dc",
+                    "_updated": "2016-03-29T13:40:01+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T13:40:01+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:ba74ed76-4bf6-434e-a979-c2176c83767e",
+                    "expiry": "2016-04-28T13:40:01+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T13:40:01.870777:b2faa515-8dbf-49a9-aca5-c7c1d25c40dc",
+                    "firstcreated": "2016-03-29T13:40:01+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T13:40:01.870777:b2faa515-8dbf-49a9-aca5-c7c1d25c40dc",
+                    "item_type": "text",
+                    "language": "en",
+                    "linked_in_packages": [],
+                    "marked_for_not_publication": false,
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "Einfacher Tweet mit Text dr\u00fcber.",
+                    "type": "text",
+                    "unique_id": 151,
+                    "unique_name": "#151",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T13:40:01+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T13:40:01.870777:b2faa515-8dbf-49a9-aca5-c7c1d25c40dc",
+                "type": "text"
+            }, {
+                "guid": "urn:newsml:localhost:2016-03-29T13:40:01.877008:225ef66f-0aaf-417f-b2d6-3ec0e4a2d646",
+                "item": {
+                    "_created": "2016-03-29T13:40:01+00:00",
+                    "_current_version": 1,
+                    "_etag": "970a369cc5d5d103dce2f4cd7140c1a6e1c6805d",
+                    "_id": "urn:newsml:localhost:2016-03-29T13:40:01.877008:225ef66f-0aaf-417f-b2d6-3ec0e4a2d646",
+                    "_updated": "2016-03-29T13:40:01+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-29T13:40:01+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:71dc9a8f-f38e-4b65-85b1-cc812aa56bbf",
+                    "expiry": "2016-04-28T13:40:01+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-29T13:40:01.877008:225ef66f-0aaf-417f-b2d6-3ec0e4a2d646",
+                    "firstcreated": "2016-03-29T13:40:01+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-29T13:40:01.877008:225ef66f-0aaf-417f-b2d6-3ec0e4a2d646",
+                    "item_type": "embed",
+                    "language": "en",
+                    "linked_in_packages": [],
+                    "marked_for_not_publication": false,
+                    "meta": {
+                        "html": "<blockquote class=\"twitter-tweet\" data-lang=\"de\"><p lang=\"de\" dir=\"ltr\">US-Vorwahl: Bernie Sanders siegt haushoch in Alaska und Washington. <a href=\"https://t.co/PvYic8egOq\">https://t.co/PvYic8egOq</a> <a href=\"https://twitter.com/dpa\">@dpa</a>-NewsBlog via <a href=\"https://twitter.com/online_MM\">@Online_MM</a></p>&mdash; dpa\u2219live (@dpa_live) <a href=\"https://twitter.com/dpa_live/status/713909626085965824\">27. M\u00e4rz 2016</a></blockquote><script async src=\"//platform.twitter.com/widgets.js\" charset=\"utf-8\"></script>"
+                    },
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "text": "<div class=\"liveblog--card\">\n  <div class=\"st-embed-block embed-preview\"><blockquote class=\"twitter-tweet\" data-lang=\"de\"><p lang=\"de\" dir=\"ltr\">US-Vorwahl: Bernie Sanders siegt haushoch in Alaska und Washington. <a href=\"https://t.co/PvYic8egOq\">https://t.co/PvYic8egOq</a> <a href=\"https://twitter.com/dpa\">@dpa</a>-NewsBlog via <a href=\"https://twitter.com/online_MM\">@Online_MM</a></p>\u2014 dpa\u2219live (@dpa_live) <a href=\"https://twitter.com/dpa_live/status/713909626085965824\">27. M\u00e4rz 2016</a></blockquote><script async=\"\" src=\"//platform.twitter.com/widgets.js\" charset=\"utf-8\"></script></div>\n  <div class=\"hidden st-embed-block cover-preview-handler\">\n    <div class=\"st-embed-block cover-preview\"></div>\n  </div>\n  <div class=\"st-embed-block title-preview\"></div>\n  <div class=\"st-embed-block description-preview\"></div>\n  <div class=\"st-embed-block credit-preview\"></div>\n  <a class=\"hidden st-embed-block link-preview\" target=\"_blank\"></a>\n",
+                    "type": "text",
+                    "unique_id": 152,
+                    "unique_name": "#152",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-29T13:40:01+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-29T13:40:01.877008:225ef66f-0aaf-417f-b2d6-3ec0e4a2d646",
+                "type": "text"
+            }],
+            "role": "grpRole:Main"
+        }],
+        "guid": "urn:newsml:localhost:2016-03-29T13:40:01.940674:6834342a-2133-484a-93cc-c52a23e96d0c",
+        "highlight": false,
+        "language": "en",
+        "marked_for_not_publication": false,
+        "more_coming": false,
+        "operation": "update",
+        "order": 25.75,
+        "original_creator": "56cad43adfc3f600800d2b97",
+        "particular_type": "post",
+        "place": [],
+        "post_status": "open",
+        "priority": 3,
+        "published_date": "2016-03-29T13:40:01+00:00",
+        "publisher": {
+            "_created": "2016-02-22T09:26:18+00:00",
+            "_etag": "4ec12d6f5cb5b8dad6776c2ed17baee1f27f5500",
+            "_id": "56cad43adfc3f600800d2b97",
+            "_updated": "2016-03-29T10:12:16+00:00",
+            "active_privileges": {
+                "archive": 1,
+                "blogs": 1,
+                "desks": 1,
+                "global_preferences": 1,
+                "groups": 1,
+                "hold": 1,
+                "ingest": 1,
+                "ingest_providers": 1,
+                "legal_archive": 1,
+                "metadata_uniquename": 1,
+                "posts": 1,
+                "publish_post": 1,
+                "request_membership": 1,
+                "restore": 1,
+                "rewrite": 1,
+                "roles": 1,
+                "saved_searches": 1,
+                "spike": 1,
+                "submit_post": 1,
+                "tasks": 1,
+                "unlock": 1,
+                "unspike": 1,
+                "users": 1
+            },
+            "avatar": "56e6cdea4f4cb600e86928ae",
+            "display_name": "dpa \u30fblive Desk",
+            "email": "sueleyman.artiisik@dpa-info.com",
+            "first_name": "dpa \u30fblive",
+            "is_active": true,
+            "is_enabled": true,
+            "last_name": "Desk",
+            "needs_activation": false,
+            "picture_url": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/a4e7b72c7955fb9151af778dd07eaa3ae50cab3a5491e22a972c4dc1a3d87dee",
+            "role": "54e64cde1024542de2649be9",
+            "session_preferences": {
+                "56fa53740e8fda00f31bbf13": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa55570e8fda00e9a83ab1": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                },
+                "56fa821c0e8fda00e7518415": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                }
+            },
+            "sign_off": "art",
+            "user_preferences": {
+                "agg:view": {
+                    "active": {}
+                },
+                "archive:view": {
+                    "allowed": ["mgrid", "compact"],
+                    "category": "archive",
+                    "default": "mgrid",
+                    "label": "Users archive view format",
+                    "type": "string",
+                    "view": "mgrid"
+                },
+                "article:default:place": {
+                    "category": "article_defaults",
+                    "label": "Place",
+                    "place": [],
+                    "type": "list"
+                },
+                "categories:preferred": {
+                    "category": "categories",
+                    "label": "Preferred Categories",
+                    "selected": {},
+                    "type": "dict"
+                },
+                "dashboard:ingest": {
+                    "providers": []
+                },
+                "dateline:located": {
+                    "category": "article_defaults",
+                    "label": "Located",
+                    "type": "dict"
+                },
+                "editor:theme": {
+                    "theme": "",
+                    "type": "string"
+                },
+                "email:notification": {
+                    "category": "notifications",
+                    "default": true,
+                    "enabled": true,
+                    "label": "Send notifications via email",
+                    "type": "bool"
+                },
+                "feature:preview": {
+                    "category": "feature",
+                    "default": false,
+                    "enabled": false,
+                    "label": "Enable Feature Preview",
+                    "type": "bool"
+                },
+                "templates:recent": {},
+                "workqueue:items": {
+                    "items": []
+                }
+            },
+            "user_type": "administrator",
+            "username": "sartiisik"
+        },
+        "pubstatus": "usable",
+        "sign_off": "art",
+        "source": "Liveblog",
+        "state": "draft",
+        "sticky": false,
+        "type": "composite",
+        "unique_id": 153,
+        "unique_name": "#153",
+        "urgency": 3,
+        "version": 2,
+        "version_creator": "56cad43adfc3f600800d2b97",
+        "versioncreated": "2016-03-29T13:40:44+00:00"
+    }, {
+        "_created": "2016-03-16T16:49:28+00:00",
+        "_current_version": 1,
+        "_etag": "c0a592476bee8258967e9803ef7eaf40bb650bf3",
+        "_id": "urn:newsml:localhost:2016-03-16T16:49:28.143670:d86a70d8-0e35-43b6-90a1-cd22ccdd5ce8",
+        "_links": {
+            "self": {
+                "href": "/posts/urn:newsml:localhost:2016-03-16T16:49:28.143670:d86a70d8-0e35-43b6-90a1-cd22ccdd5ce8",
+                "title": "Posts"
+            }
+        },
+        "_type": "archive",
+        "_updated": "2016-03-16T16:49:28+00:00",
+        "blog": "56c5b34120dc360081f8e518",
+        "dateline": {
+            "date": "2016-03-16T16:49:28+00:00",
+            "located": null,
+            "source": "SF",
+            "text": null
+        },
+        "deleted": false,
+        "event_id": "tag:localhost:2016:1fb8c1c9-2203-4d05-8566-1292e3195649",
+        "expiry": "2016-04-15T16:49:28+00:00",
+        "family_id": "urn:newsml:localhost:2016-03-16T16:49:28.143670:d86a70d8-0e35-43b6-90a1-cd22ccdd5ce8",
+        "firstcreated": "2016-03-16T16:49:28+00:00",
+        "groups": [{
+            "id": "root",
+            "refs": [{
+                "idRef": "main"
+            }],
+            "role": "grpRole:NEP"
+        }, {
+            "id": "main",
+            "refs": [{
+                "guid": "urn:newsml:localhost:2016-03-16T16:49:27.978191:83374153-c2a9-4108-801a-96c770c79cbd",
+                "item": {
+                    "_created": "2016-03-16T16:49:27+00:00",
+                    "_current_version": 1,
+                    "_etag": "85f005beb454007a596c119bb1cb69875d3146f9",
+                    "_id": "urn:newsml:localhost:2016-03-16T16:49:27.978191:83374153-c2a9-4108-801a-96c770c79cbd",
+                    "_updated": "2016-03-16T16:49:27+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-16T16:49:27+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:857cec5d-1253-4e74-b9a6-0a33c47ba905",
+                    "expiry": "2016-04-15T16:49:27+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-16T16:49:27.978191:83374153-c2a9-4108-801a-96c770c79cbd",
+                    "firstcreated": "2016-03-16T16:49:27+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-16T16:49:27.978191:83374153-c2a9-4108-801a-96c770c79cbd",
+                    "item_type": "text",
+                    "language": "en",
+                    "linked_in_packages": [{
+                        "package": "urn:newsml:localhost:2016-03-16T16:49:28.143670:d86a70d8-0e35-43b6-90a1-cd22ccdd5ce8"
+                    }],
+                    "marked_for_not_publication": false,
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "sticky": false,
+                    "text": "Test!",
+                    "type": "text",
+                    "unique_id": 85,
+                    "unique_name": "#85",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-16T16:49:27+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-16T16:49:27.978191:83374153-c2a9-4108-801a-96c770c79cbd",
+                "type": "text"
+            }],
+            "role": "grpRole:Main"
+        }],
+        "guid": "urn:newsml:localhost:2016-03-16T16:49:28.143670:d86a70d8-0e35-43b6-90a1-cd22ccdd5ce8",
+        "highlight": false,
+        "language": "en",
+        "marked_for_not_publication": false,
+        "more_coming": false,
+        "operation": "create",
+        "order": 23,
+        "original_creator": "56cad43adfc3f600800d2b97",
+        "particular_type": "post",
+        "place": [],
+        "post_status": "open",
+        "priority": 3,
+        "published_date": "2016-03-16T16:49:28+00:00",
+        "publisher": {
+            "_created": "2016-02-22T09:26:18+00:00",
+            "_etag": "1386ed0820383d6ef60cbebdf001ff4f1f3895fc",
+            "_id": "56cad43adfc3f600800d2b97",
+            "_updated": "2016-03-14T14:42:52+00:00",
+            "active_privileges": {
+                "archive": 1,
+                "blogs": 1,
+                "desks": 1,
+                "global_preferences": 1,
+                "groups": 1,
+                "hold": 1,
+                "ingest": 1,
+                "ingest_providers": 1,
+                "legal_archive": 1,
+                "metadata_uniquename": 1,
+                "posts": 1,
+                "publish_post": 1,
+                "request_membership": 1,
+                "restore": 1,
+                "rewrite": 1,
+                "roles": 1,
+                "saved_searches": 1,
+                "spike": 1,
+                "submit_post": 1,
+                "tasks": 1,
+                "unlock": 1,
+                "unspike": 1,
+                "users": 1
+            },
+            "avatar": "56e6cdea4f4cb600e86928ae",
+            "display_name": "dpa\u30fblive Desk",
+            "email": "sueleyman.artiisik@dpa-info.com",
+            "first_name": "dpa\u30fblive",
+            "is_active": true,
+            "is_enabled": true,
+            "last_name": "Desk",
+            "needs_activation": false,
+            "picture_url": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/a4e7b72c7955fb9151af778dd07eaa3ae50cab3a5491e22a972c4dc1a3d87dee",
+            "role": "54e64cde1024542de2649be9",
+            "session_preferences": {
+                "56e98d3356a22600e7772a76": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                }
+            },
+            "sign_off": "art",
+            "user_preferences": {
+                "agg:view": {
+                    "active": {}
+                },
+                "archive:view": {
+                    "allowed": ["mgrid", "compact"],
+                    "category": "archive",
+                    "default": "mgrid",
+                    "label": "Users archive view format",
+                    "type": "string",
+                    "view": "mgrid"
+                },
+                "article:default:place": {
+                    "category": "article_defaults",
+                    "label": "Place",
+                    "place": [],
+                    "type": "list"
+                },
+                "categories:preferred": {
+                    "category": "categories",
+                    "label": "Preferred Categories",
+                    "selected": {},
+                    "type": "dict"
+                },
+                "dashboard:ingest": {
+                    "providers": []
+                },
+                "dateline:located": {
+                    "category": "article_defaults",
+                    "label": "Located",
+                    "type": "dict"
+                },
+                "editor:theme": {
+                    "theme": "",
+                    "type": "string"
+                },
+                "email:notification": {
+                    "category": "notifications",
+                    "default": true,
+                    "enabled": true,
+                    "label": "Send notifications via email",
+                    "type": "bool"
+                },
+                "feature:preview": {
+                    "category": "feature",
+                    "default": false,
+                    "enabled": false,
+                    "label": "Enable Feature Preview",
+                    "type": "bool"
+                },
+                "templates:recent": {},
+                "workqueue:items": {
+                    "items": []
+                }
+            },
+            "user_type": "administrator",
+            "username": "sartiisik"
+        },
+        "pubstatus": "usable",
+        "sign_off": "art",
+        "source": "Liveblog",
+        "state": "draft",
+        "type": "composite",
+        "unique_id": 86,
+        "unique_name": "#86",
+        "urgency": 3,
+        "version_creator": "56cad43adfc3f600800d2b97",
+        "versioncreated": "2016-03-16T16:49:28+00:00"
+    }, {
+        "_created": "2016-03-14T14:47:05+00:00",
+        "_current_version": 1,
+        "_etag": "63c115760b115b481dad5d3656dbcd13f65d0f91",
+        "_id": "urn:newsml:localhost:2016-03-14T14:47:05.303637:2736e979-d4ee-45b3-8179-2f34adfafc6b",
+        "_links": {
+            "self": {
+                "href": "/posts/urn:newsml:localhost:2016-03-14T14:47:05.303637:2736e979-d4ee-45b3-8179-2f34adfafc6b",
+                "title": "Posts"
+            }
+        },
+        "_type": "archive",
+        "_updated": "2016-03-14T14:47:05+00:00",
+        "blog": "56c5b34120dc360081f8e518",
+        "dateline": {
+            "date": "2016-03-14T14:47:05+00:00",
+            "located": null,
+            "source": "SF",
+            "text": null
+        },
+        "deleted": false,
+        "event_id": "tag:localhost:2016:9e48bbcc-c01f-44a7-bf73-27b9dd1f7b17",
+        "expiry": "2016-04-13T14:47:05+00:00",
+        "family_id": "urn:newsml:localhost:2016-03-14T14:47:05.303637:2736e979-d4ee-45b3-8179-2f34adfafc6b",
+        "firstcreated": "2016-03-14T14:47:05+00:00",
+        "groups": [{
+            "id": "root",
+            "refs": [{
+                "idRef": "main"
+            }],
+            "role": "grpRole:NEP"
+        }, {
+            "id": "main",
+            "refs": [{
+                "guid": "urn:newsml:localhost:2016-03-14T14:47:05.239737:e4c9b903-d6e9-4900-bca5-e165baab0806",
+                "item": {
+                    "_created": "2016-03-14T14:47:05+00:00",
+                    "_current_version": 1,
+                    "_etag": "fcc39010cd28b8d0730d8d3b63be82e38b803e14",
+                    "_id": "urn:newsml:localhost:2016-03-14T14:47:05.239737:e4c9b903-d6e9-4900-bca5-e165baab0806",
+                    "_updated": "2016-03-14T14:47:05+00:00",
+                    "blog": "56c5b34120dc360081f8e518",
+                    "dateline": {
+                        "date": "2016-03-14T14:47:05+00:00",
+                        "located": null,
+                        "source": "SF",
+                        "text": null
+                    },
+                    "event_id": "tag:localhost:2016:b0845c32-b576-416a-a0ff-f1f530264ec0",
+                    "expiry": "2016-04-13T14:47:05+00:00",
+                    "family_id": "urn:newsml:localhost:2016-03-14T14:47:05.239737:e4c9b903-d6e9-4900-bca5-e165baab0806",
+                    "firstcreated": "2016-03-14T14:47:05+00:00",
+                    "guid": "urn:newsml:localhost:2016-03-14T14:47:05.239737:e4c9b903-d6e9-4900-bca5-e165baab0806",
+                    "item_type": "text",
+                    "language": "en",
+                    "linked_in_packages": [{
+                        "package": "urn:newsml:localhost:2016-03-14T14:47:05.303637:2736e979-d4ee-45b3-8179-2f34adfafc6b"
+                    }],
+                    "marked_for_not_publication": false,
+                    "more_coming": false,
+                    "operation": "create",
+                    "original_creator": "56cad43adfc3f600800d2b97",
+                    "particular_type": "item",
+                    "place": [],
+                    "priority": 3,
+                    "pubstatus": "usable",
+                    "sign_off": "art",
+                    "source": "Liveblog",
+                    "state": "draft",
+                    "sticky": false,
+                    "text": "Normaler Text:&nbsp;, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.&nbsp;<div><br></div><div>Kann man hier die Schriftart \u00e4ndern?<br><p><br></p>",
+                    "type": "text",
+                    "unique_id": 77,
+                    "unique_name": "#77",
+                    "urgency": 3,
+                    "version_creator": "56cad43adfc3f600800d2b97",
+                    "versioncreated": "2016-03-14T14:47:05+00:00"
+                },
+                "residRef": "urn:newsml:localhost:2016-03-14T14:47:05.239737:e4c9b903-d6e9-4900-bca5-e165baab0806",
+                "type": "text"
+            }],
+            "role": "grpRole:Main"
+        }],
+        "guid": "urn:newsml:localhost:2016-03-14T14:47:05.303637:2736e979-d4ee-45b3-8179-2f34adfafc6b",
+        "highlight": false,
+        "language": "en",
+        "marked_for_not_publication": false,
+        "more_coming": false,
+        "operation": "create",
+        "order": 22,
+        "original_creator": "56cad43adfc3f600800d2b97",
+        "particular_type": "post",
+        "place": [],
+        "post_status": "open",
+        "priority": 3,
+        "published_date": "2016-03-14T14:47:05+00:00",
+        "publisher": {
+            "_created": "2016-02-22T09:26:18+00:00",
+            "_etag": "1386ed0820383d6ef60cbebdf001ff4f1f3895fc",
+            "_id": "56cad43adfc3f600800d2b97",
+            "_updated": "2016-03-14T14:42:52+00:00",
+            "active_privileges": {
+                "archive": 1,
+                "blogs": 1,
+                "desks": 1,
+                "global_preferences": 1,
+                "groups": 1,
+                "hold": 1,
+                "ingest": 1,
+                "ingest_providers": 1,
+                "legal_archive": 1,
+                "metadata_uniquename": 1,
+                "posts": 1,
+                "publish_post": 1,
+                "request_membership": 1,
+                "restore": 1,
+                "rewrite": 1,
+                "roles": 1,
+                "saved_searches": 1,
+                "spike": 1,
+                "submit_post": 1,
+                "tasks": 1,
+                "unlock": 1,
+                "unspike": 1,
+                "users": 1
+            },
+            "avatar": "56e6cdea4f4cb600e86928ae",
+            "display_name": "dpa\u30fblive Desk",
+            "email": "sueleyman.artiisik@dpa-info.com",
+            "first_name": "dpa\u30fblive",
+            "is_active": true,
+            "is_enabled": true,
+            "last_name": "Desk",
+            "needs_activation": false,
+            "picture_url": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/a4e7b72c7955fb9151af778dd07eaa3ae50cab3a5491e22a972c4dc1a3d87dee",
+            "role": "54e64cde1024542de2649be9",
+            "session_preferences": {
+                "56e6cc234f4cb600e39980a8": {
+                    "desk:items": [],
+                    "desk:last_worked": "",
+                    "pinned:items": [],
+                    "scratchpad:items": [],
+                    "stage:items": []
+                }
+            },
+            "sign_off": "art",
+            "user_preferences": {
+                "agg:view": {
+                    "active": {}
+                },
+                "archive:view": {
+                    "allowed": ["mgrid", "compact"],
+                    "category": "archive",
+                    "default": "mgrid",
+                    "label": "Users archive view format",
+                    "type": "string",
+                    "view": "mgrid"
+                },
+                "article:default:place": {
+                    "category": "article_defaults",
+                    "label": "Place",
+                    "place": [],
+                    "type": "list"
+                },
+                "categories:preferred": {
+                    "category": "categories",
+                    "label": "Preferred Categories",
+                    "selected": {},
+                    "type": "dict"
+                },
+                "dashboard:ingest": {
+                    "providers": []
+                },
+                "dateline:located": {
+                    "category": "article_defaults",
+                    "label": "Located",
+                    "type": "dict"
+                },
+                "editor:theme": {
+                    "theme": "",
+                    "type": "string"
+                },
+                "email:notification": {
+                    "category": "notifications",
+                    "default": true,
+                    "enabled": true,
+                    "label": "Send notifications via email",
+                    "type": "bool"
+                },
+                "feature:preview": {
+                    "category": "feature",
+                    "default": false,
+                    "enabled": false,
+                    "label": "Enable Feature Preview",
+                    "type": "bool"
+                },
+                "templates:recent": {},
+                "workqueue:items": {
+                    "items": []
+                }
+            },
+            "user_type": "administrator",
+            "username": "sartiisik"
+        },
+        "pubstatus": "usable",
+        "sign_off": "art",
+        "source": "Liveblog",
+        "state": "draft",
+        "type": "composite",
+        "unique_id": 78,
+        "unique_name": "#78",
+        "urgency": 3,
+        "version_creator": "56cad43adfc3f600800d2b97",
+        "versioncreated": "2016-03-14T14:47:05+00:00"
+    }],
+    "_links": {
+        "parent": {
+            "href": "/",
+            "title": "home"
+        },
+        "self": {
+            "href": "client_blogs/56c5b34120dc360081f8e518/posts?max_results=20",
+            "title": "client_blogs/<regex(\"[a-f0-9]{24}\"):blog_id>/posts"
+        }
+    },
+    "_meta": {
+        "max_results": 20,
+        "page": 1,
+        "total": 15
+    }
+}

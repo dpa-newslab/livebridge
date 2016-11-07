@@ -1,0 +1,27 @@
+auth:
+    dev:
+        user: "dev"
+        password: "pwd"
+        api_key: "F00Baz"
+    live:
+        user: "prod"
+        password: "pwd2"
+        api_key: "Foobar"
+bridges:
+    - source_id: "abcdefg"
+      endpoint:  "https://example.com/api/"
+      label: "Example 1"
+      targets:
+        - type: "scribble"
+          event_id: "123456"
+          auth: "dev"
+        - type: "another"
+          event_id: "654321"
+          auth: "live"
+    - source_id: 54321
+      endpoint:  "https://foo.org/api/"
+      label: "Example 2"
+      targets:
+        - type: "scribble"
+          event_id: "123456"
+          auth: "dev"
