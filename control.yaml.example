@@ -11,6 +11,7 @@ bridges:
     - source_id: "abcdefg"
       endpoint:  "https://example.com/api/"
       label: "Example 1"
+      type: "example"
       targets:
         - type: "scribble"
           event_id: "123456"
@@ -21,6 +22,7 @@ bridges:
     - source_id: 54321
       endpoint:  "https://foo.org/api/"
       label: "Example 2"
+      type: "example"
       targets:
         - type: "scribble"
           event_id: "123456"
