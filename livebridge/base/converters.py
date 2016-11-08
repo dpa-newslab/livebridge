@@ -62,10 +62,16 @@ class BaseConverter(object):
             logger.exception(e)
 
     async def convert(self, post):
-        """Convert incoming content of the incoming post to a string suitable to the \
-           target as content.
+        """Convert incoming content of the raw source data.
 
-           :param post: post object
-           :type post: livebridge.posts.base.BasePost
-           :returns: string - result of the conversion as string."""
+           Returns two values:
+
+           - string with converted text suitable for the target as content.
+           - list of local paths of any downloaded images. These temporary images \
+             will automatically get deleted afterwards.
+
+           :param post: original source post
+           :type dict: 
+           :returns: string - result of conversion as string
+           :returns: list - list of local paths of downloaded images"""
         raise NotImplementedError("Not implemented in converter.")
