@@ -128,7 +128,7 @@ class DynamoClient(BaseStorage):
             "TableName": self.table_name,
             "Item": {
                 "target_id": {"S": kwargs.get("target_id")},
-                "post_id": {"S": kwargs.get("post_id")},
+                "post_id": {"S": str(kwargs.get("post_id"))},
                 "source_id": {"S": kwargs.get("source_id")},
                 "text":  {"S": kwargs.get("text") or " "},
                 "sticky": {"N": str(int(kwargs.get("sticky", False)))},
@@ -156,7 +156,7 @@ class DynamoClient(BaseStorage):
             "IndexName": "source_id-updated-index",
             "KeyConditionExpression": "source_id = :value",
             "ExpressionAttributeValues": {
-                ":value": {"S": source_id},
+                ":value": {"S": str(source_id)},
             },
             "ProjectionExpression": "source_id, updated, post_id",
             "ScanIndexForward": False,
@@ -179,8 +179,8 @@ class DynamoClient(BaseStorage):
             "TableName": self.table_name,
             "KeyConditionExpression": "target_id = :value AND post_id= :post_id",
             "ExpressionAttributeValues": {
-                ":value": {"S": target_id},
-                ":post_id": {"S": post_id}
+                ":value": {"S": str(target_id)},
+                ":post_id": {"S": str(post_id)}
             },
             "ScanIndexForward": False,
             "ProjectionExpression": "target_id, source_id, updated, post_id, target_doc, sticky",
@@ -221,8 +221,8 @@ class DynamoClient(BaseStorage):
         params = {
             "TableName": self.table_name,
             "Key": {
-                "target_id": {"S": target_id},
-                "post_id": {"S": post_id},
+                "target_id": {"S": str(target_id)},
+                "post_id": {"S": str(post_id)},
             },
         }
         db = await self.db
