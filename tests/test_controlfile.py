@@ -91,3 +91,9 @@ class ControlTest(unittest.TestCase):
 
         assert control["auth"]["dev"]["api_key"] == "F00Baz"
         assert control["auth"]["live"]["api_key"] == "Foobar"
+
+    def test_controlfile_without_auth(self):
+        file_path = os.path.join(os.path.dirname(__file__), "files", "control-no-auth.yaml")
+        control = self.control.load(file_path, resolve_auth=True)
+        print(control)
+        assert 1 == True

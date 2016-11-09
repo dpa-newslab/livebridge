@@ -29,11 +29,11 @@ class ControlFile(object):
 
     def _resolve_auth(self, data):
         for x, bridge in enumerate(data.get("bridges", [])):
-            if data["auth"].get(bridge.get("auth")):
+            if data.get("auth", {}).get(bridge.get("auth")):
                 # add user creds to bridge config
                 data["bridges"][x]["auth"] = data["auth"][bridge["auth"]]
             for y, target in enumerate(bridge.get("targets", [])):
-                if data["auth"].get(target.get("auth")):
+                if data.get("auth", {}).get(target.get("auth")):
                     # add user creds to target config
                     data["bridges"][x]["targets"][y]["auth"] = data["auth"][target["auth"]]
                 elif target.get("auth"):

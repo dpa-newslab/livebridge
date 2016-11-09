@@ -28,11 +28,3 @@ bridges:
         - type: "scribble"
           event_id: "123456"
           auth: "dev"
-#    - channel: 54321
-#      endpoint:  "https://foo.org/api/"
-#      type:  "slack"
-#      user: "slack"
-#      targets:
-#        - type: "scribble"
-#          event_id: "123456"
-#          user: "dev"
