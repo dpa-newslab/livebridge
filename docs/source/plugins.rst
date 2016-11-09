@@ -15,7 +15,7 @@ Following plugins are currently available:
 Installing plugins
 ------------------
     
-Plugins **should** be available from PyPi_ and installable via **pip**.
+Plugins **can** be made available from PyPi_ to be installable via **pip**.
 
 For example to install a **Livebridge** with plugins for Liveblog_ and Scribblelive_:
 
