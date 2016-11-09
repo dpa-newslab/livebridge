@@ -78,3 +78,11 @@ TargetResponse
    :undoc-members:
    :inherited-members:
    :show-inheritance:
+
+ConversionResult
+~~~~~~~~~~~~~~~~
+.. autoclass:: livebridge.base.ConversionResult
+   :members:
+   :undoc-members:
+   :inherited-members:
+   :show-inheritance:

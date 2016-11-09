@@ -16,7 +16,7 @@
 import asynctest
 import livebridge.components
 from unittest.mock import MagicMock
-from livebridge.base import BaseTarget, BaseConverter, TargetResponse
+from livebridge.base import BaseTarget, BaseConverter, TargetResponse, ConversionResult
 from livebridge.storages import DynamoClient
 from livebridge.components import get_target, add_target
 
@@ -31,7 +31,7 @@ class BaseTargetTests(asynctest.TestCase):
 
     def setUp(self):
         self.converter = BaseConverter
-        self.converter.convert = asynctest.CoroutineMock(return_value=("converted", []))
+        self.converter.convert = asynctest.CoroutineMock(return_value=ConversionResult("converted", []))
         self.converter.remove_images = asynctest.CoroutineMock(return_value=True)
         self.converter.source = "liveblog"
         self.converter.target = "scribble"
@@ -186,7 +186,7 @@ class BaseTargetTests(asynctest.TestCase):
 
     async def test_handle_post_failing(self):
         self.post.is_deleted = False
-        self.converter.convert = asynctest.CoroutineMock(return_value=(None,[]))
+        self.converter.convert = asynctest.CoroutineMock(return_value=ConversionResult(None,[]))
         res = await self.target.handle_post(self.post)
         assert res == None
 

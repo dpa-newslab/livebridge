@@ -18,13 +18,16 @@ import logging
 import os.path
 import uuid
 
+
 logger = logging.getLogger(__name__)
+
 
 FILE_EXT = {
     "image/jpeg": "jpeg",
     "image/gif": "gif",
     "image/png": "png",
 }
+
 
 class BaseConverter(object):
     """Base class for converters.
@@ -62,16 +65,10 @@ class BaseConverter(object):
             logger.exception(e)
 
     async def convert(self, post):
-        """Convert incoming content of the raw source data.
+        """Convert incoming content of the incoming post to a string suitable to the \                                                                                                   
+           target as content.
 
-           Returns two values:
-
-           - string with converted text suitable for the target as content.
-           - list of local paths of any downloaded images. These temporary images \
-             will automatically get deleted afterwards.
-
-           :param post: original source post
-           :type dict: 
-           :returns: string - result of conversion as string
-           :returns: list - list of local paths of downloaded images"""
+           :param post: post object
+           :type post: :class:`livebridge.posts.base.BasePost`
+           :returns: :class:`livebridge.base.ConversionResult` - result of the conversion."""
         raise NotImplementedError("Not implemented in converter.")

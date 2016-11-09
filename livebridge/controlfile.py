@@ -36,7 +36,7 @@ class ControlFile(object):
                 if data["auth"].get(target.get("auth")):
                     # add user creds to target config
                     data["bridges"][x]["targets"][y]["auth"] = data["auth"][target["auth"]]
-                else:
+                elif target.get("auth"):
                     raise LookupError("Data for user [{}] not found in control file.".format(target.get("auth")))
         return data
 
