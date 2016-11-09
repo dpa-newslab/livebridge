@@ -18,13 +18,16 @@ import logging
 import os.path
 import uuid
 
+
 logger = logging.getLogger(__name__)
+
 
 FILE_EXT = {
     "image/jpeg": "jpeg",
     "image/gif": "gif",
     "image/png": "png",
 }
+
 
 class BaseConverter(object):
     """Base class for converters.
@@ -66,6 +69,6 @@ class BaseConverter(object):
            target as content.
 
            :param post: post object
-           :type post: livebridge.posts.base.BasePost
-           :returns: string - result of the conversion as string."""
+           :type post: :class:`livebridge.posts.base.BasePost`
+           :returns: :class:`livebridge.base.ConversionResult` - result of the conversion."""
         raise NotImplementedError("Not implemented in converter.")

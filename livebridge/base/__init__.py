@@ -27,3 +27,16 @@ class TargetResponse(UserDict):
     Data returned from a BaseTarget derived target type has to be a TargetResponse.
     """
     pass
+
+
+class ConversionResult(object):
+    """Result object for conversions.
+
+    :param content: content result of conversion
+    :type string:
+    :param images: list of local file paths of downloaded images, optional
+    :type list:
+    """
+    def __init__(self, content, images=[]):
+        self.content = content
+        self.images = images

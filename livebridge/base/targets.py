@@ -20,10 +20,6 @@ from livebridge.components import get_converter, get_db_client
 
 logger = logging.getLogger(__name__)
 
-class TargetData(UserDict):
-
-    def test(self):
-        return len(self.data)
 
 class BaseTarget(object):
     """Base class for targets.
@@ -122,7 +118,9 @@ class BaseTarget(object):
         converter = self._get_converter(post)
         if converter:
             # convert from source to target
-            post.content, post.images = await converter.convert(post.data)
+            conversion = await converter.convert(post.data)
+            post.content = conversion.content
+            post.images = conversion.images
             logger.debug("CONVERSION RESULTS: {}".format(post.content))
 
             if not post.content and not post.is_deleted:
