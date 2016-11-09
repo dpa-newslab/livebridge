@@ -65,10 +65,10 @@ class BaseConverter(object):
             logger.exception(e)
 
     async def convert(self, post):
-        """Convert incoming content of the incoming post to a string suitable to the \                                                                                                   
+        """Convert incoming content of the incoming raw source post to a string suitable to the \
            target as content.
 
-           :param post: post object
-           :type post: :class:`livebridge.posts.base.BasePost`
+           :param post: raw source post
+           :type dictionary: dictionary
            :returns: :class:`livebridge.base.ConversionResult` - result of the conversion."""
         raise NotImplementedError("Not implemented in converter.")
