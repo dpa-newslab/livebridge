@@ -95,5 +95,4 @@ class ControlTest(unittest.TestCase):
     def test_controlfile_without_auth(self):
         file_path = os.path.join(os.path.dirname(__file__), "files", "control-no-auth.yaml")
         control = self.control.load(file_path, resolve_auth=True)
-        print(control)
         assert 1 == True
