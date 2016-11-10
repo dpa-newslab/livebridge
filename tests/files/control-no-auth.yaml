@@ -1,0 +1,8 @@
+bridges:
+    - type: "test"
+      label: "TEST"
+      source_id": "test-1"
+      targets:
+        - type: "test"
+          label: "TARGET"
+          target_id: "test-2"
