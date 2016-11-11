@@ -39,6 +39,10 @@ livebridge --control=s3://bucketname/control.yaml
 
 See https://pythonhosted.org/livebridge/control.html for more details.
 
+## Documentation
+
+http://pythonhosted.org/livebridge/
+
 ## Plugins
 Several source and targets are available as **[plugins]( https://pythonhosted.org/livebridge/plugins.html)**. Following plugins are currently available:
 
@@ -50,7 +54,7 @@ Several source and targets are available as **[plugins]( https://pythonhosted.or
 It's possbile to write own service plugins and to make them available to **livebridge** as a Python module via *[PyPI](https://pypi.python.org/pypi)*.
 See *https://github.com/dpa-newslab/livebridge-slack* as an example plugin.
 
-**[Guide for developing own Livebridge plugins](https://pythonhosted.org/livebridge/ownplugins.html)**
+**[Tutorial: How to build a Livebridge plugin](http://pythonhosted.org/livebridge/tutorial.html)**
 
 ## Developing
 
