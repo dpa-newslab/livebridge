@@ -35,6 +35,7 @@ Create development environment
 
  .. code-block:: bash
 
+   cd livebridge
    pip install -r requirements.txt
 
  - Install plugins (when only developing livebridge core)

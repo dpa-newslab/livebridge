@@ -25,6 +25,7 @@ Installation & Setup
    control
    extras
    developing 
+   tutorial
 
 Plugins
 -------
