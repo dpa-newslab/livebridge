@@ -37,7 +37,6 @@ Plugins
    ownplugins
    pluginapi
 
-
 License
 -------
 

@@ -5,9 +5,11 @@ Writing own service plugins
 
 The name of your Python module has to start with **livebridge_**, so it can be discovered at start time. For example **livebridge_slack**, **livebridge_scribblelive** or **livebridge_liveblog**.
 
-The module has also be available in `PYTHONPATH <https://docs.python.org/3/using/cmdline.html#envvar-PYTHONPATH>`_ to be discovered.         
+The module has also be available in `PYTHONPATH <https://docs.python.org/3/using/cmdline.html#envvar-PYTHONPATH>`_ to be discovered.
 
-Plugin components
+See :ref:`Tutorial: How to build a Livebridge plugin <tutorial>`
+
+plugin components
 -----------------
 There are four different components, which a custom plugin module can provide:
 

@@ -5,7 +5,7 @@ Tutorial: How to build a Livebridge plugin
 
 Livebridge is extensible through plugins. 
 
-The easiest way to create your own plugin is to adapt this `skeleton plugin <https://github.com/mborho/livebridge-skeleton>`_ and to modify it for your own needs:
+The easiest way to create your own plugin is to adapt this `skeleton plugin <https://github.com/dpa-newslab/livebridge-plugin-skeleton>`_ and to modify it for your own needs:
  \
 
 **Setup a development environment**
@@ -20,7 +20,7 @@ Follow the steps described here: http://pythonhosted.org/livebridge/developing.h
 
 .. code-block:: bash
 
-    git clone git@github.com:mborho/livebridge-skeleton.git
+    git clone git@github.com:dpa-newslab/livebridge-plugin-skeleton.git
 
 **Install your plugin in develop mode**
 
@@ -28,7 +28,7 @@ In order to get your plugin recognized and included by **livebridge** at startup
 
 .. code-block:: bash
 
-  cd livebridge-skeleton
+  cd livebridge-plugin-skeleton
   python setup.py develop
 
 This installs our plugin in your virtual Python environment in editable mode!
@@ -85,7 +85,7 @@ Here you can see all components used in this merely blank plugin. *See* `<http:/
 If you want to distribute content from a service with **Livebridge**, you have to  implement a **source**, which looks up a service for new posts. 
  \
 
-Have a look at https://github.com/dpa-newslab/livebridge-skeleton/blob/master/livebridge_slack/source.py to see how this is done:
+Have a look at https://github.com/dpa-newslab/livebridge-plugin-skeleton/blob/master/livebridge_skeleton/source.py to see how this is done:
 
 .. code-block:: python 
 
