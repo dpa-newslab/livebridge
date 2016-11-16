@@ -20,7 +20,7 @@ version = '0.12.0'
 
 setup(name='livebridge',
       version=version,
-      description="Keep content in-sync across services. Or simply syndicate content to multiple services.",
+      description="Keep content in-sync across services. Or simply syndicate content to multiple services. Based on asyncio."
       long_description="""\
 See https://github.com/dpa-newslab/livebridge for more infos.
 """,
@@ -33,7 +33,7 @@ See https://github.com/dpa-newslab/livebridge for more infos.
         "Operating System :: POSIX :: Linux",
         "Environment :: Console",
         ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
-      keywords=['liveticker','liveblog','syndication'],
+      keywords=['liveticker','liveblog','syndication', "async", "asyncio"],
       author='dpa-infocom GmbH',
       maintainer='Martin Borho',
       maintainer_email='martin@borho.net',
