@@ -104,7 +104,9 @@ class Controller(object):
         if bridge.source.mode == "streaming":
             self.bridges[bridge] = self.run_stream(bridge=bridge)
         elif bridge.source.mode == "polling":
-            self.bridges[bridge] = self.run_poller(bridge=bridge, interval=self.poll_interval)
+            # custom source polling intervall set in control file?
+            poll_interval = config_data["poll_interval"] if config_data.get("poll_interval") else self.poll_interval
+            self.bridges[bridge] = self.run_poller(bridge=bridge, interval=poll_interval)
 
     def remove_bridge(self, bridge):
         logger.info("ENDING: {}".format(bridge))
