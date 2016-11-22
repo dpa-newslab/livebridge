@@ -20,6 +20,7 @@ from sqlalchemy_aio import ASYNCIO_STRATEGY
 from sqlalchemy import create_engine, MetaData, Table, Column,\
                        Integer, String, Text, Boolean, DateTime, create_engine
 from sqlalchemy.schema import CreateTable
+from sqlalchemy.sql import select
 from livebridge.storages.base import BaseStorage
 
 
@@ -93,6 +94,21 @@ class SQLStorage(BaseStorage):
             logger.error("[DB] Error when querying for last updated item on {}".format(source_id))
             logger.exception(e)
         return None
+
+    async def get_by_post_ids(self, source_id, post_ids, *, full=False):
+        results = []
+        try:
+            db = await self.db
+            table = self._get_table()
+            columns = [table] if full == True else [table.c.post_id]
+            sql = select(columns=columns).where(table.c.source_id==source_id).where(table.c.post_id.in_(post_ids))
+            db_res = await db.execute(sql)
+            for r in await db_res.fetchall():
+                results.append(r if full == True else r[0])
+        except Exception as e:
+            logger.error("[DB] Error when querying for posts {}".format(post_ids))
+            logger.exception(e)
+        return results
 
     async def get_post(self, target_id, post_id):
         try:
