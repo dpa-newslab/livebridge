@@ -14,7 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import asynctest
-from livebridge.base import PollingSource, StreamingSource
+from livebridge.base import BaseSource, PollingSource, StreamingSource
+from livebridge.storages.base import BaseStorage
 from livebridge.components import get_source, add_source
 
 class TestSource(StreamingSource):
@@ -23,6 +24,11 @@ class TestSource(StreamingSource):
         self.foo = config.get("foo")
 
 class BaseSourcesTest(asynctest.TestCase):
+
+    async def test_base_source(self):
+        source = BaseSource()
+        db = source._db
+        assert isinstance(db, BaseStorage)
 
     async def test_websocket_methods(self):
         source = StreamingSource()
@@ -50,3 +56,26 @@ class BaseSourcesTest(asynctest.TestCase):
     def test_get_source_unkown(self):
         source = get_source({"type": "foo"})
         assert source == None
+
+    async def test_filter_new_posts(self):
+        source = BaseSource()
+        source._db_client = asynctest.MagicMock()
+        source._db_client.get_known_posts = asynctest.CoroutineMock(return_value=["two", "four", "five"])
+        post_ids = ["one", "two", "three", "four", "five", "six"]
+        new_ids = await source.filter_new_posts("source_id", post_ids)
+        assert new_ids == ["one", "three", "six"]
+        source._db_client.get_known_posts.assert_called_once_with("source_id", post_ids)
+
+        # empty list
+        source._db_client.get_known_posts = asynctest.CoroutineMock(return_value=[])
+        new_ids = await source.filter_new_posts("source_id", [])
+        assert new_ids == []
+        source._db_client.get_known_posts.assert_called_once_with("source_id", [])
+
+    async def test_filter_new_posts_failing(self):
+        source = BaseSource()
+        source._db_client = asynctest.MagicMock()
+        source._db_client.get_known_posts = asynctest.CoroutineMock(side_effect=Exception())
+        new_ids = await source.filter_new_posts("source_id", [])
+        assert new_ids == []
+        source._db_client.get_known_posts.call_count = 1

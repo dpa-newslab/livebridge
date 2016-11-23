@@ -174,6 +174,36 @@ class DynamoClient(BaseStorage):
             logger.error(e)
         return None
 
+    async def get_known_posts(self, source_id, post_ids):
+        results = []
+        try:
+            # build ExpressionAttributeValues
+            expr_attr = {":value": {"S": str(source_id)}}
+            for x, pid in enumerate(post_ids):
+                expr_attr[":post_id_{}".format(x)] = {"S": str(pid)}
+
+            # build KeyConditionExpression
+            filter_expr = " OR ".join(["post_id= :post_id_{}".format(x) for x in range(len(post_ids))])
+
+            params = {
+                "TableName": self.table_name,
+                "IndexName": "source_id-updated-index",
+                "KeyConditionExpression": "source_id = :value ",
+                "ExpressionAttributeValues": expr_attr,
+                "ScanIndexForward": False,
+                "ProjectionExpression": "post_id",
+                "FilterExpression": filter_expr,
+            }
+            db = await self.db
+            response = await db.query(**params)
+            if response.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
+                for item in response.get("Items", []):
+                    results.append(item["post_id"]["S"])
+        except Exception as e:
+            logger.error("[DB] Error when querying for posts {}".format(post_ids))
+            logger.exception(e)
+        return results
+
     async def get_post(self, target_id, post_id):
         params = {
             "TableName": self.table_name,

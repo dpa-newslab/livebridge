@@ -21,7 +21,7 @@ import livebridge.logger
 import signal
 from livebridge import config
 from livebridge.controller import Controller
-from livebridge.storages import get_db_client
+from livebridge.components import get_db_client
 from livebridge.loader import load_extensions
 
 logger = logging.getLogger(__name__)

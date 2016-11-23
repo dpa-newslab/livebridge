@@ -43,3 +43,6 @@ class PostTest(asynctest.TestCase):
 
         with self.assertRaises(NotImplementedError):
             await self.storage.delete_post(target_id="one", post_id="two")
+
+        with self.assertRaises(NotImplementedError):
+            await self.storage.get_known_posts(source_id="one", post_ids=["two"])

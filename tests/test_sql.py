@@ -18,7 +18,9 @@ import os
 from datetime import datetime
 from sqlalchemy_aio.engine import AsyncioEngine
 from livebridge.storages.base import BaseStorage
-from livebridge.storages import SQLStorage, get_db_client
+from livebridge.storages import SQLStorage
+from livebridge.components import get_db_client
+
 
 class SQLStorageTests(asynctest.TestCase):
 
@@ -28,8 +30,6 @@ class SQLStorageTests(asynctest.TestCase):
         params = {"dsn": self.dsn, "table_name": self.table_name}
         self.client = SQLStorage(**params)
         self.target_id = "scribble-max.mustermann@dpa-info.com-1234567890"
-        # setup db table
-        await self.client.setup()
 
     async def tearDown(self):
         if os.path.exists("./tests/tests.db"):
@@ -45,6 +45,18 @@ class SQLStorageTests(asynctest.TestCase):
         db = await self.client.db
         assert type(db) == AsyncioEngine
         
+    async def test_setup(self):
+        self.client._engine = asynctest.MagicMock()
+        db_res = asynctest.MagicMock()
+        self.client._engine.has_table = asynctest.CoroutineMock(return_value=False)
+        self.client._engine.execute = asynctest.CoroutineMock(return_value=True)
+        conn = asynctest.MagicMock()
+        conn.execute = asynctest.CoroutineMock(return_value=True)
+        conn.close = asynctest.CoroutineMock(return_value=True)
+        self.client._engine.connect = asynctest.CoroutineMock(return_value=conn)
+        res = await self.client.setup()
+        assert res == True
+
     async def test_get_db_client(self):
         params = {
             "dsn": "sqlite:///",
@@ -59,8 +71,20 @@ class SQLStorageTests(asynctest.TestCase):
         db2 = get_db_client(**params)
         assert db == db2
 
+    async def test_setup(self):
+        self.client._engine = asynctest.MagicMock()
+        self.client._engine.has_table = asynctest.CoroutineMock(return_value=False)
+        self.client._engine.execute = asynctest.CoroutineMock(return_value=True)
+        conn = asynctest.MagicMock()
+        conn.execute = asynctest.CoroutineMock(return_value=True)
+        conn.close = asynctest.CoroutineMock(return_value=True)
+        self.client._engine.connect = asynctest.CoroutineMock(return_value=conn)
+        res = await self.client.setup()
+        assert res == True
+
     async def test_setup_failing(self):
-        self.client.dsn = asynctest.CoroutineMock(side_effect=Exception())
+        self.client._engine = asynctest.MagicMock()
+        self.client._engine.has_table = asynctest.CoroutineMock(side_effect=Exception())
         res = await self.client.setup()
         assert res == False
 
@@ -82,8 +106,9 @@ class SQLStorageTests(asynctest.TestCase):
         res = await self.client.get_last_updated("source")
         assert type(res) == datetime
 
-        # failing
-        db_res.first = asynctest.CoroutineMock(side_effect=Exception())
+    async def test_get_last_updated_failing(self):
+        self.client._engine = asynctest.MagicMock()
+        self.client._engine.execute = asynctest.CoroutineMock(side_effect=Exception())
         res = await self.client.get_last_updated("source")
         assert res == None
 
@@ -121,11 +146,28 @@ class SQLStorageTests(asynctest.TestCase):
         assert res == True
         assert self.client._engine.execute.call_count == 1
 
-        # failing
+    async def test_update_post_failing(self):
+        self.client._engine = asynctest.MagicMock()
         self.client._engine.execute = asynctest.CoroutineMock(side_effect=Exception())
-        res = await self.client.update_post(**params)
+        res = await self.client.update_post(**{})
         assert res == False
         assert self.client._engine.execute.call_count == 1
+
+    async def test_get_known_posts(self):
+        source_id =  "source-id"
+        post_ids = ["one", "two", "three", "four", "five", "six"]
+        db_res = asynctest.MagicMock()
+        db_res.fetchall = asynctest.CoroutineMock(return_value=[("one",), ("three",), ("five",)])
+        self.client._engine = asynctest.MagicMock()
+        self.client._engine.execute = asynctest.CoroutineMock(return_value=db_res)
+        res = await self.client.get_known_posts(source_id, post_ids)
+        assert res == ["one", "three", "five"]
+
+    async def test_get_known_posts_failing(self):
+        self.client._engine = asynctest.MagicMock()
+        self.client._engine.execute = asynctest.CoroutineMock(side_effect=Exception())
+        res = await self.client.get_known_posts("source-id", ["one"])
+        assert res == []
 
     async def test_get_post(self):
         item = {
@@ -140,7 +182,8 @@ class SQLStorageTests(asynctest.TestCase):
         assert res["target_doc"] == {'target': 'doc'}
         assert res["updated"] == item["updated"]
 
-        # failing
+    async def test_get_post_failing(self):
+        self.client._engine = asynctest.MagicMock()
         self.client._engine.execute = asynctest.CoroutineMock(side_effect=Exception())
         res = await self.client.get_post("target", "post")
         assert res == None
@@ -151,7 +194,8 @@ class SQLStorageTests(asynctest.TestCase):
         res = await self.client.delete_post("target", "post")
         assert res == True
 
-        # failing
+    async def test_delete_post_failing(self):
+        self.client._engine = asynctest.MagicMock()
         self.client._engine.execute = asynctest.CoroutineMock(side_effect=Exception())
         res = await self.client.delete_post("target", "post")
         assert res == False

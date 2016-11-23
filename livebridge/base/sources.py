@@ -13,6 +13,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import logging
+from livebridge.components import get_db_client
+
+
+logger = logging.getLogger(__name__)
+
 
 class BaseSource(object):
     """Base class for sources."""
@@ -27,6 +33,31 @@ class BaseSource(object):
         :param config: Configuration passed from the control file.
         """
         pass
+
+    @property
+    def _db(self):
+        if not hasattr(self, "_db_client") or self._db_client == None:
+            self._db_client = get_db_client()
+        return self._db_client
+
+    async def filter_new_posts(self, source_id, post_ids):
+        """Filters ist of post_id for new ones.
+
+        :param source_id: id of the source
+        :type string:
+        :param post_ids: list of post ids
+        :type list:
+        :returns: list of unknown post ids."""
+        new_ids = []
+        try:
+            db_client = self._db
+            posts_in_db = await db_client.get_known_posts(source_id, post_ids)
+            new_ids = [p for p in post_ids if p not in posts_in_db]
+        except Exception as e:
+            logger.error("Error when filtering for new posts {} {}".format(source_id, post_ids))
+            logger.exception(e)
+        return new_ids
+
 
 class PollingSource(BaseSource):
     """Base class for sources which are getting polled. Any custom adapter source, which \

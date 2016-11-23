@@ -37,3 +37,13 @@ class BaseStorage(object):
 
     async def get_last_updated(self, source_id):
         raise NotImplementedError()
+
+    async def get_known_posts(self, source_id, post_ids):
+        """Return a list of known post_id of a source for a given list of post ids.
+
+        :param source_id: id of the source
+        :type string:
+        :param post_ids: list of post ids
+        :type list:
+        :returns: - list of dictionaries."""
+        raise NotImplementedError()

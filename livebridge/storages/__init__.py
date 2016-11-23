@@ -16,12 +16,3 @@
 from livebridge import config
 from livebridge.storages.dynamo import DynamoClient
 from livebridge.storages.sql import SQLStorage
-
-
-def get_db_client(**kwargs):
-    if kwargs.get("dsn") or config.DB.get("dsn"):
-        params = config.DB if not kwargs else kwargs
-        return SQLStorage(**params)
-    # default dynamodb
-    params = config.AWS if not kwargs else kwargs
-    return DynamoClient(**params)

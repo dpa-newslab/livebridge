@@ -15,7 +15,7 @@
 # limitations under the License.
 import os
 import json
-from livebridge.storages import get_db_client
+from livebridge.components import get_db_client
 
 
 def load_file(name):

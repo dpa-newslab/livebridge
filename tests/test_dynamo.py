@@ -20,7 +20,8 @@ import aiohttp
 from datetime import datetime
 from botocore.exceptions import ParamValidationError, BotoCoreError
 from livebridge.storages.base import BaseStorage
-from livebridge.storages import DynamoClient, get_db_client
+from livebridge.storages import DynamoClient
+from livebridge.components import get_db_client
 from tests import load_json
 
 class DynamoClientTests(asynctest.TestCase):
@@ -218,6 +219,39 @@ class DynamoClientTests(asynctest.TestCase):
         res = await self.client.get_last_updated(source_id)
         assert type(res) == datetime
         assert db.query.call_count == 1
+
+    async def test_get_known_posts(self):
+        source_id =  "source-id"
+        post_ids = ["one", "two", "three", "four", "five", "six"]
+        db_res = {
+            "ResponseMetadata": {"HTTPStatusCode": 200},
+            "Items": [
+                {"post_id": {"S": "one"}},
+                {"post_id": {"S": "three"}},
+                {"post_id": {"S": "five"}},
+            ]}
+        db = await self.client.db
+        db.query =  asynctest.CoroutineMock(return_value=db_res)
+        res = await self.client.get_known_posts(source_id, post_ids)
+        assert res == ["one", "three", "five"]
+        db.query.assert_called_once_with(
+            ExpressionAttributeValues={
+                    ':post_id_1': {'S': 'two'}, ':post_id_2': {'S': 'three'}, ':post_id_0': {'S': 'one'},
+                    ':value': {'S': 'source-id'}, ':post_id_5': {'S': 'six'}, ':post_id_3': {'S': 'four'},
+                    ':post_id_4': {'S': 'five'}}, 
+            FilterExpression='post_id= :post_id_0 OR post_id= :post_id_1 OR post_id= :post_id_2 OR post_id='\
+                             +' :post_id_3 OR post_id= :post_id_4 OR post_id= :post_id_5',
+            IndexName='source_id-updated-index',
+            KeyConditionExpression='source_id = :value ',
+            ProjectionExpression='post_id',
+            ScanIndexForward=False,
+            TableName='livebridge_test')
+
+    async def test_get_known_posts_failing(self):
+        db = await self.client.db
+        db.query =  asynctest.CoroutineMock(side_effect=Exception())
+        res = await self.client.get_known_posts("source-id", ["one"])
+        assert res == []
 
     async def test_get_post(self):
         api_res = {'Count': 1, 'ScannedCount': 2, 'Items': [

@@ -95,16 +95,15 @@ class SQLStorage(BaseStorage):
             logger.exception(e)
         return None
 
-    async def get_by_post_ids(self, source_id, post_ids, *, full=False):
+    async def get_known_posts(self, source_id, post_ids):
         results = []
         try:
             db = await self.db
             table = self._get_table()
-            columns = [table] if full == True else [table.c.post_id]
-            sql = select(columns=columns).where(table.c.source_id==source_id).where(table.c.post_id.in_(post_ids))
+            sql = select(columns=[table.c.post_id]).where(table.c.source_id==source_id).where(table.c.post_id.in_(post_ids))
             db_res = await db.execute(sql)
             for r in await db_res.fetchall():
-                results.append(r if full == True else r[0])
+                results.append(r[0])
         except Exception as e:
             logger.error("[DB] Error when querying for posts {}".format(post_ids))
             logger.exception(e)
