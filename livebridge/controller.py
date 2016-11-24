@@ -32,6 +32,7 @@ class Controller(object):
         self.poll_interval = poll_interval
         self.read_control = False
         self.tasked = []
+        self.sleep_tasks = []
         self.bridges = {}
         self._sqs_client = None
         self.retry_run_interval = 30
@@ -57,9 +58,15 @@ class Controller(object):
     async def clean_shutdown(self):
         logger.info("Requesting proper shutdown of tasks.")
         self.shutdown = True
+        await self.stop_bridges()
         while len(self.bridges) > 0:
+            logger.debug("Running bridges left: {}".format(len(self.bridges)))
             await asyncio.sleep(1)
-        return True
+
+    async def stop_bridges(self):
+        """Stop all sleep tasks to allow bridges to end."""
+        for t in self.sleep_tasks:
+            t.cancel()
 
     async def check_control_change(self):
         client = self.sqs_client
@@ -73,7 +80,7 @@ class Controller(object):
         except ClientError as e:
             logger.warning("Purging SQS queue failed with: {}".format(e))
         # check for update events
-        while True:
+        while True and self.shutdown != True:
             try:
                 response = await client.receive_message(
                     QueueUrl=self.config["sqs_s3_queue"]
@@ -88,12 +95,14 @@ class Controller(object):
                     )
                     if data:
                         for rec in data.get("Records", []):
-                            self.read_control = True
                             logger.debug("EVENT: {} {}".format(rec.get("s3", {}).get("object", {}).get("key"), rec.get("eventName")))
+                            self.read_control = True
+                            await self.stop_bridges()
                             return
             except Exception as e:
                 logger.error("Error fetching SQS messages with: {}".format(e))
-            await asyncio.sleep(60)
+            await self.sleep(60)
+        client.close()
 
     def append_bridge(self, config_data):
         bridge = LiveBridge(config_data)
@@ -162,19 +171,38 @@ class Controller(object):
         future = await bridge.listen_ws()
         while True and self.read_control != True and self.shutdown != True:
             # wait for shutdown
-            await asyncio.sleep(4)
-        await bridge.source.stop()
+            await self.sleep(4)
+
+        # stop bridge
+        try:
+            await bridge.source.stop()
+        except Exception as e:
+            logger.error("Error when stopping stream: {}".format(e))
 
         self.remove_bridge(bridge)
         return 
+
+    async def sleep(self, seconds):
+        if self.read_control == True or self.shutdown == True:
+            # if shutdown or restart is requested, don't fall asleep again
+            return True
+
+        try:
+            task = asyncio.ensure_future(asyncio.sleep(seconds))
+            self.sleep_tasks.append(task)
+            await task
+        except asyncio.CancelledError:
+            pass
+        finally:
+            self.sleep_tasks.remove(task)
+        return True
 
     async def run_poller(self, *, bridge, interval=180):
         # initialize liveblogs to watch
         while True and self.read_control != True and self.shutdown != True:
             #logger.debug("Checked new posts for {} on {}".format(bridge.source_id, bridge.endpoint))
             await bridge.check_posts()
-            # wait
-            await asyncio.sleep(interval)
+            await self.sleep(interval)
 
         self.remove_bridge(bridge)
         return 

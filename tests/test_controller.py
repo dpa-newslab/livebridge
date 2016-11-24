@@ -203,6 +203,18 @@ class ControllerTests(asynctest.TestCase):
         assert self.controller.remove_bridge.call_count == 1
         assert bridge.source.stop.call_count == 1
 
+        # test stop failing
+        bridge.source.stop = asynctest.CoroutineMock(side_effect=Exception())
+        await self.controller.run_stream(bridge=bridge)
+        assert bridge.source.stop.call_count == 1
+
+    async def test_stop_bridges(self):
+        sleeper = MagicMock()
+        sleeper.cancel = asynctest.CoroutineMock()
+        self.controller.sleep_tasks.append(sleeper)
+        await self.controller.stop_bridges()
+        assert sleeper.cancel.call_count == 1
+
     @asynctest.ignore_loop
     def test_append_streaming_bridge(self):
         class Source:
