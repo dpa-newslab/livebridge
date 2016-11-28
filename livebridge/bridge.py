@@ -73,8 +73,11 @@ class LiveBridge(object):
         await target.handle_post(post)
 
     async def new_posts(self, posts):
-        logger.info("##### Received {} posts from {}".format(len(posts), self.source))
-        for p in posts:
-            coros = [self._process_post(t, p) for t in self.targets]
-            await asyncio.gather(*coros)
+        try:
+            logger.info("##### Received {} posts from {}".format(len(posts), self.source))
+            for p in posts:
+                coros = [self._process_post(t, p) for t in self.targets]
+                await asyncio.gather(*coros, return_exceptions=True)
+        except Exception as e:
+            logger.error("Handling new posts failed [{}]: {}".format(self.source, e))
         return True

@@ -103,6 +103,10 @@ class LiveBridgeTest(asynctest.TestCase):
         res = await self.bridge.new_posts([api_res])
         assert res == True
 
+    async def test_new_posts_failing(self):
+        res = await self.bridge.new_posts(lambda: Exception())
+        assert res == True
+
     async def test_listen_ws(self):
         self.bridge.source.listen = asynctest.CoroutineMock()
         res = await self.bridge.listen_ws()
