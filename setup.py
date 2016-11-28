@@ -16,11 +16,11 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.12.0'
+version = '0.13.0'
 
 setup(name='livebridge',
       version=version,
-      description="Keep content in-sync across services. Or simply syndicate content to multiple services. Based on asyncio."
+      description="Keep content in-sync across services. Or simply syndicate content to multiple services. Based on asyncio.",
       long_description="""\
 See https://github.com/dpa-newslab/livebridge for more infos.
 """,
