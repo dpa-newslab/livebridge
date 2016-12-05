@@ -32,6 +32,10 @@ class LiveBridge(object):
         self.endpoint = self.config.get("endpoint")
         self.label = self.config.get("label", "-")
         self.db = get_db_client()
+        self.loop = asyncio.get_event_loop()
+        self.queue = asyncio.Queue()
+        self.queue_task = asyncio.ensure_future(self._queue_consumer())
+        self.sleep_tasks = []
 
     def __repr__(self):
         return "<LiveBridge [{}] {} {}>".format(self.label, self.endpoint, self.source_id)
@@ -43,6 +47,12 @@ class LiveBridge(object):
         # setup api client
         self.api_client = get_source(self.config)
         return self.api_client
+
+    def stop(self):
+        self.queue_task.cancel()
+        for t in self.sleep_tasks:
+            t.cancel()
+        return True
 
     def add_target(self, target):
         logger.debug("Adding target {} to {}".format(target, self))
@@ -59,30 +69,63 @@ class LiveBridge(object):
                 logger.info("LAST UPDATED: {} {}".format(self.source.last_updated, self.source))
             posts = await self.source.poll()
             if posts:
-                await self.new_posts(posts)
+                asyncio.ensure_future(self.new_posts(posts))
         except Exception as e:
             logger.error("Fatal checking {}{}".format(getattr(self, "endpoint", "-"), self.source_id))
             logger.exception(e)
         return True
 
-    async def _process_post(self, target, source_post):
-        post = copy.deepcopy(source_post)
-        # update last updated property in source client
-        self.source.last_updated = post.updated
-        # handle post in target
-        await target.handle_post(post)
-
-    async def log_error_results(self, results):
-        for err in [r for r in results if r]:
-            try:
-                raise err
-            except Exception as e:
-                logger.error("Handling new posts failed [{}]: {}".format(self.source, e))
-
-    async def new_posts(self, posts):
-        logger.info("##### Received {} posts from {}".format(len(posts), self.source))
-        for p in posts:
-            coros = [self._process_post(t, p) for t in self.targets]
-            res = await asyncio.gather(*coros, return_exceptions=True)
-            await self.log_error_results(res)
+    async def _sleep(self, seconds):
+        try:
+            task = asyncio.ensure_future(asyncio.sleep(seconds))
+            self.sleep_tasks.append(task)
+            await task
+        except asyncio.CancelledError:
+            pass
+        finally:
+            self.sleep_tasks.remove(task)
         return True
+
+    async def _action_done(self, fn, item):
+        exc = fn.exception()
+        if exc:
+            logger.error("TARGET ACTION FAILED, WILL RETRY: [{}] {} {} [{}]".format(
+                         item["count"], item["post"], item["target"], exc))
+            item["count"] = item["count"] + 1
+            await self._sleep(5*item["count"])
+            await self.queue.put(item)
+        else:
+            logger.info("POST {post.id} distributed to {target.target_id} [{count}]".format(**item))
+
+    async def _process_action(self, task):
+            t = asyncio.ensure_future(task["target"].handle_post(task["post"]))
+            cb = lambda fn: asyncio.ensure_future(self._action_done(fn, task))
+            t.add_done_callback(cb)
+
+    async def _queue_consumer(self):
+        try:
+            while True:
+                task = await self.queue.get()
+                self.queue.task_done()
+                if task["count"] > 10:
+                    logger.debug("DISTRIBUTION ABORTED: {post.id} {target.target_id} [{count}]".format(**task))
+                    continue
+                asyncio.ensure_future(self._process_action(task))
+        except asyncio.CancelledError:
+            pass
+        except Exception as e:
+            logger.error("WORKER QUEUE FAILED: {}".format(e))
+            logger.exception(e)
+                                    
+    async def new_posts(self, posts):
+        try:
+            logger.info("##### Received {} posts from {}".format(len(posts), self.source))
+            for p in posts:
+                for t in self.targets:
+                    post = copy.deepcopy(p)
+                    item ={"post":post, "target": t, "count": 0}
+                    await self.queue.put(item)
+                # update last updated property in source client
+                self.source.last_updated = p.updated
+        except Exception as e:
+            logger.error("Handling new posts failed [{}]: {}".format(self.source, e))

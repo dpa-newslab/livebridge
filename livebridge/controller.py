@@ -67,6 +67,8 @@ class Controller(object):
         """Stop all sleep tasks to allow bridges to end."""
         for t in self.sleep_tasks:
             t.cancel()
+        for b in self.bridges:
+            b.stop()
 
     async def check_control_change(self):
         client = self.sqs_client
