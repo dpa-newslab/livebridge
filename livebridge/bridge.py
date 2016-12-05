@@ -32,7 +32,6 @@ class LiveBridge(object):
         self.endpoint = self.config.get("endpoint")
         self.label = self.config.get("label", "-")
         self.db = get_db_client()
-        self.loop = asyncio.get_event_loop()
         self.queue = asyncio.Queue()
         self.queue_task = asyncio.ensure_future(self._queue_consumer())
         self.sleep_tasks = []
