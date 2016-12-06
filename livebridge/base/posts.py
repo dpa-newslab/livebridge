@@ -100,7 +100,7 @@ class BasePost(object):
            the livebrigde storage item, saved in a syndication earlier.
 
         :returns: dict"""
-        if not hasattr(self, "_target_doc") or self._target_doc == None:
+        if not hasattr(self, "_target_doc") or not self._target_doc:
             if self._existing:
                 self._target_doc = self._existing.get("target_doc", {})
         return self._target_doc
