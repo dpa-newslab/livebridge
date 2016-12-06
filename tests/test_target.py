@@ -204,7 +204,7 @@ class BaseTargetTests(asynctest.TestCase):
     async def test_handle_delete(self):
         new_doc = {"doc": "foo"}
         self.target.delete_item = asynctest.CoroutineMock(return_value=new_doc)
-        self.target._db.delete_post =  asynctest.CoroutineMock()
+        self.target._db.delete_post =  asynctest.CoroutineMock(return_value=True)
         res = await self.target._handle_delete(self.post)
         assert res == True
         self.target.delete_item.assert_called_once_with(self.post)

@@ -195,8 +195,8 @@ class ControllerTests(asynctest.TestCase):
         bridge = MagicMock()
         bridge.listen_ws = asynctest.CoroutineMock(side_effect=mock_routine)
         bridge.source = MagicMock()
-        bridge.source.stop = asynctest.CoroutineMock()
-        self.controller.remove_bridge = asynctest.CoroutineMock()
+        bridge.source.stop = asynctest.CoroutineMock(return_value=True)
+        self.controller.remove_bridge = asynctest.CoroutineMock(return_value=True)
         self.controller.read_control = False
         self.controller.shutdown = False
         await self.controller.run_stream(bridge=bridge)
@@ -204,6 +204,7 @@ class ControllerTests(asynctest.TestCase):
         assert bridge.source.stop.call_count == 1
 
         # test stop failing
+        bridge.listen_ws = asynctest.CoroutineMock(return_value=None)
         bridge.source.stop = asynctest.CoroutineMock(side_effect=Exception())
         await self.controller.run_stream(bridge=bridge)
         assert bridge.source.stop.call_count == 1

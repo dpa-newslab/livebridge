@@ -16,7 +16,7 @@
 import asynctest
 import os
 from datetime import datetime
-from sqlalchemy_aio.engine import AsyncioEngine
+from sqlalchemy_aio.engine import AsyncioEngine, AsyncioResultProxy, AsyncioConnection
 from livebridge.storages.base import BaseStorage
 from livebridge.storages import SQLStorage
 from livebridge.components import get_db_client
@@ -45,18 +45,6 @@ class SQLStorageTests(asynctest.TestCase):
         db = await self.client.db
         assert type(db) == AsyncioEngine
         
-    async def test_setup(self):
-        self.client._engine = asynctest.MagicMock()
-        db_res = asynctest.MagicMock()
-        self.client._engine.has_table = asynctest.CoroutineMock(return_value=False)
-        self.client._engine.execute = asynctest.CoroutineMock(return_value=True)
-        conn = asynctest.MagicMock()
-        conn.execute = asynctest.CoroutineMock(return_value=True)
-        conn.close = asynctest.CoroutineMock(return_value=True)
-        self.client._engine.connect = asynctest.CoroutineMock(return_value=conn)
-        res = await self.client.setup()
-        assert res == True
-
     async def test_get_db_client(self):
         params = {
             "dsn": "sqlite:///",
@@ -75,7 +63,7 @@ class SQLStorageTests(asynctest.TestCase):
         self.client._engine = asynctest.MagicMock()
         self.client._engine.has_table = asynctest.CoroutineMock(return_value=False)
         self.client._engine.execute = asynctest.CoroutineMock(return_value=True)
-        conn = asynctest.MagicMock()
+        conn = asynctest.MagicMock(spec=AsyncioConnection)
         conn.execute = asynctest.CoroutineMock(return_value=True)
         conn.close = asynctest.CoroutineMock(return_value=True)
         self.client._engine.connect = asynctest.CoroutineMock(return_value=conn)
@@ -90,7 +78,7 @@ class SQLStorageTests(asynctest.TestCase):
 
     async def test_get_last_updated(self):
         item = {"updated": datetime.strptime("2016-10-19T10:13:43+00:00", "%Y-%m-%dT%H:%M:%S+00:00")}
-        db_res = asynctest.MagicMock()
+        db_res = asynctest.MagicMock(spec=AsyncioResultProxy)
         db_res.first = asynctest.CoroutineMock(return_value=item)
         self.client._engine = asynctest.MagicMock()
         self.client._engine.execute = asynctest.CoroutineMock(return_value=db_res)
@@ -156,7 +144,7 @@ class SQLStorageTests(asynctest.TestCase):
     async def test_get_known_posts(self):
         source_id =  "source-id"
         post_ids = ["one", "two", "three", "four", "five", "six"]
-        db_res = asynctest.MagicMock()
+        db_res = asynctest.MagicMock(spec=AsyncioResultProxy)
         db_res.fetchall = asynctest.CoroutineMock(return_value=[("one",), ("three",), ("five",)])
         self.client._engine = asynctest.MagicMock()
         self.client._engine.execute = asynctest.CoroutineMock(return_value=db_res)
@@ -174,7 +162,7 @@ class SQLStorageTests(asynctest.TestCase):
             "updated": datetime.strptime("2016-10-19T10:13:43+00:00", "%Y-%m-%dT%H:%M:%S+00:00"),
             "target_doc": '{"target":"doc"}'
         }
-        db_res = asynctest.MagicMock()
+        db_res = asynctest.MagicMock(spec=AsyncioResultProxy)
         db_res.first = asynctest.CoroutineMock(return_value=item)
         self.client._engine = asynctest.MagicMock()
         self.client._engine.execute = asynctest.CoroutineMock(return_value=db_res)
