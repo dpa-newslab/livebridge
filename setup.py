@@ -16,7 +16,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.15.0'
+version = '0.16.0'
 
 setup(name='livebridge',
       version=version,
