@@ -88,7 +88,7 @@ class SQLStorage(BaseStorage):
             table = self._get_table()
             result = await db.execute(table.select().where(table.c.source_id==source_id).limit(1))
             item = await result.first()
-            tstamp = item["updated"] if item else datetime.utcnow()
+            tstamp = item["updated"] if item else None
             return tstamp
         except Exception as e:
             logger.error("[DB] Error when querying for last updated item on {}".format(source_id))

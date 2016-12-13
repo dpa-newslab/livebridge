@@ -167,7 +167,7 @@ class DynamoClient(BaseStorage):
             response = await db.query(**params)
             if response.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
                 updated = response["Items"][0]["updated"]["S"] if response["Count"] == 1 else None
-                tstamp = parse_date(updated) if updated else datetime.utcnow()
+                tstamp = parse_date(updated) if updated else None
                 return tstamp
         except BotoCoreError as e:
             logger.error("[DB] Error when querying for last updated item on {}".format(source_id))

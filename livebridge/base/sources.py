@@ -58,6 +58,16 @@ class BaseSource(object):
             logger.exception(e)
         return new_ids
 
+    async def get_last_updated(self, source_id):
+        """Returns latest update-timestamp from storage for source.
+
+        :param source_id: id of the source (source_id, ticker_id, blog_id pp)
+        :type string:
+        :returns: :py:class:`datetime.datetime` object o fhighest update datetime in db."""
+        last_updated = await self._db.get_last_updated(source_id)
+        logger.info("LAST UPDATED: {} {}".format(last_updated, self))
+        return last_updated
+
 
 class PollingSource(BaseSource):
     """Base class for sources which are getting polled. Any custom adapter source, which \

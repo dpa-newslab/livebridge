@@ -217,7 +217,7 @@ class DynamoClientTests(asynctest.TestCase):
         db = await self.client.db
         db.query =  asynctest.CoroutineMock(return_value=api_res)
         res = await self.client.get_last_updated(source_id)
-        assert type(res) == datetime
+        assert res == None
         assert db.query.call_count == 1
 
     async def test_get_known_posts(self):

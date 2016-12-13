@@ -125,32 +125,24 @@ class LiveBridgeTest(asynctest.TestCase):
 
     async def test_check_posts(self):
         self.bridge.new_posts = asynctest.CoroutineMock(return_value=None)
-        self.bridge.db.get_last_updated = asynctest.CoroutineMock(return_value=None)
         self.bridge.api_client.poll =  asynctest.CoroutineMock(return_value=["one", "two"])
         res = await self.bridge.check_posts()
         assert res == True
         assert self.bridge.api_client.poll.call_count == 1
-        self.bridge.db.get_last_updated.assert_called_once_with(12345)
         self.bridge.new_posts.assert_called_once_with(["one", "two"])
 
     async def test_check_posts_empty(self):
         self.bridge.source.get = asynctest.CoroutineMock(side_effect=Exception)
         self.bridge.source.poll = asynctest.CoroutineMock(return_value=False)#side_effect=Exception)
         assert self.bridge.source.last_updated == None
-        self.bridge.db.get_last_updated = asynctest.CoroutineMock(return_value=None)
         res = await self.bridge.check_posts()
         assert res == True
-        assert self.bridge.source.last_updated == None
-        assert self.bridge.db.get_last_updated.call_count == 1
 
     async def test_check_posts_failing(self):
         self.bridge.source.poll = asynctest.CoroutineMock(side_effect=Exception)
         assert self.bridge.source.last_updated == None
-        self.bridge.db.get_last_updated = asynctest.CoroutineMock(return_value=None)
         res = await self.bridge.check_posts()
         assert res == True
-        assert self.bridge.source.last_updated == None
-        assert self.bridge.db.get_last_updated.call_count == 1
 
     async def test_new_posts(self):
         # return of target

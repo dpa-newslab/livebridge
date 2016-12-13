@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import asynctest
+from datetime import datetime
 from livebridge.base import BaseSource, PollingSource, StreamingSource
 from livebridge.storages.base import BaseStorage
 from livebridge.components import get_source, add_source
@@ -79,3 +80,18 @@ class BaseSourcesTest(asynctest.TestCase):
         new_ids = await source.filter_new_posts("source_id", [])
         assert new_ids == []
         source._db_client.get_known_posts.call_count = 1
+
+    async def test_get_last_updated(self):
+        source = BaseSource()
+        source._db_client = asynctest.MagicMock()
+        tstamp = datetime.utcnow()
+        source._db_client.get_last_updated = asynctest.CoroutineMock(return_value=tstamp)
+        last_updated = await source.get_last_updated("foo")
+        assert last_updated == tstamp
+        assert source._db_client.get_last_updated.call_count == 1
+        assert source._db_client.get_last_updated.call_args == asynctest.call("foo")
+
+        # no data from storage
+        source._db_client.get_last_updated = asynctest.CoroutineMock(return_value=None)
+        last_updated = await source.get_last_updated("foo")
+        assert last_updated == None

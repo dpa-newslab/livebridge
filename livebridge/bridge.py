@@ -62,10 +62,6 @@ class LiveBridge(object):
 
     async def check_posts(self):
         try:
-            # set last_updated
-            if not self.source.last_updated:
-                self.source.last_updated = await self.db.get_last_updated(self.source_id)
-                logger.info("LAST UPDATED: {} {}".format(self.source.last_updated, self.source))
             posts = await self.source.poll()
             if posts:
                 asyncio.ensure_future(self.new_posts(posts))
@@ -124,7 +120,5 @@ class LiveBridge(object):
                     post = copy.deepcopy(p)
                     item ={"post":post, "target": t, "count": 0}
                     await self.queue.put(item)
-                # update last updated property in source client
-                self.source.last_updated = p.updated
         except Exception as e:
             logger.error("Handling new posts failed [{}]: {}".format(self.source, e))

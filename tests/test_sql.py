@@ -92,7 +92,7 @@ class SQLStorageTests(asynctest.TestCase):
         # no date 
         db_res.first = asynctest.CoroutineMock(return_value={})
         res = await self.client.get_last_updated("source")
-        assert type(res) == datetime
+        assert res == None
 
     async def test_get_last_updated_failing(self):
         self.client._engine = asynctest.MagicMock()
