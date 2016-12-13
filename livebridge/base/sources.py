@@ -63,7 +63,7 @@ class BaseSource(object):
 
         :param source_id: id of the source (source_id, ticker_id, blog_id pp)
         :type string:
-        :returns: :py:class:`datetime.datetime` object o fhighest update datetime in db."""
+        :returns: :py:class:`datetime.datetime` object of highest update datetime in db."""
         last_updated = await self._db.get_last_updated(source_id)
         logger.info("LAST UPDATED: {} {}".format(last_updated, self))
         return last_updated
