@@ -15,27 +15,59 @@
 # limitations under the License.
 
 class BaseStorage(object):
+    """Base class for storage clients.
+
+    Every concrete implementation of a storage class, requires to implement following methods:
+
+    * :func:`db` - property holds underlying databse client.
+    * :func:`setup` - Method for setting up storage, creating table pp.
+    * :func:`insert_post` - insert single post into storage.
+    * :func:`get_post` - returns single post from storage.
+    * :func:`update_post` - updates single post in storage.
+    * :func:`delete_post` - deletes single post in storage.
+    * :func:`get_last_updated` - returns latest updated-timestamp or source from storage.
+    """
 
     @property
     async def db(self):
+        """Property holds underlying database client."""
         raise NotImplementedError()
 
     def setup(self):
+        """Method for setting up storage, creating table pp."""
         raise NotImplementedError()
 
     async def insert_post(self, **kwargs):
+        """Insert single post into storage."""
         raise NotImplementedError()
 
     async def get_post(self, target_id, post_id):
+        """Returns single post from storage.
+
+        :param target_id: id of the target
+        :type string:
+        :param post_id: id of post
+        :type string:"""
         raise NotImplementedError()
 
-    async def update_post(self, target_id, post_id, ):
+    async def update_post(self, **kwargs):
+        """Updates single post in storage."""
         raise NotImplementedError()
 
     async def delete_post(self, target_id, post_id):
+        """Deletes single post from storage.
+
+        :param target_id: id of the target
+        :type string:
+        :param post_id: id of post to delete
+        :type string:"""
         raise NotImplementedError()
 
     async def get_last_updated(self, source_id):
+        """Returns latest updated-timestamp of source from storage.
+
+        :param source_id: id of the source
+        :type string:"""
         raise NotImplementedError()
 
     async def get_known_posts(self, source_id, post_ids):

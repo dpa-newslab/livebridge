@@ -5,12 +5,16 @@ Millions of users read [dpa-Live](https://www.dpa.com/de/produkte-services/livet
 We’re already using it in production, delivering content produced using [Sourcefabric’s Liveblog](https://github.com/liveblog/liveblog)  in the dpa newsroom to media customers who use the service of [ScribbleLive](http://scribblelive.com).
 
 ## Features
-- Keep content in-sync over different services. 
-- **CRUD** - create, update, delete
-- syndicate one source to various sources in realtime.
+
+- Keep content in-sync over different services.
+- syndicate one source to various targets in realtime.
+- **CRUD** - create, update, delete of resources over different services.
 - extensible for all kinds of services with [plugins](https://pythonhosted.org/livebridge/ownplugins.html)
 - supported storage backends: DynamoDB, MySQL, PostgreSQL, MSSQL, Oracle and others
 - [await/async](https://docs.python.org/3/library/asyncio.html) based, Python 3.5
+- (non-persistent) queues for retrying the distribution of a post.
+- focus on robustness and stability
+
 
 ## Installation 
 

@@ -21,14 +21,12 @@ BaseSource
 .. autoclass:: livebridge.base.PollingSource
    :members:
    :undoc-members:
-   :inherited-members:
    :show-inheritance:
    :private-members:
 
 .. autoclass:: livebridge.base.StreamingSource
    :members:
    :undoc-members:
-   :inherited-members:
    :show-inheritance:
    :private-members:
 
@@ -59,6 +57,14 @@ BaseConverter
    .. autoattribute:: livebridge.base.BaseConverter.target
       :annotation: = Specifies the target type of the conversion
 
+ConversionResult
+~~~~~~~~~~~~~~~~
+.. autoclass:: livebridge.base.ConversionResult
+   :members:
+   :undoc-members:
+   :inherited-members:
+   :show-inheritance:
+
 BaseTarget
 ~~~~~~~~~~
 .. autoclass:: livebridge.base.BaseTarget
@@ -79,9 +85,9 @@ TargetResponse
    :inherited-members:
    :show-inheritance:
 
-ConversionResult
-~~~~~~~~~~~~~~~~
-.. autoclass:: livebridge.base.ConversionResult
+BaseStorage
+~~~~~~~~~~~
+.. autoclass:: livebridge.storages.base.BaseStorage
    :members:
    :undoc-members:
    :inherited-members:

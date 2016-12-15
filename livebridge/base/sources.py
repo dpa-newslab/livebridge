@@ -36,6 +36,9 @@ class BaseSource(object):
 
     @property
     def _db(self):
+        """Database client for accessing storage. 
+
+           :returns: :class:`livebridge.storages.base.BaseStorage` """
         if not hasattr(self, "_db_client") or self._db_client == None:
             self._db_client = get_db_client()
         return self._db_client
@@ -63,7 +66,7 @@ class BaseSource(object):
 
         :param source_id: id of the source (source_id, ticker_id, blog_id pp)
         :type string:
-        :returns: :py:class:`datetime.datetime` object of highest update datetime in db."""
+        :returns: :py:class:`datetime.datetime` object of latest update datetime in db."""
         last_updated = await self._db.get_last_updated(source_id)
         logger.info("LAST UPDATED: {} {}".format(last_updated, self))
         return last_updated
