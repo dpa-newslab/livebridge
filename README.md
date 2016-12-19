@@ -51,8 +51,9 @@ http://pythonhosted.org/livebridge/
 Several source and targets are available as **[plugins]( https://pythonhosted.org/livebridge/plugins.html)**. Following plugins are currently available:
 
 * **[Liveblog](https://github.com/dpa-newslab/livebridge-liveblog)**  - Provides a Liveblog liveticker as source.
-* **[Scribblelive](https://github.com/dpa-newslab/livebridge-scribblelive)**  - Provides a Scribblelive event stream as target.   Provides also a **converter** from Liveblog_ to Scribblelive_.
-* **[Slack](https://github.com/dpa-newslab/livebridge-slack)** - Provides Slack channels as source and as target. Also provides **converters** from Liveblog_ and to Scribblelive_.
+* **[Scribblelive](https://github.com/dpa-newslab/livebridge-scribblelive)**  - Provides a Scribblelive event stream as target.   Provides also a **converter** from **Liveblog** to **Scribblelive**.
+* **[Slack](https://github.com/dpa-newslab/livebridge-slack)** - Provides Slack channels as source and as target. Also provides **converters** from **Liveblog** and to **Scribblelive**.
+* **[Tickaroo](https://github.com/Tickaroo/livebridge-tickaroo)** - Provides a **Tickaroo** ticker as target.
 
 
 It's possbile to write own service plugins and to make them available to **livebridge** as a Python module via *[PyPI](https://pypi.python.org/pypi)*.
