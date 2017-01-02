@@ -14,8 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
-import boto3
 import logging
+import boto3
 import yaml
 from botocore.client import Config
 from livebridge.config import AWS
@@ -48,7 +48,7 @@ class ControlFile(object):
         control = yaml.load(body)
 
         if resolve_auth:
-            control= self._resolve_auth(control)
+            control = self._resolve_auth(control)
 
         return control
 
@@ -57,16 +57,15 @@ class ControlFile(object):
         if not os.path.exists(path):
             raise IOError("Path for control file not found.")
 
-        f = open(path, "r")
-        body = f.read()
-        f.close()
+        file = open(path, "r")
+        body = file.read()
+        file.close()
 
         return body
 
     def load_from_s3(self, url):
-        bucket, key = url.split('/',2)[-1].split('/',1)
+        bucket, key = url.split('/', 2)[-1].split('/', 1)
         logger.info("Loading control file from s3: {} - {}".format(bucket, key))
-        session = boto3.session.Session()
         config = Config(signature_version="s3v4") if AWS["region"] in ["eu-central-1"] else None
         client = boto3.client(
             's3',

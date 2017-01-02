@@ -23,7 +23,7 @@ class BasePost(object):
     common properties from the resource, regardless of their source."""
     __module__ = "livebridge.base"
 
-    source = "" 
+    source = ""
 
     def __init__(self, data, *, content="", images=[]):
         """Base constructor for targets.
@@ -33,7 +33,7 @@ class BasePost(object):
         :param images: - list of iage_paths, optional"""
         self.data = data
         self.content = content
-        self.images= images
+        self.images = images
         self._existing = None
         self._target_id = None
         self._target_doc = None
@@ -85,8 +85,8 @@ class BasePost(object):
 
     @property
     def is_known(self):
-       """Returns boolean if resource is already known to livebridge."""
-       return bool(self._existing)
+        """Returns boolean if resource is already known to livebridge."""
+        return bool(self._existing)
 
     def get_action(self):
         """Returns type of action which has to be handled by the target.
@@ -114,7 +114,7 @@ class BasePost(object):
     def target_id(self):
         """Returns the id the target, to which this post has to be syndicated.
 
-        :returns: string""" 
+        :returns: string"""
         # already set?
         if self._target_id:
             return self._target_id
@@ -130,7 +130,7 @@ class BasePost(object):
         self._existing = existing
 
     def get_existing(self):
-        """Returns existing resource at target. 
+        """Returns existing resource at target.
 
-        :returns: - dict of resource""" 
+        :returns: - dict of resource"""
         return self._existing

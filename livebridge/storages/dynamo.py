@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import asyncio
-import aiobotocore
 import logging
 import json
-from dateutil.parser import parse as parse_date
 from datetime import datetime
+from dateutil.parser import parse as parse_date
+import aiobotocore
 from botocore.exceptions import BotoCoreError
 from livebridge.storages.base import BaseStorage
 
@@ -42,50 +42,51 @@ class DynamoClient(BaseStorage):
         self.secret_key = kwargs.get("secret_key") or None
         self.region = kwargs.get("region")
         self.endpoint_url = kwargs.get("endpoint_url") or None
+        self.db_client = None
         self.table_name = kwargs.get("table_name")
         self.table_schema = {
             "TableName": self.table_name,
             "KeySchema": [
-                { "AttributeName": "target_id", "KeyType": "HASH" },
-                { "AttributeName": "post_id", "KeyType": "RANGE" }
+                {"AttributeName": "target_id", "KeyType": "HASH"},
+                {"AttributeName": "post_id", "KeyType": "RANGE"}
             ],
             "AttributeDefinitions": [
-                { "AttributeName": "updated", "AttributeType": "S" },
-                { "AttributeName": "target_id", "AttributeType": "S" },
-                { "AttributeName": "post_id", "AttributeType": "S" },
-                { "AttributeName": "source_id", "AttributeType": "S" }
+                {"AttributeName": "updated", "AttributeType": "S"},
+                {"AttributeName": "target_id", "AttributeType": "S"},
+                {"AttributeName": "post_id", "AttributeType": "S"},
+                {"AttributeName": "source_id", "AttributeType": "S"}
             ],
-            "ProvisionedThroughput": { "ReadCapacityUnits": 3, "WriteCapacityUnits": 3 },
+            "ProvisionedThroughput": {"ReadCapacityUnits": 3, "WriteCapacityUnits": 3},
             "GlobalSecondaryIndexes": [
                 {
                     "IndexName": "source_id-updated-index",
                     "KeySchema": [
-                        { "AttributeName": "source_id", "KeyType": "HASH" },
-                        { "AttributeName": "updated", "KeyType": "RANGE" }
+                        {"AttributeName": "source_id", "KeyType": "HASH"},
+                        {"AttributeName": "updated", "KeyType": "RANGE"}
                     ],
-                    "Projection": { "ProjectionType": "KEYS_ONLY" },
-                    "ProvisionedThroughput": { "ReadCapacityUnits": 2, "WriteCapacityUnits": 2 },
+                    "Projection": {"ProjectionType": "KEYS_ONLY"},
+                    "ProvisionedThroughput": {"ReadCapacityUnits": 2, "WriteCapacityUnits": 2},
                 }
             ]
         }
 
     def __del__(self):
-        if hasattr(self, "db_client") and self.db_client:
+        if self.db_client:
             self.db_client.close()
 
     @property
     async def db(self):
-        if hasattr(self, "db_client") and self.db_client:
+        if self.db_client:
             return self.db_client
         logger.info("DynamoDB: Connecting to region [{}] with endpoint_url [{}] and table [{}]".format(
-                                self.region, self.endpoint_url or "-", self.table_name or "-"))
+            self.region, self.endpoint_url or "-", self.table_name or "-"))
         loop = asyncio.get_event_loop()
         session = aiobotocore.get_session(loop=loop)
         self.db_client = session.create_client('dynamodb',
-                                    region_name = self.region,
-                                    endpoint_url = self.endpoint_url,
-                                    aws_secret_access_key = self.secret_key,
-                                    aws_access_key_id = self.access_key)
+                                               region_name=self.region,
+                                               endpoint_url=self.endpoint_url,
+                                               aws_secret_access_key=self.secret_key,
+                                               aws_access_key_id=self.access_key)
         # dirty fix for disabling crc32 checks
         self.db_client._endpoint._aio_session._default_headers["Accept-Encoding"] = ""
         return self.db_client
@@ -102,9 +103,9 @@ class DynamoClient(BaseStorage):
                 if resp.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
                     logger.info("DynamoDB table [{}] successfully created!".format(self.table_name))
                     return True
-        except Exception as e:
+        except Exception as exc:
             logger.error("[DB] Error when setting up DynamoDB.")
-            logger.error(e)
+            logger.error(exc)
         return False
 
     async def scan(self):
@@ -118,9 +119,9 @@ class DynamoClient(BaseStorage):
             response = await db.scan(**scan_params)
             if response.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
                 return response["Items"]
-        except BotoCoreError as e:
+        except BotoCoreError as exc:
             logger.error("[DB] Error when scanning db")
-            logger.error(e)
+            logger.error(exc)
         return []
 
     async def insert_post(self, **kwargs):
@@ -145,9 +146,9 @@ class DynamoClient(BaseStorage):
             if response.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
                 logger.info("[DB] Post {} {} was saved!".format(kwargs["source_id"], kwargs["post_id"]))
                 return True
-        except BotoCoreError as e:
+        except BotoCoreError as exc:
             logger.error("[DB] Error when saving {}".format(kwargs))
-            logger.error(e)
+            logger.error(exc)
         return False
 
     async def get_last_updated(self, source_id):
@@ -169,9 +170,9 @@ class DynamoClient(BaseStorage):
                 updated = response["Items"][0]["updated"]["S"] if response["Count"] == 1 else None
                 tstamp = parse_date(updated) if updated else None
                 return tstamp
-        except BotoCoreError as e:
+        except BotoCoreError as exc:
             logger.error("[DB] Error when querying for last updated item on {}".format(source_id))
-            logger.error(e)
+            logger.error(exc)
         return None
 
     async def get_known_posts(self, source_id, post_ids):
@@ -199,9 +200,9 @@ class DynamoClient(BaseStorage):
             if response.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
                 for item in response.get("Items", []):
                     results.append(item["post_id"]["S"])
-        except Exception as e:
+        except Exception as exc:
             logger.error("[DB] Error when querying for posts {}".format(post_ids))
-            logger.exception(e)
+            logger.exception(exc)
         return results
 
     async def get_post(self, target_id, post_id):
@@ -221,30 +222,31 @@ class DynamoClient(BaseStorage):
             if response.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
                 db_post = response["Items"][0] if response["Count"] >= 1 else None
                 if db_post:
-                    db_post["sticky"]     = db_post.get("sticky", {}).get("N")
-                    db_post["updated"]    = db_post.get("updated", {}).get("S")
-                    db_post["source_id"]  = db_post.get("source_id", {}).get("S")
-                    db_post["post_id"]    = db_post.get("post_id", {}).get("S")
-                    db_post["target_id"]  = db_post.get("target_id", {}).get("S")
-                    db_post["target_doc"] = json.loads(db_post["target_doc"]["S"]) if db_post.get("target_doc",{}).get("S") else {}
+                    db_post["sticky"] = db_post.get("sticky", {}).get("N")
+                    db_post["updated"] = db_post.get("updated", {}).get("S")
+                    db_post["source_id"] = db_post.get("source_id", {}).get("S")
+                    db_post["post_id"] = db_post.get("post_id", {}).get("S")
+                    db_post["target_id"] = db_post.get("target_id", {}).get("S")
+                    db_post["target_doc"] = json.loads(db_post["target_doc"]["S"]) \
+                        if db_post.get("target_doc", {}).get("S") else {}
                 return db_post
-        except BotoCoreError as e:
+        except BotoCoreError as exc:
             logger.error("[DB] Error when querying for a post [{}] on {}".format(post_id, target_id))
-            logger.error(e)
+            logger.error(exc)
         return None
 
     async def update_post(self, **kwargs):
         try:
-            db = await self.db
             target_id = kwargs.get("target_id")
             post_id = kwargs.get("post_id")
-            if await self.delete_post(target_id, post_id) == True:
+            if await self.delete_post(target_id, post_id) is True:
                 await self.insert_post(**kwargs)
                 logger.info("[DB] Post {} {} was updated!".format(target_id, post_id))
                 return True
-        except Exception as e:
-            logger.error("[DB] Error when updating for a post [{}] on {}".format(kwargs.get("post_id"), kwargs.get("target_id")))
-            logger.error(e)
+        except Exception as exc:
+            logger.error("[DB] Error when updating for a post [{}] on {}".format(
+                kwargs.get("post_id"), kwargs.get("target_id")))
+            logger.error(exc)
         return False
 
     async def delete_post(self, target_id, post_id):
@@ -261,7 +263,7 @@ class DynamoClient(BaseStorage):
             if response.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
                 logger.info("[DB] Post {} {} was deleted!".format(target_id, post_id))
                 return True
-        except Exception as e:
+        except Exception as exc:
             logger.error("[DB] Error when deleting for a post [{}] on {}".format(post_id, target_id))
-            logger.error(e)
+            logger.error(exc)
         return False

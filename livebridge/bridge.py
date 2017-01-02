@@ -16,7 +16,7 @@
 import asyncio
 import copy
 import logging
-from livebridge.components import get_converter, get_post, get_source, get_db_client
+from livebridge.components import get_source, get_db_client
 
 
 logger = logging.getLogger(__name__)
@@ -49,8 +49,8 @@ class LiveBridge(object):
 
     def stop(self):
         self.queue_task.cancel()
-        for t in self.sleep_tasks:
-            t.cancel()
+        for task in self.sleep_tasks:
+            task.cancel()
         return True
 
     def add_target(self, target):
@@ -65,9 +65,9 @@ class LiveBridge(object):
             posts = await self.source.poll()
             if posts:
                 asyncio.ensure_future(self.new_posts(posts))
-        except Exception as e:
+        except Exception as exc:
             logger.error("Fatal checking {}{}".format(getattr(self, "endpoint", "-"), self.source_id))
-            logger.exception(e)
+            logger.exception(exc)
         return True
 
     async def _sleep(self, seconds):
@@ -81,11 +81,11 @@ class LiveBridge(object):
             self.sleep_tasks.remove(task)
         return True
 
-    async def _action_done(self, fn, item):
-        exc = fn.exception()
+    async def _action_done(self, future, item):
+        exc = future.exception()
         if exc:
             logger.error("TARGET ACTION FAILED, WILL RETRY: [{}] {} {} [{}]".format(
-                         item["count"], item["post"], item["target"], exc))
+                item["count"], item["post"], item["target"], exc))
             item["count"] = item["count"] + 1
             await self._sleep(5*item["count"])
             await self.queue.put(item)
@@ -93,9 +93,9 @@ class LiveBridge(object):
             logger.info("POST {post.id} distributed to {target.target_id} [{count}]".format(**item))
 
     async def _process_action(self, task):
-            t = asyncio.ensure_future(task["target"].handle_post(task["post"]))
-            cb = lambda fn: asyncio.ensure_future(self._action_done(fn, task))
-            t.add_done_callback(cb)
+        fut = asyncio.ensure_future(task["target"].handle_post(task["post"]))
+        callback = lambda fn: asyncio.ensure_future(self._action_done(fn, task))
+        fut.add_done_callback(callback)
 
     async def _queue_consumer(self):
         try:
@@ -108,17 +108,17 @@ class LiveBridge(object):
                 asyncio.ensure_future(self._process_action(task))
         except asyncio.CancelledError:
             pass
-        except Exception as e:
-            logger.error("WORKER QUEUE FAILED: {}".format(e))
-            logger.exception(e)
-                                    
+        except Exception as exc:
+            logger.error("WORKER QUEUE FAILED: {}".format(exc))
+            logger.exception(exc)
+
     async def new_posts(self, posts):
         try:
             logger.info("##### Received {} posts from {}".format(len(posts), self.source))
-            for p in posts:
-                for t in self.targets:
-                    post = copy.deepcopy(p)
-                    item ={"post":post, "target": t, "count": 0}
+            for new_post in posts:
+                for target in self.targets:
+                    post = copy.deepcopy(new_post)
+                    item = {"post":post, "target": target, "count": 0}
                     await self.queue.put(item)
-        except Exception as e:
-            logger.error("Handling new posts failed [{}]: {}".format(self.source, e))
+        except Exception as exc:
+            logger.error("Handling new posts failed [{}]: {}".format(self.source, exc))

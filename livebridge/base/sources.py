@@ -36,10 +36,10 @@ class BaseSource(object):
 
     @property
     def _db(self):
-        """Database client for accessing storage. 
+        """Database client for accessing storage.
 
            :returns: :class:`livebridge.storages.base.BaseStorage` """
-        if not hasattr(self, "_db_client") or self._db_client == None:
+        if not hasattr(self, "_db_client") or getattr(self, "_db_client") is None:
             self._db_client = get_db_client()
         return self._db_client
 
@@ -56,9 +56,9 @@ class BaseSource(object):
             db_client = self._db
             posts_in_db = await db_client.get_known_posts(source_id, post_ids)
             new_ids = [p for p in post_ids if p not in posts_in_db]
-        except Exception as e:
+        except Exception as exc:
             logger.error("Error when filtering for new posts {} {}".format(source_id, post_ids))
-            logger.exception(e)
+            logger.exception(exc)
         return new_ids
 
     async def get_last_updated(self, source_id):
@@ -84,7 +84,7 @@ class PollingSource(BaseSource):
         :func:`poll` gets called by the interval defined by environment var *POLLING_INTERVALL*.
 
         The inheriting class has to implement the actual poll request for the source in this method.
-        
+
         :return: list of new posts"""
         raise NotImplementedError("Method 'poll' not implemented.")
 
@@ -107,7 +107,7 @@ class StreamingSource(BaseSource):
 
     async def stop(self):
         """Method has to be implemented by the concrete inherited source class.
-            
+
            By calling this method, the websocket-connection has to be stopped.
 
            :return: True"""

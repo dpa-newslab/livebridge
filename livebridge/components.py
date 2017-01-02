@@ -13,10 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import pkgutil
-import inspect
 import logging
-from importlib import import_module
 from livebridge import config
 from livebridge.storages import DynamoClient, SQLStorage
 
@@ -30,8 +27,8 @@ POST_MAP = {}
 TARGET_MAP = {}
 
 
-def get_source(conf, loop=None):
-    client  = None
+def get_source(conf):
+    client = None
     if SOURCE_MAP.get(conf.get("type")):
         source_cls = SOURCE_MAP[conf.get("type")]
         client = source_cls(config=conf)
@@ -47,7 +44,7 @@ def add_source(cls):
 def get_converter(source, target):
     try:
         return CONVERTER_MAP[source][target]()
-    except KeyError as e:
+    except KeyError:
         logger.debug("no converter found for {} -> {}".format(source, target))
     return None
 
@@ -66,7 +63,7 @@ def add_post(cls):
 
 
 def get_target(conf):
-    client  = None
+    client = None
 
     if TARGET_MAP.get(conf.get("type")):
         target_cls = TARGET_MAP[conf.get("type")]

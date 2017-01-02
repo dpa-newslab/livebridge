@@ -13,10 +13,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import aiohttp
 import logging
 import os.path
 import uuid
+import aiohttp
 
 
 logger = logging.getLogger(__name__)
@@ -51,8 +51,8 @@ class BaseConverter(object):
         with aiohttp.ClientSession() as session:
             async with session.get(data["href"]) as resp:
                 test = await resp.read()
-                with open(filepath, "wb") as f:
-                    f.write(test)
+                with open(filepath, "wb") as file:
+                    file.write(test)
         return filepath
 
     async def remove_images(self, images):
@@ -60,9 +60,9 @@ class BaseConverter(object):
             for filepath in images:
                 os.remove(filepath)
                 logger.info("Removed image {}".format(filepath))
-        except Exception as e:
+        except Exception as exc:
             logger.error("Error when deleting image.")
-            logger.exception(e)
+            logger.exception(exc)
 
     async def convert(self, post):
         """Convert incoming content of the incoming raw source post to a string suitable to the \

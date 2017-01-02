@@ -37,6 +37,6 @@ class ConversionResult(object):
     :param images: list of local file paths of downloaded images, optional
     :type list:
     """
-    def __init__(self, content, images=[]):
+    def __init__(self, content, images=None):
         self.content = content
-        self.images = images
+        self.images = images if images else []

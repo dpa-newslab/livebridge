@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 def load_extensions():
     for pkg_info in pkgutil.walk_packages(onerror=importfail):
         if pkg_info[1].startswith("livebridge"):
-            if pkg_info[2] == True:
+            if pkg_info[2] is True:
                 get_extensions(pkg_info)
 
 
@@ -37,8 +37,8 @@ def importfail(pkg):
 
 def get_extensions(pkg):
     mod = import_module(pkg[1])
-    for m in [d for d in inspect.getmembers(mod) if not d[0].startswith("__") and inspect.isclass(d[1])]:
-        ext = m[1]
+    for member in [d for d in inspect.getmembers(mod) if not d[0].startswith("__") and inspect.isclass(d[1])]:
+        ext = member[1]
         if issubclass(ext, BaseTarget):
             logger.debug("Loading target: {}".format(ext))
             add_target(ext)

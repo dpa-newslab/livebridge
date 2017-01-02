@@ -17,8 +17,8 @@ import argparse
 import asyncio
 import functools
 import logging
-import livebridge.logger
 import signal
+import livebridge.logger
 from livebridge import config
 from livebridge.controller import Controller
 from livebridge.components import get_db_client
@@ -30,9 +30,9 @@ logger = logging.getLogger(__name__)
 # clean up at tear down
 async def finish(tasks):
     logger.info("Finishing ...")
-    for t in tasks:
-        logger.debug("... {}".format(t))
-        t.cancel()
+    for task in tasks:
+        logger.debug("... {}".format(task))
+        task.cancel()
     logger.info("Bye!")
 
 
@@ -53,8 +53,8 @@ def main():
     load_extensions()
 
     # setup db table
-    db = get_db_client()
-    loop.run_until_complete(db.setup())
+    db_connector = get_db_client()
+    loop.run_until_complete(db_connector.setup())
 
     # Controller manages the tasks
     controller = Controller(config=config.AWS, control_file=args.control, poll_interval=config.POLL_INTERVAL)
@@ -74,4 +74,3 @@ def main():
             loop._default_executor.shutdown(wait=True)
         loop.stop()
         loop.close()
-

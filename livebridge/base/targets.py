@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import logging
-from collections import UserDict
 from livebridge.components import get_converter, get_db_client
 
 
@@ -47,37 +46,41 @@ class BaseTarget(object):
 
     @property
     def _db(self):
-        if not hasattr(self, "_db_client") or self._db_client == None:
+        if not hasattr(self, "_db_client") or getattr(self, "_db_client") is None:
             self._db_client = get_db_client()
         return self._db_client
-        
+
     def post_item(self, post):
         """Creates new resource at target.
 
         :param post: - Object of type :class:`livebridge.posts.base.BasePost`
-        :returns: - :class:`livebridge.base.TargetResponse` of the newly created resource returned from service, empty if failed."""
+        :returns: - :class:`livebridge.base.TargetResponse` of the newly created resource returned \
+        from service, empty if failed."""
         raise NotImplementedError()
 
     def delete_item(self, post):
         """Deletes an existing resource at target.
 
         :param post: - Object of type :class:`livebridge.posts.base.BasePost`
-        :returns: - :class:`livebridge.base.TargetResponse` of the deleted resource returned from service, empty or False if failed."""
+        :returns: - :class:`livebridge.base.TargetResponse` of the deleted resource \
+        returned from service, empty or False if failed."""
         raise NotImplementedError()
 
     def update_item(self, post):
         """Updates existing resource resource at target.
 
         :param post: - Object of type :class:`livebridge.posts.base.BasePost`
-        :returns: - :class:`livebridge.base.TargetResponse` of the updated resource returned from service, empty or False if failed."""
+        :returns: - :class:`livebridge.base.TargetResponse` of the updated resource \
+        returned from service, empty or False if failed."""
         raise NotImplementedError()
 
     def handle_extras(self, post):
         """Handle extra actions, for example set resource to *sticky* at the target. Return None \
-        if method is unneeded.    
+        if method is unneeded.
 
         :param post: - Object of type :class:`livebridge.posts.base.BasePost`
-        :returns: - :class:`livebridge.base.TargetResponse` of the updated resource returned from service, empty or None if nothing has changed at resource."""
+        :returns: - :class:`livebridge.base.TargetResponse` of the updated resource returned \
+        from service, empty or None if nothing has changed at resource."""
         raise NotImplementedError()
 
     async def _handle_new(self, post):

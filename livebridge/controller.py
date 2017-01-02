@@ -13,10 +13,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import aiobotocore
 import asyncio
 import logging
 import json
+import aiobotocore
 from botocore.exceptions import ClientError
 from livebridge.components import get_target
 from livebridge.bridge import LiveBridge
@@ -50,9 +50,9 @@ class Controller(object):
         loop = asyncio.get_event_loop()
         session = aiobotocore.get_session(loop=loop)
         self._sqs_client = session.create_client('sqs',
-                                    region_name = self.config["region"],
-                                    aws_secret_access_key = self.config["secret_key"] or None,
-                                    aws_access_key_id = self.config["access_key"] or None)
+                                                 region_name=self.config["region"],
+                                                 aws_secret_access_key=self.config["secret_key"] or None,
+                                                 aws_access_key_id=self.config["access_key"] or None)
         return self._sqs_client
 
     async def clean_shutdown(self):
@@ -65,22 +65,22 @@ class Controller(object):
 
     async def stop_bridges(self):
         """Stop all sleep tasks to allow bridges to end."""
-        for t in self.sleep_tasks:
-            t.cancel()
-        for b in self.bridges:
-            b.stop()
+        for task in self.sleep_tasks:
+            task.cancel()
+        for bridge in self.bridges:
+            bridge.stop()
 
     async def check_control_change(self):
         client = self.sqs_client
         logger.info("Starting watching for control file changes on s3.")
         try:
             # purge queue before starting watching
-            purge_resp = await client.purge_queue(
+            await client.purge_queue(
                 QueueUrl=self.config["sqs_s3_queue"]
             )
             logger.info("Purged SQS queue {}".format(self.config["sqs_s3_queue"]))
-        except ClientError as e:
-            logger.warning("Purging SQS queue failed with: {}".format(e))
+        except ClientError as exc:
+            logger.warning("Purging SQS queue failed with: {}".format(exc))
         # check for update events
         while True and self.shutdown != True:
             try:
@@ -91,27 +91,28 @@ class Controller(object):
                     logger.debug("SQS {}".format(msg.get("MessageId")))
                     body = msg.get("Body")
                     data = json.loads(body) if body else None
-                    del_res = await client.delete_message(
+                    await client.delete_message(
                         QueueUrl=self.config["sqs_s3_queue"],
                         ReceiptHandle=msg.get("ReceiptHandle")
                     )
                     if data:
                         for rec in data.get("Records", []):
-                            logger.debug("EVENT: {} {}".format(rec.get("s3", {}).get("object", {}).get("key"), rec.get("eventName")))
+                            logger.debug("EVENT: {} {}".format(
+                                rec.get("s3", {}).get("object", {}).get("key"), rec.get("eventName")))
                             self.read_control = True
                             await self.stop_bridges()
                             return
-            except Exception as e:
-                logger.error("Error fetching SQS messages with: {}".format(e))
+            except Exception as exc:
+                logger.error("Error fetching SQS messages with: {}".format(exc))
             await self.sleep(60)
         client.close()
 
     def append_bridge(self, config_data):
         bridge = LiveBridge(config_data)
-        for t in config_data.get("targets", []):
-            target_client = get_target(t)
+        for tconf in config_data.get("targets", []):
+            target_client = get_target(tconf)
             bridge.add_target(target_client)
-        # start specific source 
+        # start specific source
         if bridge.source.mode == "streaming":
             self.bridges[bridge] = self.run_stream(bridge=bridge)
         elif bridge.source.mode == "polling":
@@ -121,7 +122,6 @@ class Controller(object):
 
     def remove_bridge(self, bridge):
         logger.info("ENDING: {}".format(bridge))
-        task = self.bridges[bridge]
         del self.bridges[bridge]
         if self.read_control and not self.bridges:
             logger.info("RESTART BRIDGES")
@@ -137,11 +137,11 @@ class Controller(object):
         self.read_control = False
         control_data = None
         try:
-            c = ControlFile()
-            control_data = c.load(self.control_file, resolve_auth=True)
-        except Exception as e:
+            cfile = ControlFile()
+            control_data = cfile.load(self.control_file, resolve_auth=True)
+        except Exception as exc:
             logger.error("Error when reading control file.")
-            logger.error(e)
+            logger.error(exc)
             logger.info("Will try to reuse existing control data.")
 
         # set new control data
@@ -155,22 +155,21 @@ class Controller(object):
         else:
             self.tasked.append(asyncio.Task(self.retry_run()))
 
-    
     def start_tasks(self):
-        # start content bridges
-        for b in self.control_data["bridges"]:
-            self.append_bridge(b)
+        # append content bridges
+        for bridge_config in self.control_data["bridges"]:
+            self.append_bridge(bridge_config)
 
         # create futures for bridges
-        for b in self.bridges:
-            self.tasked.append(asyncio.Task(self.bridges[b]))
+        for bridge in self.bridges:
+            self.tasked.append(asyncio.Task(self.bridges[bridge]))
 
         # listen to s3 control changes if sqs queue is given
         if self.config.get("sqs_s3_queue"):
             self.tasked.append(asyncio.Task(self.check_control_change()))
 
     async def run_stream(self, *, bridge):
-        future = await bridge.listen_ws()
+        await bridge.listen_ws()
         while True and self.read_control != True and self.shutdown != True:
             # wait for shutdown
             await self.sleep(4)
@@ -178,14 +177,13 @@ class Controller(object):
         # stop bridge
         try:
             await bridge.source.stop()
-        except Exception as e:
-            logger.error("Error when stopping stream: {}".format(e))
+        except Exception as exc:
+            logger.error("Error when stopping stream: {}".format(exc))
 
         self.remove_bridge(bridge)
-        return 
 
     async def sleep(self, seconds):
-        if self.read_control == True or self.shutdown == True:
+        if self.read_control is True or self.shutdown is True:
             # if shutdown or restart is requested, don't fall asleep again
             return True
 
@@ -207,4 +205,4 @@ class Controller(object):
             await self.sleep(interval)
 
         self.remove_bridge(bridge)
-        return 
+        return

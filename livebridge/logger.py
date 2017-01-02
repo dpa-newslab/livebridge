@@ -30,5 +30,3 @@ if LOGFILE:
     fh = logging.FileHandler(LOGFILE)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
-
-
