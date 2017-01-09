@@ -25,8 +25,11 @@ A **livebridge** command will be available afterwards.
 Settings
 --------
 
+:ref:`The specific bridges will be specified in an extra .yaml control file! <control>`
+
 Some global settings are defined in `livebridge/config.py`_. These values can be set through **environment variables**.  Following variables for configuration are available:
 
+* **LB_CONTROLFILE** - path to control file, overrides **--control** commandline argument.
 * **LB_LOGLEVEL** - Python logging level, *INFO* is default, can be *DEBUG, INFO, WARNING, ERROR* or *CRITICAL*
 * **LB_LOGFILE** - path to write a logfile, *optional*
 * **LB_POLL_INTERVAL** - interval in seconds for polling an API for new posts when using a polling-source, defaults to 60 seconds. 
@@ -45,8 +48,6 @@ Since livebridge also supports `AWS DynamoDB`_ as storage backend, following **A
 * **LB_DYNAMO_ENDPOINT**  - Endpoint url for DynamoDB. Can be empty, except when using a local DynamoDB.
 * **LB_DYNAMO_TABLE** - Tablename, defaults to **livebridge_posts**. The DynamoDB table will be automatically created, if it not exists. *Sufficient* `AWS IAM`_ *rights are required.*
 * **LB_SQS_S3_QUEUE** - SQS-QueueUrl for listening for control file changes on S3.
-
-:ref:`The specific bridges will be specified in an extra .yaml control file! <control>`
 
 
 Testing

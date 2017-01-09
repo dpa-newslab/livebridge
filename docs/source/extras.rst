@@ -3,6 +3,36 @@
 Howto / Help
 ============
 
+Use livebridge as a module within another app
+---------------------------------------------
+
+.. code-block:: python
+
+    # -*- coding: utf-8 -*-
+    import asyncio
+    from livebridge.run import main as lb_run
+
+    async def hello_world():
+        while 1:
+            print("PING")
+            await asyncio.sleep(5)
+
+    loop = asyncio.get_event_loop()
+    asyncio.ensure_future(hello_world())
+
+    # initialise livebridge
+    livebridge = lb_run(loop=loop, control="control-dev.yaml")
+
+    try:
+        loop.run_forever()
+    finally:
+        livebridge.shutdown()
+        loop.stop()
+        loop.close()
+
+To allow Livebridge to shutdown properly, you should call **livebridge.shutdown()** before stopping \
+and closing the event loop.
+
 
 IAM policy for running on Amazon AWS
 ------------------------------------

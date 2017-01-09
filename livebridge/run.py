@@ -19,35 +19,31 @@ import functools
 import logging
 import signal
 import livebridge.logger
-from livebridge import config
+from argparse import Namespace
+from livebridge import config, LiveBridge
 from livebridge.controller import Controller
 from livebridge.components import get_db_client
 from livebridge.loader import load_extensions
 
-logger = logging.getLogger(__name__)
 
-
-# clean up at tear down
-async def finish(tasks):
-    logger.info("Finishing ...")
-    for task in tasks:
-        logger.debug("... {}".format(task))
-        task.cancel()
-    logger.info("Bye!")
-
-
-def main():
+def main(loop=None, **kwargs):
     # disable bot logging
     logging.getLogger('botocore').setLevel(logging.ERROR)
     logging.getLogger('websockets').setLevel(logging.INFO)
 
-    # read cli args
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--control", required=True, help="Control file, can be path.")
-    args = parser.parse_args()
+    # check for controlfile parameter
+    if kwargs.get("control"):
+        args = Namespace(control=kwargs["control"])
+    elif config.CONTROLFILE:
+        args = Namespace(control=config.CONTROLFILE)
+    else:
+        # read cli args
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--control", required=True, help="Control file, can be path.")
+        args = parser.parse_args()
 
-    # get loop
-    loop = asyncio.get_event_loop()
+    if not loop:
+        loop = asyncio.get_event_loop()
 
     # load extensions
     load_extensions()
@@ -64,13 +60,15 @@ def main():
     for signame in ('SIGINT', 'SIGTERM'):
         loop.add_signal_handler(getattr(signal, signame), functools.partial(loop.stop))
 
+    livebridge = LiveBridge(loop=loop, controller=controller)
+
+    if kwargs.get("loop"):
+        return livebridge
+
     # run
     try:
         loop.run_forever()
     finally:
-        loop.run_until_complete(controller.clean_shutdown())
-        loop.run_until_complete(finish(controller.tasked))
-        if loop._default_executor:
-            loop._default_executor.shutdown(wait=True)
+        livebridge.shutdown()
         loop.stop()
         loop.close()

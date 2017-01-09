@@ -19,6 +19,8 @@ LOGLEVEL = os.environ.get("LB_LOGLEVEL", "INFO")
 
 LOGFILE = os.environ.get("LB_LOGFILE")
 
+CONTROLFILE = os.environ.get("LB_CONTROLFILE")
+
 POLL_INTERVAL = int(os.environ.get("LB_POLL_INTERVAL", 60))
 
 DB = {

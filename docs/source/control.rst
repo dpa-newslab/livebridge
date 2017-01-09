@@ -20,6 +20,9 @@ configuration for the content bridges.
 
     livebridge --control=s3://bucketname/control.yaml
 
+.. note::
+  The control file can alternatively be specified via the **LB_CONTROLFILE** environment variable.
+
 
 The bridges, over which the content is syndicated, are setup in this control file in *YAML* format. Use \
 `control.yaml.example`_ as basis for your own control file.
