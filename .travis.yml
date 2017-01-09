@@ -1,0 +1,11 @@
+language: python
+python:
+  - "3.5"
+install:
+  - pip install -r requirements.txt
+  - pip install coveralls
+script:
+  - py.test -v tests --cov livebridge --cov-report term-missing
+after_success: 
+  - coveralls
+

@@ -1,5 +1,8 @@
 # Livebridge by dpa-newslab
 
+[![Build Status](https://travis-ci.org/dpa-newslab/livebridge.svg?branch=master)](https://travis-ci.org/dpa-newslab/livebridge)
+[![Coverage Status](https://coveralls.io/repos/github/dpa-newslab/livebridge/badge.svg?branch=master)](https://coveralls.io/github/dpa-newslab/livebridge?branch=master)
+
 Millions of users read [dpa-Live](https://www.dpa.com/de/produkte-services/liveticker-newsblogs/#liveticker) updates when a new US president is elected or an ongoing attack of unknown origin keeps the nation awake.  We strive to deliver these updates live to whatever publishing system our customers chose. So we developed this open-source software as part of a project funded by the [Google DNI Fund](https://www.digitalnewsinitiative.com/). Read [Introducing Live Coverage Ecosystem](https://blog.sourcefabric.org/en/news/blog/3434/Introducing-Live-Coverage-Ecosystem-funded-by-Google.htm) for more details.
 
 We’re already using it in production, delivering content produced using [Sourcefabric’s Liveblog](https://github.com/liveblog/liveblog)  in the dpa newsroom to media customers who use the service of [ScribbleLive](http://scribblelive.com).
