@@ -13,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import copy
 import os
 import logging
 import boto3
@@ -40,12 +41,35 @@ class ControlFile(object):
                     raise LookupError("Data for user [{}] not found in control file.".format(target.get("auth")))
         return data
 
+    def _remove_doubles(self, control_data):
+        bridges = []
+        filtered = {"auth": control_data.get("auth", {}), "bridges": []}
+        # clear double source->target connections
+        for bridge in control_data.get("bridges", []):
+            # filter sources
+            source = copy.deepcopy(bridge)
+            source["targets"] = []
+            if source not in bridges:
+                bridges.append(source)
+                filtered["bridges"].append(copy.deepcopy(source))
+            # filter targets
+            for target in bridge.get("targets", []):
+                index = bridges.index(source)
+                if target not in filtered["bridges"][index]["targets"]:
+                    filtered["bridges"][index]["targets"].append(target)
+                else:
+                   logger.info("Filtering double target [{}] from source [{}]".format(target, source))
+        return filtered
+
     def load(self, path, *, resolve_auth=False):
         if not path.startswith("s3://"):
             body = self.load_from_file(path)
         else:
             body = self.load_from_s3(path)
         control = yaml.load(body)
+
+        # filter duplicates
+        control = self._remove_doubles(control)
 
         if resolve_auth:
             control = self._resolve_auth(control)
