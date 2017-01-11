@@ -42,7 +42,6 @@ class DynamoClient(BaseStorage):
         self.secret_key = kwargs.get("secret_key") or None
         self.region = kwargs.get("region")
         self.endpoint_url = kwargs.get("endpoint_url") or None
-        self.db_client = None
         self.table_name = kwargs.get("table_name")
         self.table_schema = {
             "TableName": self.table_name,
@@ -71,12 +70,12 @@ class DynamoClient(BaseStorage):
         }
 
     def __del__(self):
-        if self.db_client:
+        if hasattr(self, "db_client") and self.db_client:
             self.db_client.close()
 
     @property
     async def db(self):
-        if self.db_client:
+        if hasattr(self, "db_client") and self.db_client:
             return self.db_client
         logger.info("DynamoDB: Connecting to region [{}] with endpoint_url [{}] and table [{}]".format(
             self.region, self.endpoint_url or "-", self.table_name or "-"))
