@@ -69,12 +69,4 @@ Run tests with test coverage:
 
 `pytest-cov`_ has to be installed. In the example above, a html summary of the test coverage is saved in **./htmlcov/**.
 
-
-.. _Asyncio: https://docs.python.org/3/library/asyncio-task.html
-.. _livebridge/config.py: https://github.com/dpa-newslab/livebridge/blob/master/livebridge/config.py
-.. _SQLALchemy: http://www.sqlalchemy.org/
-.. _`AWS DynamoDB`: https://aws.amazon.com/de/documentation/dynamodb/
-.. _`AWS IAM`: https://aws.amazon.com/iam/
-.. _pytest: http://pytest.org/
-.. _asynctest: http://asynctest.readthedocs.io/
-.. _pytest-cov: https://pypi.python.org/pypi/pytest-cov
+.. include:: links.rst

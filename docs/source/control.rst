@@ -101,4 +101,4 @@ Targets
 
 A block for a target consists of parameter for the target.
 
-.. _`control.yaml.example`: https://github.com/dpa-newslab/livebridge/blob/master/control.yaml.example
+.. include:: links.rst

@@ -22,7 +22,7 @@ We’re already using it in production, delivering content produced using `Sourc
 
 
 Features
-########
+--------
 
 * Keep content in-sync over different services.
 * syndicate one source to various targets in realtime.
@@ -32,6 +32,16 @@ Features
 * await/async based, Python 3.5
 * (non-persistent) queues for retrying the distribution of a post.
 * focus on robustness and stability
+
+
+
+Plugins
+-------
+
+.. include:: plugins.rst
+   :start-line: 4
+   :end-line: 13
+
 
 Installation & Setup
 --------------------
@@ -62,4 +72,4 @@ License
 
 Copyright 2016 dpa-infocom GmbH
 
-.. _LICENSE: https://github.com/dpa-newslab/livebridge/blob/master/LICENSE
+.. include:: links.rst

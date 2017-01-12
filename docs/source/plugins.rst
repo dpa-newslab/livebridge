@@ -10,6 +10,7 @@ Following plugins are currently available:
   Provides also a **converter** from Liveblog_ to Scribblelive_.
 * **Slack** livebridge-slack_  - Provides Slack_ channels as source and as target. Also provides \
   **converters** from Liveblog_ and to Scribblelive_. 
+* **Tickaroo** livebridge-tickaroo_ - Provides a Tickaroo_ ticker as target.
 
 
 Installing plugins
@@ -29,11 +30,4 @@ Control plugins
 
 See :ref:`control` for setting up bridges.
 
-
-.. _livebridge-liveblog: https://github.com/dpa-newslab/livebridge-liveblog
-.. _livebridge-scribblelive: https://github.com/dpa-newslab/livebridge-scribblelive
-.. _livebridge-slack: https://github.com/dpa-newslab/livebridge-slack
-.. _Slack: https://slack.com
-.. _Liveblog: https://github.com/liveblog/liveblog
-.. _Scribblelive: http://scribblelive.com
-.. _PyPi: http://pypi.python.org/
+.. include:: links.rst
