@@ -40,11 +40,10 @@ class SQLStorage(BaseStorage):
     def __init__(self, **kwargs):
         self.dsn = kwargs.get("dsn", None)
         self.table_name = kwargs.get("table_name")
-        self._engine = None
 
     @property
     async def db(self):
-        if self._engine:
+        if hasattr(self, "_engine") and self._engine:
             return self._engine
         logger.debug("Connecting to {}".format(self.dsn))
         self._engine = create_engine(self.dsn, strategy=ASYNCIO_STRATEGY)
