@@ -155,7 +155,7 @@ class BaseTarget(object):
                 "target_id": self.target_id,
                 "post_id": post.id,
                 "source_id": post.source_id,
-                "text": post.content,
+                "text": str(post.content),
                 "sticky": post.is_sticky,
                 "created": post.created,
                 "updated": post.updated,
