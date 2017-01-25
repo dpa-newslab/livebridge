@@ -87,7 +87,12 @@ class SQLStorage(BaseStorage):
         try:
             db = await self.db
             table = self._get_table()
-            result = await db.execute(table.select().where(table.c.source_id == source_id).limit(1))
+            result = await db.execute(
+                            table.select().where(
+                                table.c.source_id == source_id
+                            ).order_by(
+                                table.c.updated.desc()
+                            ).limit(1))
             item = await result.first()
             tstamp = item["updated"] if item else None
             return tstamp
