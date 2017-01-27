@@ -17,7 +17,7 @@ import asyncio
 import copy
 import logging
 from livebridge.components import get_source, get_db_client
-
+from livebridge.base import InvalidTargetResource
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +83,10 @@ class LiveBridge(object):
 
     async def _action_done(self, future, item):
         exc = future.exception()
-        if exc:
+        if exc and type(exc) is InvalidTargetResource:
+            logger.warning("POST {post.id} could not be distributed to {target.target_id} [{count}], no retry.".format(**item))
+            logger.warning(exc)
+        elif exc:
             logger.error("TARGET ACTION FAILED, WILL RETRY: [{}] {} {} [{}]".format(
                 item["count"], item["post"], item["target"], exc))
             item["count"] = item["count"] + 1

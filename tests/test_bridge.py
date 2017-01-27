@@ -15,7 +15,7 @@
 # limitations under the License.
 import asyncio
 import asynctest
-from livebridge.base import BaseTarget
+from livebridge.base import BaseTarget, InvalidTargetResource
 from livebridge.bridge import LiveBridge
 from tests import load_json
 
@@ -69,6 +69,17 @@ class LiveBridgeTest(asynctest.TestCase):
         }
         future = asynctest.MagicMock(asyncio.Future)
         future.exception = asynctest.Mock(return_value=None)
+        await self.bridge._action_done(future, item_in)
+        assert future.exception.call_count == 1
+
+    async def test_action_done_exception_invalid_target(self):
+        item_in = {
+            "target": asynctest.MagicMock(),
+            "post": asynctest.MagicMock(),
+            "count": 0
+        }
+        future = asynctest.MagicMock(asyncio.Future)
+        future.exception = asynctest.Mock(return_value=InvalidTargetResource("Test"))
         await self.bridge._action_done(future, item_in)
         assert future.exception.call_count == 1
 
