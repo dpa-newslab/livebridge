@@ -22,9 +22,8 @@ from livebridge.components import get_converter, get_db_client
 
 
 class InvalidTargetResource(Exception):
-    """Raised, when a known resource target is invalid.
-
-       This exception will prevent a retry of the failed action.
+    """This exception ca be raised, when a known resource target is invalid.
+       This exception will prevent a retry of a failed action.
     """
     pass
 

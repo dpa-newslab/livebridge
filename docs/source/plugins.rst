@@ -5,7 +5,7 @@ Plugin for services
 
 Following plugins are currently available:
 
-* **Liveblog** livebridge-liveblog_ - Provides a Liveblog_ liveticker as source.
+* **Liveblog** livebridge-liveblog_ - Provides a Liveblog_ liveticker as source and target.
 * **Scribblelive** livebridge-scribblelive_ - Provides a Scribblelive_ event stream as target. \
   Provides also a **converter** from Liveblog_ to Scribblelive_.
 * **Slack** livebridge-slack_  - Provides Slack_ channels as source and as target. Also provides \

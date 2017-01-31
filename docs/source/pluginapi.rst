@@ -85,6 +85,11 @@ TargetResponse
    :inherited-members:
    :show-inheritance:
 
+InvalidTargetResource
+~~~~~~~~~~~~~~~~~~~~~
+.. autoexception:: livebridge.base.InvalidTargetResource
+   :members:
+
 BaseStorage
 ~~~~~~~~~~~
 .. autoclass:: livebridge.storages.base.BaseStorage

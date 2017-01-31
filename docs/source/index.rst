@@ -35,8 +35,8 @@ Features
 
 
 
-Plugins
--------
+Available Plugins
+-----------------
 
 .. include:: plugins.rst
    :start-line: 4
