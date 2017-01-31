@@ -23,9 +23,9 @@ logger = logging.getLogger(__name__)
 
 
 FILE_EXT = {
-    "image/jpeg": "jpeg",
-    "image/gif": "gif",
-    "image/png": "png",
+    "image/jpeg": ".jpg",
+    "image/gif": ".gif",
+    "image/png": ".png",
 }
 
 
@@ -42,10 +42,12 @@ class BaseConverter(object):
         pass
 
     async def _download_image(self, data):
-        filename = "{}-{}.{}".format(
+        basename = os.path.basename(data["media"])
+        file_ext = os.path.splitext(basename)[1]
+        filename = "{}-{}{}".format(
             str(uuid.uuid4())[:8],
-            data["media"],
-            FILE_EXT[data["mimetype"]]
+            basename,
+            FILE_EXT[data["mimetype"]] if not file_ext else ""
         )
         filepath = os.path.join("/tmp/", filename)
         with aiohttp.ClientSession() as session:
