@@ -16,13 +16,13 @@
 import unittest
 import logging
 
-
 class LoggerTests(unittest.TestCase):
 
     def test_logger(self):
         import livebridge.config
-        livebridge.config.LOGFILE = "/tmp/test.log"
+        livebridge.config.LOGFILE = "/dev/null"
         from livebridge.logger import logger
         assert type(logger) is logging.RootLogger
         assert type(logger.handlers[0]) is logging.StreamHandler
         assert type(logger.handlers[1]) is logging.FileHandler
+        logger.handlers = []
