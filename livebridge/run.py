@@ -26,7 +26,7 @@ from livebridge.components import get_db_client
 from livebridge.loader import load_extensions
 
 
-def main(loop=None, **kwargs):
+def main(**kwargs):
     # disable bot logging
     logging.getLogger('botocore').setLevel(logging.ERROR)
     logging.getLogger('websockets').setLevel(logging.INFO)
@@ -42,8 +42,7 @@ def main(loop=None, **kwargs):
         parser.add_argument("--control", required=True, help="Control file, can be path.")
         args = parser.parse_args()
 
-    if not loop:
-        loop = asyncio.get_event_loop()
+    loop = asyncio.get_event_loop() if not kwargs.get("loop") else kwargs["loop"]
 
     # load extensions
     load_extensions()
