@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 dpa-infocom GmbH
+# Copyright 2016,2017 dpa-infocom GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 import asynctest
 import asyncio
 import os
+from botocore.exceptions import ClientError
 from unittest.mock import MagicMock
 from livebridge.controller import Controller
 from livebridge.controlfile import ControlFile
@@ -48,6 +49,69 @@ class ControllerTests(asynctest.TestCase):
     @asynctest.ignore_loop
     def test_sqs_client(self):
         assert self.controller._sqs_client == self.controller.sqs_client
+
+    @asynctest.ignore_loop
+    def test_new_sqs_client(self):
+        self.controller._sqs_client = None
+        mock_sqs_client = MagicMock()
+        mock_sqs_client.create_client = MagicMock(return_value="SQS-Client")
+        with asynctest.patch("aiobotocore.get_session") as patched:
+            patched.return_value = mock_sqs_client
+            client = self.controller.sqs_client
+            assert mock_sqs_client.create_client.call_count == 1
+            assert mock_sqs_client.create_client.call_args[0] == ("sqs",)
+            assert mock_sqs_client.create_client.call_args[1]["region_name"] == "eu-central-1"
+            assert client == "SQS-Client"
+            assert client == self.controller._sqs_client
+
+    @asynctest.ignore_loop
+    def test_del(self):
+        self.controller._sqs_client.close = asynctest.CoroutineMock()
+        self.controller.__del__()
+        assert self.controller._sqs_client.close.call_count == 1
+
+    async def shutdown(self):
+        await asyncio.sleep(3)
+        self.controller.shutdown = True
+
+    async def test_check_control_change(self):
+        messages = {"Messages": [{"Body": '{"Records": []}', "ReceiptHandle": "baz"}]}
+        sqs_client = asynctest.MagicMock()
+        sqs_client.purge_queue = asynctest.CoroutineMock(return_value=None)
+        sqs_client.receive_message = asynctest.CoroutineMock(return_value=messages)
+        sqs_client.delete_message = asynctest.CoroutineMock(return_value=True)
+        self.controller._sqs_client = sqs_client
+        self.controller.sleep = asynctest.CoroutineMock(side_effect=[self.shutdown()])
+        await self.controller.check_control_change()
+        sqs_client.receive_message.assert_called_once_with(
+            QueueUrl=self.config_aws["sqs_s3_queue"])
+        sqs_client.delete_message.assert_called_once_with(
+            QueueUrl=self.config_aws["sqs_s3_queue"],
+            ReceiptHandle="baz")
+
+    async def test_check_control_change_with_exception(self):
+        sqs_client = asynctest.MagicMock()
+        sqs_client.purge_queue = asynctest.CoroutineMock(return_value=None)
+        sqs_client.receive_message = asynctest.CoroutineMock(side_effect=[Exception()])
+        self.controller._sqs_client = sqs_client
+        self.controller.sleep = asynctest.CoroutineMock(side_effect=[self.shutdown()])
+        await self.controller.check_control_change()
+        sqs_client.receive_message.assert_called_once_with(
+            QueueUrl=self.config_aws["sqs_s3_queue"])
+
+    async def test_check_control_change_with_records(self):
+        messages = {"Messages": [{"Body": '{"Records": [{"foo":"baz"}]}', "ReceiptHandle": "baz"}]}
+        sqs_client = asynctest.MagicMock()
+        sqs_client.purge_queue = asynctest.CoroutineMock(
+            side_effect=[ClientError({"Error": {"Code": 1, "Message": "Testerror"}}, operation_name="foo")])
+        sqs_client.receive_message = asynctest.CoroutineMock(return_value=messages)
+        sqs_client.delete_message = asynctest.CoroutineMock(return_value=True)
+        self.controller._sqs_client = sqs_client
+        self.controller.stop_bridges = asynctest.CoroutineMock(return_value=None)
+        assert self.controller.read_control != True
+        await self.controller.check_control_change()
+        assert self.controller.read_control == True
+        assert self.controller.stop_bridges.call_count == 1
 
     @asynctest.ignore_loop
     def test_run(self):
@@ -262,3 +326,9 @@ class ControllerTests(asynctest.TestCase):
         self.controller.remove_bridge(bridge2)
         assert len(self.controller.bridges) == 0
         assert self.controller.run.called == 1
+
+    async def test_sleep_cancelled(self):
+        self.controller.sleep_tasks = MagicMock()
+        self.controller.sleep_tasks.append = MagicMock(side_effect=[asyncio.CancelledError()])
+        res = await self.controller.sleep(3)
+        assert res == True
