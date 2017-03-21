@@ -13,9 +13,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import botocore
 import unittest
+import unittest.mock
 import os.path
 import yaml
+from io import StringIO
 from livebridge.controlfile import ControlFile
 
 from tests import load_file
@@ -91,6 +94,20 @@ class ControlTest(unittest.TestCase):
 
         assert control["auth"]["dev"]["api_key"] == "F00Baz"
         assert control["auth"]["live"]["api_key"] == "Foobar"
+
+    def test_load_from_s3(self):
+        s3_url = "s3://foobaz/control.yaml"
+        mock_client = unittest.mock.Mock()
+        mock_client.get_object.return_value = {"Body":StringIO("foo")}
+        with unittest.mock.patch("boto3.client") as patched:
+            patched.return_value = mock_client
+            control_data = self.control.load_from_s3(s3_url)
+            assert control_data == "foo"
+            assert patched.call_count == 1
+            assert patched.call_args[0] == ('s3',)
+            assert patched.call_args[1]["region_name"] == "eu-central-1"
+            assert type(patched.call_args[1]["config"]) == botocore.config.Config
+            mock_client.get_object.assert_called_once_with(Bucket='foobaz', Key='control.yaml')
 
     def test_controlfile_without_auth(self):
         file_path = os.path.join(os.path.dirname(__file__), "files", "control-no-auth.yaml")
