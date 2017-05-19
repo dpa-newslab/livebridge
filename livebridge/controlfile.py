@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 class ControlFile(object):
 
     def __init__(self):
-        pass
+        self.control_data = {}
 
     def _resolve_auth(self, data):
         for x, bridge in enumerate(data.get("bridges", [])):
@@ -73,8 +73,8 @@ class ControlFile(object):
 
         if resolve_auth:
             control = self._resolve_auth(control)
-
-        return control
+        self.control_data= control
+        return self.control_data
 
     def load_from_file(self, path):
         logger.info("Loading control file from disk: {}".format(path))
@@ -100,3 +100,6 @@ class ControlFile(object):
         )
         control_file = client.get_object(Bucket=bucket, Key=key)
         return control_file["Body"].read()
+
+    def list_bridges(self):
+        return self.control_data.get("bridges", [])

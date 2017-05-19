@@ -34,9 +34,10 @@ class ControlTest(unittest.TestCase):
         self.assertRaises(IOError, self.control.load, "/home/baz/control.yaml")
 
     def test_load_from_file(self):
+        assert self.control.control_data == {}
         file_path = os.path.join(os.path.dirname(__file__), "files", "control.yaml")
         control = self.control.load(file_path)
-
+        assert set(self.control.control_data.keys()) == set(["bridges", "auth"])
         assert control["auth"]["dev"]["api_key"] == "F00Baz"
         assert control["auth"]["live"]["api_key"] == "Foobar"
         assert control["bridges"][0]["source_id"] == "abcdefg"
@@ -186,3 +187,9 @@ class ControlTest(unittest.TestCase):
         assert len(cleared["bridges"][0]["targets"]) == 3
         assert len(cleared["bridges"][1]["targets"]) == 1
         assert len(cleared["bridges"][2]["targets"]) == 0
+
+    def test_iter_bridges(self):
+        file_path = os.path.join(os.path.dirname(__file__), "files", "control.yaml")
+        control = self.control.load(file_path)
+        bridges = self.control.list_bridges()
+        assert len(bridges) == 2
