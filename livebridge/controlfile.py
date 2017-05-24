@@ -66,14 +66,14 @@ class ControlFile(object):
             body = self.load_from_file(path)
         else:
             body = self.load_from_s3(path)
-        control = yaml.load(body)
+        control_data = yaml.load(body)
 
         # filter duplicates
-        control = self._remove_doubles(control)
+        control_data = self._remove_doubles(control_data)
 
         if resolve_auth:
-            control = self._resolve_auth(control)
-        self.control_data= control
+            control_data = self._resolve_auth(control_data)
+        self.control_data = control_data
         return self.control_data
 
     def load_from_file(self, path):
