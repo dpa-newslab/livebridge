@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 dpa-infocom GmbH
+# Copyright 2017 dpa-infocom GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,19 +14,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import copy
-import os
 import logging
-import boto3
-import yaml
-from botocore.client import Config
-from livebridge.config import AWS
+from livebridge.controldata.controlfile import ControlFile
 
 logger = logging.getLogger(__name__)
 
-class ControlFile(object):
+class ControlData(object):
 
-    def __init__(self):
+    def __init__(self, config):
+        self.config = config
+        self.control_client = None
         self.control_data = {}
+
+    def load(self, path, *, resolve_auth=False):
+        control_data = {}
+        if path.startswith("/") or path.startswith("s3://"):
+            self.control_client = ControlFile()
+            control_data = self.control_client.load(path, resolve_auth=resolve_auth)
+
+        # filter duplicates
+        control_data = self._remove_doubles(control_data)
+
+        if resolve_auth:
+            control_data = self._resolve_auth(control_data)
+        self.control_data = control_data
 
     def _resolve_auth(self, data):
         for x, bridge in enumerate(data.get("bridges", [])):
@@ -61,45 +72,8 @@ class ControlFile(object):
                    logger.info("Filtering double target [{}] from source [{}]".format(target, source))
         return filtered
 
-    def load(self, path, *, resolve_auth=False):
-        if not path.startswith("s3://"):
-            body = self.load_from_file(path)
-        else:
-            body = self.load_from_s3(path)
-        control_data = yaml.load(body)
-
-        # filter duplicates
-        control_data = self._remove_doubles(control_data)
-
-        if resolve_auth:
-            control_data = self._resolve_auth(control_data)
-        self.control_data = control_data
-        return self.control_data
-
-    def load_from_file(self, path):
-        logger.info("Loading control file from disk: {}".format(path))
-        if not os.path.exists(path):
-            raise IOError("Path for control file not found.")
-
-        file = open(path, "r")
-        body = file.read()
-        file.close()
-
-        return body
-
-    def load_from_s3(self, url):
-        bucket, key = url.split('/', 2)[-1].split('/', 1)
-        logger.info("Loading control file from s3: {} - {}".format(bucket, key))
-        config = Config(signature_version="s3v4") if AWS["region"] in ["eu-central-1"] else None
-        client = boto3.client(
-            's3',
-            region_name=AWS["region"],
-            aws_access_key_id=AWS["access_key"] or None,
-            aws_secret_access_key=AWS["secret_key"] or None,
-            config=config,
-        )
-        control_file = client.get_object(Bucket=bucket, Key=key)
-        return control_file["Body"].read()
+    async def check_control_change(self):
+        return await self.control_client.check_control_change()
 
     def list_bridges(self):
         return self.control_data.get("bridges", [])

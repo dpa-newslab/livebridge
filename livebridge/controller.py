@@ -15,12 +15,9 @@
 # limitations under the License.
 import asyncio
 import logging
-import json
-import aiobotocore
-from botocore.exceptions import ClientError
 from livebridge.components import get_target
 from livebridge.bridge import LiveBridge
-from livebridge.controlfile import ControlFile
+from livebridge.controldata import ControlData
 
 logger = logging.getLogger(__name__)
 
@@ -34,26 +31,9 @@ class Controller(object):
         self.tasked = []
         self.sleep_tasks = []
         self.bridges = {}
-        self._sqs_client = None
         self.retry_run_interval = 30
-        self.control_data = None # data from control file
+        self.control_data = None # access to data from control file
         self.shutdown = False
-
-    def __del__(self):
-        if self._sqs_client:
-            self._sqs_client.close()
-
-    @property
-    def sqs_client(self):
-        if self._sqs_client:
-            return self._sqs_client
-        loop = asyncio.get_event_loop()
-        session = aiobotocore.get_session(loop=loop)
-        self._sqs_client = session.create_client('sqs',
-                                                 region_name=self.config["region"],
-                                                 aws_secret_access_key=self.config["secret_key"] or None,
-                                                 aws_access_key_id=self.config["access_key"] or None)
-        return self._sqs_client
 
     async def clean_shutdown(self):
         logger.info("Requesting proper shutdown of tasks.")
@@ -71,41 +51,16 @@ class Controller(object):
             bridge.stop()
 
     async def check_control_change(self):
-        client = self.sqs_client
-        logger.info("Starting watching for control file changes on s3.")
-        try:
-            # purge queue before starting watching
-            await client.purge_queue(
-                QueueUrl=self.config["sqs_s3_queue"]
-            )
-            logger.info("Purged SQS queue {}".format(self.config["sqs_s3_queue"]))
-        except ClientError as exc:
-            logger.warning("Purging SQS queue failed with: {}".format(exc))
         # check for update events
+        logger.info("Starting watching for control file changes.")
         while True and self.shutdown != True:
-            try:
-                response = await client.receive_message(
-                    QueueUrl=self.config["sqs_s3_queue"]
-                )
-                for msg in response.get("Messages", []):
-                    logger.debug("SQS {}".format(msg.get("MessageId")))
-                    body = msg.get("Body")
-                    data = json.loads(body) if body else None
-                    await client.delete_message(
-                        QueueUrl=self.config["sqs_s3_queue"],
-                        ReceiptHandle=msg.get("ReceiptHandle")
-                    )
-                    if data:
-                        for rec in data.get("Records", []):
-                            logger.debug("EVENT: {} {}".format(
-                                rec.get("s3", {}).get("object", {}).get("key"), rec.get("eventName")))
-                            self.read_control = True
-                            await self.stop_bridges()
-                            return
-            except Exception as exc:
-                logger.error("Error fetching SQS messages with: {}".format(exc))
+            is_changed = await self.control_data.check_control_change()
+            if is_changed == True:
+                logger.debug("CONTROL DATA CHANGED")
+                self.read_control = True
+                await self.stop_bridges()
+                return
             await self.sleep(60)
-        client.close()
 
     def append_bridge(self, config_data):
         bridge = LiveBridge(config_data)
@@ -135,17 +90,20 @@ class Controller(object):
     def run(self):
         """ Blocking code."""
         self.read_control = False
+        loaded = False
         control_data = None
         try:
-            cfile = ControlFile()
-            control_data = cfile.load(self.control_file, resolve_auth=True)
+            control_data = ControlData(config=self.config)
+            control_data.load(self.control_file, resolve_auth=True)
+            loaded = True
         except Exception as exc:
             logger.error("Error when reading control file.")
             logger.error(exc)
             logger.info("Will try to reuse existing control data.")
 
         # set new control data
-        if control_data:
+        #if control_data:
+        if loaded:
             logger.info("Using fetched control data.")
             self.control_data = control_data
 
@@ -157,7 +115,7 @@ class Controller(object):
 
     def start_tasks(self):
         # append content bridges
-        for bridge_config in self.control_data["bridges"]:
+        for bridge_config in self.control_data.list_bridges():
             self.append_bridge(bridge_config)
 
         # create futures for bridges
