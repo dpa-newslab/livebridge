@@ -84,20 +84,12 @@ class ControlFile(object):
 
     def load(self, path, *, resolve_auth=False):
         if not path.startswith("s3://"):
-            body = self.load_from_file(path)
+            body = self.__del__load_from_file(path)
         else:
-            body = self.load_from_s3(path)
-        control_data = yaml.load(body)
-        return control_data
-        """# filter duplicates
-        control_data = self._remove_doubles(control_data)
+            body = self._load_from_s3(path)
+        return yaml.load(body)
 
-        if resolve_auth:
-            control_data = self._resolve_auth(control_data)
-        self.control_data = control_data
-        return self#.control_data"""
-
-    def load_from_file(self, path):
+    def _load_from_file(self, path):
         logger.info("Loading control file from disk: {}".format(path))
         if not os.path.exists(path):
             raise IOError("Path for control file not found.")
@@ -108,7 +100,7 @@ class ControlFile(object):
 
         return body
 
-    def load_from_s3(self, url):
+    def _load_from_s3(self, url):
         bucket, key = url.split('/', 2)[-1].split('/', 1)
         logger.info("Loading control file from s3: {} - {}".format(bucket, key))
         config = Config(signature_version="s3v4") if self.config["region"] in ["eu-central-1"] else None

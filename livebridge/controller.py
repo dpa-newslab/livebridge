@@ -102,7 +102,6 @@ class Controller(object):
             logger.info("Will try to reuse existing control data.")
 
         # set new control data
-        #if control_data:
         if loaded:
             logger.info("Using fetched control data.")
             self.control_data = control_data

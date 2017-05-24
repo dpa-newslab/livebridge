@@ -26,19 +26,6 @@ class ControlData(object):
         self.control_client = None
         self.control_data = {}
 
-    def load(self, path, *, resolve_auth=False):
-        control_data = {}
-        if path.startswith("/") or path.startswith("s3://"):
-            self.control_client = ControlFile()
-            control_data = self.control_client.load(path, resolve_auth=resolve_auth)
-
-        # filter duplicates
-        control_data = self._remove_doubles(control_data)
-
-        if resolve_auth:
-            control_data = self._resolve_auth(control_data)
-        self.control_data = control_data
-
     def _resolve_auth(self, data):
         for x, bridge in enumerate(data.get("bridges", [])):
             if data.get("auth", {}).get(bridge.get("auth")):
@@ -72,8 +59,21 @@ class ControlData(object):
                    logger.info("Filtering double target [{}] from source [{}]".format(target, source))
         return filtered
 
-    async def check_control_change(self):
-        return await self.control_client.check_control_change()
+    def load(self, path, *, resolve_auth=False):
+        control_data = {}
+        if path.startswith("/") or path.startswith("s3://"):
+            self.control_client = ControlFile()
+            control_data = self.control_client.load(path, resolve_auth=resolve_auth)
+
+        # filter duplicates
+        control_data = self._remove_doubles(control_data)
+
+        if resolve_auth:
+            control_data = self._resolve_auth(control_data)
+        self.control_data = control_data
 
     def list_bridges(self):
         return self.control_data.get("bridges", [])
+
+    async def check_control_change(self):
+        return await self.control_client.check_control_change()
