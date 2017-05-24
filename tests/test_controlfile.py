@@ -193,3 +193,6 @@ class ControlTest(unittest.TestCase):
         control = self.control.load(file_path)
         bridges = self.control.list_bridges()
         assert len(bridges) == 2
+        for b in bridges:
+            assert "source_id" in b
+            assert "targets" in b
