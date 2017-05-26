@@ -84,7 +84,7 @@ class ControlFile(object):
 
     def load(self, path, *, resolve_auth=False):
         if not path.startswith("s3://"):
-            body = self.__del__load_from_file(path)
+            body = self._load_from_file(path)
         else:
             body = self._load_from_s3(path)
         return yaml.load(body)
