@@ -29,9 +29,9 @@ logger = logging.getLogger(__name__)
 class ControlFile(object):
 
     def __init__(self):
-        self.control_data = {}
         self._sqs_client = None
         self.config = AWS
+        self.config["sqs_s3_queue"] = "http://foo.baz/queue"
 
     def __del__(self):
         if self._sqs_client:
@@ -47,6 +47,11 @@ class ControlFile(object):
              aws_secret_access_key=self.config["secret_key"] or None,
              aws_access_key_id=self.config["access_key"] or None)
 
+        await self._purge_sqs_queue()
+
+        return self._sqs_client
+
+    async def _purge_sqs_queue(self):
         # purge queue before starting watching
         try:
             await self._sqs_client.purge_queue(
@@ -55,8 +60,6 @@ class ControlFile(object):
             logger.info("Purged SQS queue {}".format(self.config["sqs_s3_queue"]))
         except ClientError as exc:
             logger.warning("Purging SQS queue failed with: {}".format(exc))
-
-        return self._sqs_client
 
     async def check_control_change(self):
         client = await self.sqs_client

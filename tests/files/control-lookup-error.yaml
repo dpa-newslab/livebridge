@@ -1,0 +1,14 @@
+auth:
+    dev:
+        user: "dev"
+        password: "pwd"
+        api_key: "F00Baz"
+bridges:
+    - source_id: 54321
+      endpoint:  "https://foo.org/api/"
+      type:  "liveblog"
+      auth: "slack"
+      targets:
+        - type: "scribble"
+          event_id: "123456"
+          auth: "foo"

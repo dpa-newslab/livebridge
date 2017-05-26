@@ -37,9 +37,6 @@ class ControllerTests(asynctest.TestCase):
         self.poll_interval = 10
         self.controller = Controller(config=self.config_aws, control_file=self.control_file, poll_interval=self.poll_interval)
 
-        # set mock clients
-        self.controller._sqs_client = MagicMock()
-
     @asynctest.ignore_loop
     def test_init(self):
         assert self.controller.config== self.config_aws
