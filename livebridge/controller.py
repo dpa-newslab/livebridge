@@ -31,6 +31,7 @@ class Controller(object):
         self.tasked = []
         self.sleep_tasks = []
         self.bridges = {}
+        self.check_control_interval = 60
         self.retry_run_interval = 30
         self.control_data = None # access to data from control file
         self.shutdown = False
@@ -59,8 +60,8 @@ class Controller(object):
                 logger.debug("CONTROL DATA CHANGED")
                 self.read_control = True
                 await self.stop_bridges()
-                return
-            await self.sleep(60)
+                return True
+            await self.sleep(self.check_control_interval)
 
     def append_bridge(self, config_data):
         bridge = LiveBridge(config_data)
