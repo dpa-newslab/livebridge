@@ -59,7 +59,7 @@ class ControlData(object):
                    logger.info("Filtering double target [{}] from source [{}]".format(target, source))
         return filtered
 
-    def load(self, path, *, resolve_auth=False):
+    async def load(self, path, *, resolve_auth=False):
         control_data = {}
         if path.startswith("/") or path.startswith("s3://"):
             self.control_client = ControlFile()

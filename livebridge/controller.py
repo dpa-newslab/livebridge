@@ -81,21 +81,20 @@ class Controller(object):
         del self.bridges[bridge]
         if self.read_control and not self.bridges:
             logger.info("RESTART BRIDGES")
-            self.run()
+            asyncio.ensure_future(self.run())
 
     async def retry_run(self):
         logger.info("Will retry loading control file in 30 seconds.")
         await asyncio.sleep(self.retry_run_interval)
-        self.run()
+        asyncio.ensure_future(self.run())
 
-    def run(self):
-        """ Blocking code."""
+    async def run(self):
         self.read_control = False
         loaded = False
         control_data = None
         try:
             control_data = ControlData(config=self.config)
-            control_data.load(self.control_file, resolve_auth=True)
+            await control_data.load(self.control_file, resolve_auth=True)
             loaded = True
         except Exception as exc:
             logger.error("Error when reading control file.")

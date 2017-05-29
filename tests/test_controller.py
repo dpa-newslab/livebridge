@@ -65,42 +65,39 @@ class ControllerTests(asynctest.TestCase):
         assert self.controller.read_control != True
         assert self.controller.control_data.check_control_change.call_count == 2
 
-    @asynctest.ignore_loop
-    def test_run(self):
+    async def test_run(self):
         self.controller.start_tasks = MagicMock()
         self.controller.read_control = True
         assert self.controller.control_data == None
-        self.controller.run()
+        await self.controller.run()
         assert self.controller.read_control == False
         assert self.controller.start_tasks.call_count == 1
         assert len(self.controller.tasked) == 0
 
-    @asynctest.ignore_loop
-    def test_run_failing(self):
+    async def test_run_failing(self):
         self.controller.start_tasks = MagicMock()
         self.controller.control_file = "/does/not/exist.yaml"
         assert len(self.controller.tasked) == 0
         assert self.controller.control_data == None
-        self.controller.run()
+        await self.controller.run()
         assert len(self.controller.tasked) == 1
         assert type(self.controller.tasked[0]) == asyncio.Task
         assert self.controller.start_tasks.called == 0
         assert self.controller.control_data == None
 
-    @asynctest.ignore_loop
-    def test_run_failing_reuse_existing_control(self):
+    async def test_run_failing_reuse_existing_control(self):
         # run with existing control
         self.controller.start_tasks = MagicMock()
         self.controller.read_control = True
         assert self.controller.control_data == None
-        self.controller.run()
+        await self.controller.run()
         assert type(self.controller.control_data) == ControlData
         self.controller.start_tasks.call_count == 1
 
         # run again with failing control file
         existing_control = self.controller.control_data
         self.controller.control_file = "/does/not/exist.yaml"
-        self.controller.run()
+        await self.controller.run()
         assert len(self.controller.tasked) == 0
         assert self.controller.start_tasks.call_count == 2
         assert self.controller.control_data == existing_control
@@ -113,8 +110,7 @@ class ControllerTests(asynctest.TestCase):
         assert self.controller.run.called
         assert self.controller.run.call_count ==  1
 
-    @asynctest.ignore_loop
-    def test_start_tasks_with_watcher(self):
+    async def test_start_tasks_with_watcher(self):
         class Source:
             mode = "streaming"
             def __init__(self, **kwargs):
@@ -123,7 +119,7 @@ class ControllerTests(asynctest.TestCase):
         SOURCE_MAP["scrible"] = Source
         SOURCE_MAP["another"] = Source
         self.controller.control_data = ControlData(self.config_aws)
-        self.controller.control_data.load(self.control_file, resolve_auth=True)
+        await self.controller.control_data.load(self.control_file, resolve_auth=True)
         assert self.controller.bridges == {}
         assert self.controller.tasked == []
         self.controller.start_tasks()
@@ -136,8 +132,7 @@ class ControllerTests(asynctest.TestCase):
         for task in self.controller.tasked:
             assert type(task) == asyncio.tasks.Task
 
-    @asynctest.ignore_loop
-    def test_start_tasks_without_watcher(self):
+    async def test_start_tasks_without_watcher(self):
         class Source:
             mode = "streaming"
             def __init__(self, **kwargs):
@@ -146,7 +141,7 @@ class ControllerTests(asynctest.TestCase):
         SOURCE_MAP["scrible"] = Source
         SOURCE_MAP["another"] = Source
         self.controller.control_data = ControlData(self.config_aws)
-        self.controller.control_data.load(self.control_file, resolve_auth=True)
+        await self.controller.control_data.load(self.control_file, resolve_auth=True)
         del self.controller.config["sqs_s3_queue"]
         self.controller.start_tasks()
 

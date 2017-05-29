@@ -53,7 +53,7 @@ def main(**kwargs):
 
     # Controller manages the tasks
     controller = Controller(config=config.AWS, control_file=args.control, poll_interval=config.POLL_INTERVAL)
-    controller.run()
+    asyncio.ensure_future(controller.run())
 
     # add signal handler
     for signame in ('SIGINT', 'SIGTERM'):

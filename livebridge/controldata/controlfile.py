@@ -31,7 +31,6 @@ class ControlFile(object):
     def __init__(self):
         self._sqs_client = None
         self.config = AWS
-        self.config["sqs_s3_queue"] = "http://foo.baz/queue"
 
     def __del__(self):
         if self._sqs_client:

@@ -37,20 +37,18 @@ class ControlDataTests(asynctest.TestCase):
         res = await self.control.check_control_change()
         assert res == True
 
-    @asynctest.ignore_loop
-    def test_iter_bridges(self):
+    async def test_iter_bridges(self):
         file_path = os.path.join(os.path.dirname(__file__), "files", "control.yaml")
-        control = self.control.load(file_path)
+        control = await self.control.load(file_path)
         bridges = self.control.list_bridges()
         assert len(bridges) == 2
         for b in bridges:
             assert "source_id" in b
             assert "targets" in b
 
-    @asynctest.ignore_loop
-    def test_load_auth_resolved(self):
+    async def test_load_auth_resolved(self):
         file_path = os.path.join(os.path.dirname(__file__), "files", "control.yaml")
-        self.control.load(file_path, resolve_auth=True)
+        await self.control.load(file_path, resolve_auth=True)
 
         control = self.control.control_data
         assert control["auth"]["dev"]["api_key"] == "F00Baz"
@@ -72,10 +70,10 @@ class ControlDataTests(asynctest.TestCase):
         assert control["bridges"][1]["targets"][0]["type"] == "scribble"
         assert control["bridges"][1]["targets"][0]["auth"] == control["auth"]["dev"]
 
-    @asynctest.ignore_loop
-    def test_load_auth_resolved_failed(self):
+    async def test_load_auth_resolved_failed(self):
         file_path = os.path.join(os.path.dirname(__file__), "files", "control-lookup-error.yaml")
-        self.assertRaises(LookupError, self.control.load, file_path, resolve_auth=True)
+        with self.assertRaises(LookupError):
+            await self.control.load(file_path, resolve_auth=True)
 
     @asynctest.ignore_loop
     def test_remove_doubles(self):
