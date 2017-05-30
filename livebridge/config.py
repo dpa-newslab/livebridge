@@ -34,5 +34,6 @@ AWS = {
     "region":  os.environ.get("LB_AWS_REGION", "eu-central-1"),
     "endpoint_url":  os.environ.get("LB_DYNAMO_ENDPOINT"),
     "table_name": os.environ.get("LB_DYNAMO_TABLE", "livebridge-dev"),
+    "control_table_name": os.environ.get("LB_DYNAMO_CONTROL_TABLE"),
     "sqs_s3_queue": os.environ.get("LB_SQS_S3_QUEUE", ""),
 }

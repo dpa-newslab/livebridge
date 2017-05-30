@@ -68,6 +68,17 @@ class DynamoClient(BaseStorage):
                 }
             ]
         }
+        self.control_table_name = kwargs.get("control_table_name")
+        self.control_table_schema = {
+            "TableName": self.control_table_name,
+            "KeySchema": [
+                {"AttributeName": "id", "KeyType": "HASH"},
+            ],
+            "AttributeDefinitions": [
+                {"AttributeName": "id", "AttributeType": "S"},
+            ],
+            "ProvisionedThroughput": {"ReadCapacityUnits": 3, "WriteCapacityUnits": 3},
+        }
 
     def __del__(self):
         if hasattr(self, "db_client") and self.db_client:
@@ -95,13 +106,21 @@ class DynamoClient(BaseStorage):
         try:
             client = await self.db
             response = await client.list_tables()
+            created = False
             # create table if not already created.
             if self.table_name not in response["TableNames"]:
                 logger.info("Creating DynamoDB table [{}]".format(self.table_name))
                 resp = await client.create_table(**self.table_schema)
                 if resp.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
                     logger.info("DynamoDB table [{}] successfully created!".format(self.table_name))
-                    return True
+                    created = True
+            # create control table if not already created.
+            if created == True and self.control_table_name and self.control_table_name not in response["TableNames"]:
+                logger.info("Creating DynamoDB control_table [{}]".format(self.control_table_name))
+                resp = await client.create_table(**self.control_table_schema)
+                if resp.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
+                    logger.info("DynamoDB control table [{}] successfully created!".format(self.control_table_name))
+            return created
         except Exception as exc:
             logger.error("[DB] Error when setting up DynamoDB.")
             logger.error(exc)
@@ -264,5 +283,26 @@ class DynamoClient(BaseStorage):
                 return True
         except Exception as exc:
             logger.error("[DB] Error when deleting for a post [{}] on {}".format(post_id, target_id))
+            logger.error(exc)
+        return False
+
+    async def get_control(self):
+        params = {
+            "TableName": self.control_table_name,
+            "KeyConditionExpression": "id= :value",
+            "ExpressionAttributeValues": {
+                ":value": {"S": "control"}
+            },
+            "ScanIndexForward": False,
+        }
+        try:
+            db = await self.db
+            response = await db.query(**params)
+            if response.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
+                db_post = response["Items"][0] if response["Count"] >= 1 else None
+                if db_post:
+                    return json.loads(db_post["data"]["S"])
+        except BotoCoreError as exc:
+            logger.error("[DB] Error when querying for control_data on {}".format(self.control_table_name))
             logger.error(exc)
         return False

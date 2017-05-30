@@ -31,12 +31,14 @@ class DynamoClientTests(asynctest.TestCase):
         self.secret_key= "bla"
         self.region = "eu-central-1"
         self.table_name= "livebridge_test"
+        self.control_table_name= "livebridge_test_control"
         self.endpoint_url= "http://172.17.0.1:8000"
         params = {"access_key":self.access_key,
                   "secret_key": self.secret_key,
                   "region": self.region,
                   "endpoint_url": self.endpoint_url,
-                  "table_name": self.table_name}
+                  "table_name": self.table_name,
+                  "control_table_name": self.control_table_name}
         DynamoClient._instance = None
         self.client = DynamoClient(**params)
         self.target_id = "scribble-max.mustermann@dpa-info.com-1234567890"
@@ -60,22 +62,22 @@ class DynamoClientTests(asynctest.TestCase):
 
     async def test_setup(self):
         self.client.db_client = asynctest.MagicMock()
-        table_resp = {"TableNames": []}    
+        table_resp = {"TableNames": []}
         self.client.db_client.list_tables = asynctest.CoroutineMock(return_value=table_resp)
         create_resp = {"ResponseMetadata": {"HTTPStatusCode": 200}}
         self.client.db_client.create_table = asynctest.CoroutineMock(return_value=create_resp)
         res = await self.client.setup()
         assert res == True
         assert self.client.db_client.list_tables.call_count == 1
-        assert self.client.db_client.create_table.call_count == 1
+        assert self.client.db_client.create_table.call_count == 2
 
         # table exists already
-        table_resp = {"TableNames": [self.table_name]}    
+        table_resp = {"TableNames": [self.table_name, self.control_table_name]}
         self.client.db_client.list_tables.return_value = table_resp
         res = await self.client.setup()
         assert res == False
         assert self.client.db_client.list_tables.call_count == 2
-        assert self.client.db_client.create_table.call_count == 1
+        assert self.client.db_client.create_table.call_count == 2
 
         # failes with exception
         self.client.db_client.list_tables.side_effect = Exception

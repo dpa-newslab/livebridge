@@ -23,10 +23,11 @@ import yaml
 from botocore.client import Config
 from botocore.exceptions import ClientError
 from livebridge.config import AWS
+from livebridge.controldata.base import BaseControl
 
 logger = logging.getLogger(__name__)
 
-class ControlFile(object):
+class ControlFile(BaseControl):
 
     def __init__(self):
         self._sqs_client = None
@@ -84,7 +85,7 @@ class ControlFile(object):
             logger.error("Error fetching SQS messages with: {}".format(exc))
         return False
 
-    def load(self, path, *, resolve_auth=False):
+    async def load(self, path, *, resolve_auth=False):
         if not path.startswith("s3://"):
             body = self._load_from_file(path)
         else:

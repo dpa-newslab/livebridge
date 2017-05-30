@@ -16,6 +16,7 @@
 import copy
 import logging
 from livebridge.controldata.controlfile import ControlFile
+from livebridge.controldata.dynamo import DynamoControl
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +64,10 @@ class ControlData(object):
         control_data = {}
         if path.startswith("/") or path.startswith("s3://"):
             self.control_client = ControlFile()
-            control_data = self.control_client.load(path, resolve_auth=resolve_auth)
+            control_data = await self.control_client.load(path)
+        elif path == "dynamodb":
+            self.control_client = DynamoControl()
+        control_data = await self.control_client.load(path)
 
         # filter duplicates
         control_data = self._remove_doubles(control_data)

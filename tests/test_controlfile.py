@@ -84,14 +84,13 @@ class ControlFileTest(asynctest.TestCase):
         self.control.__del__()
         assert self.control._sqs_client.close.call_count == 1
 
-    @asynctest.ignore_loop
-    def test_load_from_file_no_exists(self):
-        self.assertRaises(IOError, self.control.load, "/home/baz/control.yaml")
+    async def test_load_from_file_no_exists(self):
+        with self.assertRaises(IOError):
+            await self.control.load("/home/baz/control.yaml")
 
-    @asynctest.ignore_loop
-    def test_load_from_file(self):
+    async def test_load_from_file(self):
         file_path = os.path.join(os.path.dirname(__file__), "files", "control.yaml")
-        control_data = self.control.load(file_path)
+        control_data = await self.control.load(file_path)
         assert set(control_data.keys()) == set(["bridges", "auth"])
         assert control_data["auth"]["dev"]["api_key"] == "F00Baz"
         assert control_data["auth"]["live"]["api_key"] == "Foobar"
@@ -111,12 +110,11 @@ class ControlFileTest(asynctest.TestCase):
         assert control_data["bridges"][1]["targets"][0]["type"] == "scribble"
         assert control_data["bridges"][1]["targets"][0]["auth"] == "dev"
 
-    @asynctest.ignore_loop
-    def test_load_by_s3_url(self):
+    async def test_load_by_s3_url(self):
         file_path = os.path.join(os.path.dirname(__file__), "files", "control.yaml")
         yaml_str = open(file_path).read()
         self.control._load_from_s3 = lambda x: yaml_str
-        control = self.control.load("s3://foobaz/control.yaml", resolve_auth=True)
+        control = await self.control.load("s3://foobaz/control.yaml", resolve_auth=True)
 
         assert control["auth"]["dev"]["api_key"] == "F00Baz"
         assert control["auth"]["live"]["api_key"] == "Foobar"
@@ -136,10 +134,9 @@ class ControlFileTest(asynctest.TestCase):
             assert type(patched.call_args[1]["config"]) == botocore.config.Config
             mock_client.get_object.assert_called_once_with(Bucket='foobaz', Key='control.yaml')
 
-    @asynctest.ignore_loop
-    def test_controlfile_without_auth(self):
+    async def test_controlfile_without_auth(self):
         file_path = os.path.join(os.path.dirname(__file__), "files", "control-no-auth.yaml")
-        control = self.control.load(file_path, resolve_auth=True)
+        control = await self.control.load(file_path, resolve_auth=True)
         assert 1 == True
 
     async def test_check_control_change(self):
