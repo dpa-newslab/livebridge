@@ -14,10 +14,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import asynctest
-import unittest
 import os
 import yaml
 from livebridge.controldata import ControlData
+from livebridge.controldata.base import BaseControl
+
+class BaseControlTest(asynctest.TestCase):
+
+    def setUp(self):
+        self.base = BaseControl()
+
+    async def test_check_control_change(self):
+        with self.assertRaises(NotImplementedError):
+            await self.base.check_control_change()
+
+    async def test_load(self):
+        with self.assertRaises(NotImplementedError):
+            await self.base.load("path")
 
 class ControlDataTests(asynctest.TestCase):
 
@@ -45,6 +58,12 @@ class ControlDataTests(asynctest.TestCase):
         for b in bridges:
             assert "source_id" in b
             assert "targets" in b
+
+    async def test_load_dynamo(self):
+        self.control.CONTROL_DATA_CLIENTS["dynamodb"].load = \
+            asynctest.CoroutineMock(return_value={"auth": {}, "bridges": []})
+        await self.control.load("dynamodb")
+        assert self.control.control_data == {'auth': {}, 'bridges': []}
 
     async def test_load_auth_resolved(self):
         file_path = os.path.join(os.path.dirname(__file__), "files", "control.yaml")

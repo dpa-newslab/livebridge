@@ -306,3 +306,24 @@ class DynamoClientTests(asynctest.TestCase):
         db.delete_item = asynctest.CoroutineMock(side_effect=BotoCoreError)
         res = await self.client.delete_post("target-id", "baz")
         assert res == False
+
+    async def test_get_control(self):
+        api_res = {'Count': 1, 'ScannedCount': 1, 'Items': [
+                    {'id': {'S': 'control'}, 'data': {'S': '{"bridges": [{"foo": "bla"}], "auth": {"foo": "baz"}}'}}
+                ], 'ResponseMetadata': {'RequestId': '80cc148b-16d2-4dbc-813d-a7a3cd17acd5', 'HTTPStatusCode': 200}}
+        db = await self.client.db
+        db.query =  asynctest.CoroutineMock(return_value=api_res)
+        res = await self.client.get_control()
+        assert res["auth"] ==  {"foo": "baz"}
+        assert res["bridges"] == [{"foo": "bla"}]
+        db.query.assert_called_once_with(
+            ExpressionAttributeValues={':value': {'S': 'control'}},
+            KeyConditionExpression='id= :value',
+            ScanIndexForward=False,
+            TableName='livebridge_test_control')
+
+    async def test_get_control_failing(self):
+        db = await self.client.db
+        db.query = asynctest.CoroutineMock(side_effect=BotoCoreError)
+        res = await self.client.get_control()
+        assert res == False
