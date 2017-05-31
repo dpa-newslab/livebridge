@@ -268,12 +268,11 @@ class ControllerTests(asynctest.TestCase):
         for bridge in self.controller.bridges.keys():
             assert self.controller.bridges[bridge].__name__ == "run_poller"
 
-    @asynctest.ignore_loop
-    def test_remove_bridge(self):
+    async def test_remove_bridge(self):
         bridge1 = MagicMock()
         bridge2 = MagicMock()
         self.controller.bridges = {bridge1: "foo", bridge2: "baz"}
-        self.controller.run = asynctest.CoroutineMock()
+        self.controller.run = asynctest.CoroutineMock(return_value=False)
         self.controller.read_control = True
 
         # remove bridge 1
