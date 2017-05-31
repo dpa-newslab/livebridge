@@ -22,6 +22,11 @@ logger = logging.getLogger(__name__)
 
 class ControlData(object):
 
+    CONTROL_DATA_CLIENTS = {
+        "file": ControlFile,
+        "dynamodb": DynamoControl
+    }
+
     def __init__(self, config):
         self.config = config
         self.control_client = None
@@ -62,10 +67,10 @@ class ControlData(object):
 
     async def load(self, path, *, resolve_auth=False):
         control_data = {}
-        if path.startswith("/") or path.startswith("s3://"):
-            self.control_client = ControlFile()
-        elif path == "dynamodb":
-            self.control_client = DynamoControl()
+        if self.CONTROL_DATA_CLIENTS.get(path):
+            self.control_client = self.CONTROL_DATA_CLIENTS.get(path)()
+        else:
+            self.control_client = self.CONTROL_DATA_CLIENTS.get("file")()
         control_data = await self.control_client.load(path)
 
         # filter duplicates
