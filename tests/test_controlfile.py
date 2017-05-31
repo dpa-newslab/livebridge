@@ -18,7 +18,6 @@ import asynctest
 import unittest
 import unittest.mock
 import os.path
-import yaml
 from io import StringIO
 from botocore.exceptions import ClientError
 from livebridge.controldata.controlfile import ControlFile

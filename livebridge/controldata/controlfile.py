@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import aiobotocore
-import asyncio
 import boto3
 import json
 import logging

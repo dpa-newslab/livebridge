@@ -13,11 +13,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import pytest
 import asynctest 
 from livebridge.storages.base import BaseStorage
 
-class PostTest(asynctest.TestCase):
+class StoragesTest(asynctest.TestCase):
 
     def setUp(self):
         self.storage = BaseStorage()

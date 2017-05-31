@@ -15,7 +15,6 @@
 # limitations under the License.
 import asynctest
 import os
-import yaml
 from livebridge.controldata import ControlData
 from livebridge.controldata.base import BaseControl
 

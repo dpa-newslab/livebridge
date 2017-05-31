@@ -14,9 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import asynctest
-import aiobotocore
-import json
-import aiohttp
 from datetime import datetime
 from botocore.exceptions import ParamValidationError, BotoCoreError
 from livebridge.storages.base import BaseStorage

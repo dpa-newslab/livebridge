@@ -13,12 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import botocore
 import asynctest
-import unittest
-import unittest.mock
-import os.path
-from botocore.exceptions import ClientError
 from livebridge.storages import DynamoClient
 from livebridge.controldata.dynamo import DynamoControl
 
