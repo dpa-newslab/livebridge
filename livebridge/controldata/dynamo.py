@@ -51,6 +51,6 @@ class DynamoControl(BaseControl):
 
     async def load(self, path):
         control_data = await self._load_control_data()
-        self._checksum = hashlib.md5(str(control_data).encode("utf-8")).hexdigest()
+        self._checksum = self._get_checksum(control_data)
         return control_data
 
