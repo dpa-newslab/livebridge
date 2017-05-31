@@ -64,7 +64,6 @@ class ControlData(object):
         control_data = {}
         if path.startswith("/") or path.startswith("s3://"):
             self.control_client = ControlFile()
-            control_data = await self.control_client.load(path)
         elif path == "dynamodb":
             self.control_client = DynamoControl()
         control_data = await self.control_client.load(path)
