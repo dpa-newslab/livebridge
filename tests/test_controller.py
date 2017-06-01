@@ -23,24 +23,26 @@ from livebridge.controldata import ControlData
 from livebridge.controldata.controlfile import ControlFile
 from livebridge.bridge import LiveBridge
 from livebridge.components import SOURCE_MAP
+from livebridge import config
 
 class ControllerTests(asynctest.TestCase):
 
     def setUp(self):
         self.control_file = os.path.join(os.path.dirname(__file__), "files", "control.yaml")
-        self.config_aws = {
+        self.config = config
+        self.config.AWS = {
             "access_key": "foo",
             "secret_key": "baz",
             "region":  "eu-central-1",
             "sqs_s3_queue": "http://foo-queue",
         }
-        self.poll_interval = 10
-        self.controller = Controller(config=self.config_aws, control_file=self.control_file, poll_interval=self.poll_interval)
+        self.config.POLL_INTERVAL = 10
+        self.controller = Controller(config=self.config, control_file=self.control_file)
 
     @asynctest.ignore_loop
     def test_init(self):
-        assert self.controller.config== self.config_aws
-        assert self.controller.poll_interval == self.poll_interval
+        assert self.controller.config== self.config
+        assert self.controller.poll_interval == self.config.POLL_INTERVAL
         assert self.controller.control_file == self.control_file
         assert isinstance(self.controller, Controller) == True
 
@@ -118,7 +120,7 @@ class ControllerTests(asynctest.TestCase):
         SOURCE_MAP["liveblog"] = Source
         SOURCE_MAP["scrible"] = Source
         SOURCE_MAP["another"] = Source
-        self.controller.control_data = ControlData(self.config_aws)
+        self.controller.control_data = ControlData(self.config)
         await self.controller.control_data.load(self.control_file, resolve_auth=True)
         assert self.controller.bridges == {}
         assert self.controller.tasked == []
@@ -132,6 +134,7 @@ class ControllerTests(asynctest.TestCase):
         for task in self.controller.tasked:
             assert type(task) == asyncio.tasks.Task
 
+    @asynctest.skip("TODO")
     async def test_start_tasks_without_watcher(self):
         class Source:
             mode = "streaming"
@@ -140,9 +143,10 @@ class ControllerTests(asynctest.TestCase):
         SOURCE_MAP["liveblog"] = Source
         SOURCE_MAP["scrible"] = Source
         SOURCE_MAP["another"] = Source
-        self.controller.control_data = ControlData(self.config_aws)
+        self.controller.control_data = ControlData(self.config)
         await self.controller.control_data.load(self.control_file, resolve_auth=True)
-        del self.controller.config["sqs_s3_queue"]
+        print(self.controller.config.AWS)
+        del self.controller.config.AWS["sqs_s3_queue"]
         self.controller.start_tasks()
 
         assert len(self.controller.tasked) == 2

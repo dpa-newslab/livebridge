@@ -40,6 +40,7 @@ class SQLStorage(BaseStorage):
     def __init__(self, **kwargs):
         self.dsn = kwargs.get("dsn", None)
         self.table_name = kwargs.get("table_name")
+        self.control_table_name = kwargs.get("control_table_name")
 
     @property
     async def db(self):
@@ -62,10 +63,19 @@ class SQLStorage(BaseStorage):
                      Column("target_doc", Text()),
                     )
 
+    def _get_control_table(self):
+        return Table(self.control_table_name, MetaData(),
+                     Column("id", Integer(), primary_key=True),
+                     Column("type", String(150), index=True),
+                     Column("data", Text()),
+                     Column("updated", DateTime()),
+                    )
+
     async def setup(self):
         """Setting up SQL table, if it not exists."""
         try:
             engine = await self.db
+            created = False
             if not await engine.has_table(self.table_name):
                 # create table
                 logger.info("Creating SQL table [{}]".format(self.table_name))
@@ -78,7 +88,15 @@ class SQLStorage(BaseStorage):
                 await conn.execute(
                     "CREATE INDEX `lb_post` ON `{}` (`target_id` DESC,`post_id` DESC);".format(self.table_name))
                 await conn.close()
-                return True
+                created = True
+            # create control table if not already created.
+            if self.control_table_name and not await engine.has_table(self.control_table_name):
+                # create table
+                logger.info("Creating SQL control table [{}]".format(self.control_table_name))
+                items = self._get_control_table()
+                await engine.execute(CreateTable(items))
+                created = True
+            return created
         except Exception as exc:
             logger.error("[DB] Error when setting up SQL table: {}".format(exc))
         return False
@@ -193,3 +211,22 @@ class SQLStorage(BaseStorage):
             logger.error("[DB] Error when deleting for a post [{}] on {}".format(post_id, target_id))
             logger.error(exc)
         return False
+
+    async def get_control(self, updated=None):
+        try:
+            db = await self.db
+            table = self._get_control_table()
+            sql = table.select().where(table.c.type == "control")
+            if updated: # check for updated timestamp
+                sql = sql.where(table.c.updated != updated.strftime("%Y-%m-%d %H:%M:%S"))
+            sql = sql.limit(1)
+            result = await db.execute(sql)
+            item = await result.first()
+            if item:
+                item = dict(item)
+                item["data"] = json.loads(item["data"]) if item.get("data") != "" else {}
+                return item
+        except Exception as exc:
+            logger.error("[DB] Error when querying for a control data on {}".format(self.control_table_name))
+            logger.error(exc)
+        return None

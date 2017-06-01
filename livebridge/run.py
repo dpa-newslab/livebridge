@@ -52,7 +52,7 @@ def main(**kwargs):
     loop.run_until_complete(db_connector.setup())
 
     # Controller manages the tasks
-    controller = Controller(config=config.AWS, control_file=args.control, poll_interval=config.POLL_INTERVAL)
+    controller = Controller(config=config, control_file=args.control)
     asyncio.ensure_future(controller.run())
 
     # add signal handler

@@ -17,6 +17,7 @@ import copy
 import logging
 from livebridge.controldata.controlfile import ControlFile
 from livebridge.controldata.dynamo import DynamoControl
+from livebridge.controldata.sql  import SQLControl
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +25,8 @@ class ControlData(object):
 
     CONTROL_DATA_CLIENTS = {
         "file": ControlFile,
-        "dynamodb": DynamoControl
+        "dynamodb": DynamoControl,
+        "sql": SQLControl,
     }
 
     def __init__(self, config):

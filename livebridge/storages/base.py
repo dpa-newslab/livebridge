@@ -79,3 +79,7 @@ class BaseStorage(object):
         :type list:
         :returns: - list of dictionaries."""
         raise NotImplementedError()
+
+    def get_control(self):
+        """Method for retrieving of control data form storage."""
+        raise NotImplementedError()

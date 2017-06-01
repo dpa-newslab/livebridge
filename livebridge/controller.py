@@ -23,10 +23,10 @@ logger = logging.getLogger(__name__)
 
 class Controller(object):
 
-    def __init__(self, config, control_file, poll_interval=60):
+    def __init__(self, config, control_file):
         self.config = config
         self.control_file = control_file
-        self.poll_interval = poll_interval
+        self.poll_interval = config.POLL_INTERVAL or 60
         self.read_control = False
         self.tasked = []
         self.sleep_tasks = []
@@ -53,11 +53,10 @@ class Controller(object):
 
     async def check_control_change(self):
         # check for update events
-        logger.info("Starting watching for control file changes.")
+        logger.info("Starting watching for control data changes.")
         while True and self.shutdown != True:
             is_changed = await self.control_data.check_control_change()
             if is_changed == True:
-                logger.debug("CONTROL DATA CHANGED")
                 self.read_control = True
                 await self.stop_bridges()
                 return True
@@ -121,9 +120,8 @@ class Controller(object):
         for bridge in self.bridges:
             self.tasked.append(asyncio.Task(self.bridges[bridge]))
 
-        # listen to s3 control changes if sqs queue is given
-        if self.config.get("sqs_s3_queue"):
-            self.tasked.append(asyncio.Task(self.check_control_change()))
+        # listen to s3 control changes
+        self.tasked.append(asyncio.Task(self.check_control_change()))
 
     async def run_stream(self, *, bridge):
         await bridge.listen_ws()

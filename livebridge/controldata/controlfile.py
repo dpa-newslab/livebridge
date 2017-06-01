@@ -61,6 +61,9 @@ class ControlFile(BaseControl):
             logger.warning("Purging SQS queue failed with: {}".format(exc))
 
     async def check_control_change(self):
+        if not self.config.get("sqs_s3_queue", False):
+            return False
+
         client = await self.sqs_client
         # check for update events
         try:
