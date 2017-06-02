@@ -27,7 +27,8 @@ class SQLStorageTests(asynctest.TestCase):
     async def setUp(self):
         self.dsn = "sqlite:///tests/tests.db"
         self.table_name = "test_table"
-        params = {"dsn": self.dsn, "table_name": self.table_name}
+        self.control_table_name = "test_control_table"
+        params = {"dsn": self.dsn, "table_name": self.table_name, "control_table_name": self.control_table_name}
         self.client = SQLStorage(**params)
         self.target_id = "scribble-max.mustermann@dpa-info.com-1234567890"
 
@@ -44,7 +45,7 @@ class SQLStorageTests(asynctest.TestCase):
     async def test_db(self):
         db = await self.client.db
         assert type(db) == AsyncioEngine
-        
+
     async def test_get_db_client(self):
         params = {
             "dsn": "sqlite:///",
@@ -69,6 +70,7 @@ class SQLStorageTests(asynctest.TestCase):
         self.client._engine.connect = asynctest.CoroutineMock(return_value=conn)
         res = await self.client.setup()
         assert res == True
+        assert conn.execute.call_count == 2
 
     async def test_setup_failing(self):
         self.client._engine = asynctest.MagicMock()
@@ -89,7 +91,7 @@ class SQLStorageTests(asynctest.TestCase):
         assert res.second == 43
         assert self.client._engine.execute.call_count == 1
 
-        # no date 
+        # no date
         db_res.first = asynctest.CoroutineMock(return_value={})
         res = await self.client.get_last_updated("source")
         assert res == None
@@ -101,7 +103,7 @@ class SQLStorageTests(asynctest.TestCase):
         assert res == None
 
     async def test_insert_post(self):
-        params = {"target_id": "target-id", 
+        params = {"target_id": "target-id",
                   "post_id": "post-id",
                   "source_id": "source-id",
                   "text": "Text",
@@ -120,7 +122,7 @@ class SQLStorageTests(asynctest.TestCase):
         assert res == False
 
     async def test_update_post(self):
-        params = {"target_id": "target-id", 
+        params = {"target_id": "target-id",
                   "post_id": "post-id",
                   "source_id": "source-id",
                   "text": "Text",
@@ -186,4 +188,28 @@ class SQLStorageTests(asynctest.TestCase):
         self.client._engine = asynctest.MagicMock()
         self.client._engine.execute = asynctest.CoroutineMock(side_effect=Exception())
         res = await self.client.delete_post("target", "post")
+        assert res == False
+
+    async def test_get_control(self):
+        updated = datetime(2017, 6, 1, 11, 3, 2)
+        db_item = {
+            'updated': datetime(2017, 6, 1, 11, 3, 1),
+            'data': '{"bridges": [{"foo": "bar"}], "auth": {"foo": "baz"}}', 'id': 1, 'type': 'control'}
+        db_res = asynctest.MagicMock(spec=AsyncioResultProxy)
+        db_res.first = asynctest.CoroutineMock(return_value=db_item)
+        self.client._engine = asynctest.MagicMock()
+        self.client._engine.execute = asynctest.CoroutineMock(return_value=db_res)
+        res = await self.client.get_control(updated=updated)
+        assert res["data"]["auth"] ==  {"foo": "baz"}
+        assert res["data"]["bridges"] == [{"foo": "bar"}]
+        assert self.client._engine.execute.call_count == 1
+
+    async def test_get_control_failing(self):
+        db = await self.client.db
+        db.execute = asynctest.CoroutineMock(side_effect=Exception())
+        res = await self.client.get_control()
+        assert res == False
+
+    async def test_get_control_failing_with_tstamp(self):
+        res = await self.client.get_control(updated="string")
         assert res == False

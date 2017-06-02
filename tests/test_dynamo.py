@@ -237,7 +237,7 @@ class DynamoClientTests(asynctest.TestCase):
             ExpressionAttributeValues={
                     ':post_id_1': {'S': 'two'}, ':post_id_2': {'S': 'three'}, ':post_id_0': {'S': 'one'},
                     ':value': {'S': 'source-id'}, ':post_id_5': {'S': 'six'}, ':post_id_3': {'S': 'four'},
-                    ':post_id_4': {'S': 'five'}}, 
+                    ':post_id_4': {'S': 'five'}},
             FilterExpression='post_id= :post_id_0 OR post_id= :post_id_1 OR post_id= :post_id_2 OR post_id='\
                              +' :post_id_3 OR post_id= :post_id_4 OR post_id= :post_id_5',
             IndexName='source_id-updated-index',
@@ -296,7 +296,7 @@ class DynamoClientTests(asynctest.TestCase):
         db.delete_item = asynctest.CoroutineMock(return_value=api_res)
         res = await self.client.delete_post("target-id", "baz")
         assert res == True
-    
+
     async def test_delete_failing(self):
         post_id = "urn:newsml:localhost:2016-04-06T14:36:37.255055:f2266f58-1e5c-4021-85af-e39087d94372"
         db = await self.client.db

@@ -13,7 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import asynctest 
+import asynctest
 from livebridge.storages.base import BaseStorage
 
 class StoragesTest(asynctest.TestCase):
@@ -45,3 +45,6 @@ class StoragesTest(asynctest.TestCase):
 
         with self.assertRaises(NotImplementedError):
             await self.storage.get_known_posts(source_id="one", post_ids=["two"])
+
+        with self.assertRaises(NotImplementedError):
+            await self.storage.get_control()
