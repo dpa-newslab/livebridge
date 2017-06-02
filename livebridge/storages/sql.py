@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 dpa-infocom GmbH
+# Copyright 2016, 2017 dpa-infocom GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -229,4 +229,4 @@ class SQLStorage(BaseStorage):
         except Exception as exc:
             logger.error("[DB] Error when querying for a control data on {}".format(self.control_table_name))
             logger.error(exc)
-        return None
+        return False
