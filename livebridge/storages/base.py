@@ -81,5 +81,7 @@ class BaseStorage(object):
         raise NotImplementedError()
 
     def get_control(self):
-        """Method for retrieving of control data form storage."""
+        """Method for retrieving of control data form storage.
+
+        :returns: - dictionary"""
         raise NotImplementedError()
