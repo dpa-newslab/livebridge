@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 dpa-infocom GmbH
+# Copyright 2016, 2017 dpa-infocom GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
+import warnings
 
 LOGLEVEL = os.environ.get("LB_LOGLEVEL", "INFO")
 
@@ -33,8 +34,15 @@ AWS = {
     "access_key": os.environ.get("LB_AWS_ACCESS_KEY", ""),
     "secret_key": os.environ.get("LB_AWS_SECRET_KEY", ""),
     "region":  os.environ.get("LB_AWS_REGION", "eu-central-1"),
-    "endpoint_url":  os.environ.get("LB_DYNAMO_ENDPOINT"),
+    "endpoint_url": os.environ.get("LB_DYNAMO_ENDPOINT"),
     "table_name": os.environ.get("LB_DYNAMO_TABLE", "livebridge-dev"),
     "control_table_name": os.environ.get("LB_DYNAMO_CONTROL_TABLE"),
     "sqs_s3_queue": os.environ.get("LB_SQS_S3_QUEUE", ""),
 }
+
+if AWS.get("table_name"):
+    warnings.simplefilter('default', DeprecationWarning)
+    warnings.warn("LB_DYNAMO_TABLE is deprecated, use LB_DB_TABLE instead!", DeprecationWarning)
+    DB["table_name"] = AWS["table_name"]
+    del AWS["table_name"]
+    warnings.simplefilter('ignore', DeprecationWarning)
