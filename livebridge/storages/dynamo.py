@@ -115,11 +115,12 @@ class DynamoClient(BaseStorage):
                     logger.info("DynamoDB table [{}] successfully created!".format(self.table_name))
                     created = True
             # create control table if not already created.
-            if created == True and self.control_table_name and self.control_table_name not in response["TableNames"]:
+            if self.control_table_name and self.control_table_name not in response["TableNames"]:
                 logger.info("Creating DynamoDB control_table [{}]".format(self.control_table_name))
                 resp = await client.create_table(**self.control_table_schema)
                 if resp.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
                     logger.info("DynamoDB control table [{}] successfully created!".format(self.control_table_name))
+                    created = True
             return created
         except Exception as exc:
             logger.error("[DB] Error when setting up DynamoDB.")

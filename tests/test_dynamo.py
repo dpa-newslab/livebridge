@@ -59,22 +59,40 @@ class DynamoClientTests(asynctest.TestCase):
 
     async def test_setup(self):
         self.client.db_client = asynctest.MagicMock()
-        table_resp = {"TableNames": []}
-        self.client.db_client.list_tables = asynctest.CoroutineMock(return_value=table_resp)
         create_resp = {"ResponseMetadata": {"HTTPStatusCode": 200}}
         self.client.db_client.create_table = asynctest.CoroutineMock(return_value=create_resp)
-        res = await self.client.setup()
-        assert res == True
-        assert self.client.db_client.list_tables.call_count == 1
-        assert self.client.db_client.create_table.call_count == 2
 
         # table exists already
         table_resp = {"TableNames": [self.table_name, self.control_table_name]}
-        self.client.db_client.list_tables.return_value = table_resp
+        self.client.db_client.list_tables = asynctest.CoroutineMock(return_value=table_resp)
         res = await self.client.setup()
         assert res == False
+        assert self.client.db_client.list_tables.call_count == 1
+        assert self.client.db_client.create_table.call_count == 0
+
+        # create one table
+        table_resp = {"TableNames": [self.table_name]}
+        self.client.db_client.list_tables.return_value = table_resp
+        res = await self.client.setup()
+        assert res == True
         assert self.client.db_client.list_tables.call_count == 2
+        assert self.client.db_client.create_table.call_count == 1
+
+        # create second table
+        table_resp = {"TableNames": [self.control_table_name]}
+        self.client.db_client.list_tables.return_value = table_resp
+        res = await self.client.setup()
+        assert res == True
+        assert self.client.db_client.list_tables.call_count == 3
         assert self.client.db_client.create_table.call_count == 2
+
+        # create both tables
+        table_resp = {"TableNames": []}
+        self.client.db_client.list_tables.return_value = table_resp
+        res = await self.client.setup()
+        assert res == True
+        assert self.client.db_client.list_tables.call_count == 4
+        assert self.client.db_client.create_table.call_count == 4
 
         # failes with exception
         self.client.db_client.list_tables.side_effect = Exception
