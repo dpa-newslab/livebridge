@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
-import warnings
 
 LOGLEVEL = os.environ.get("LB_LOGLEVEL", "INFO")
 
@@ -39,10 +38,3 @@ AWS = {
     "control_table_name": os.environ.get("LB_DYNAMO_CONTROL_TABLE"),
     "sqs_s3_queue": os.environ.get("LB_SQS_S3_QUEUE", ""),
 }
-
-if AWS.get("table_name"):
-    warnings.simplefilter('default', DeprecationWarning)
-    warnings.warn("LB_DYNAMO_TABLE is deprecated, use LB_DB_TABLE instead!", DeprecationWarning)
-    DB["table_name"] = AWS["table_name"]
-    del AWS["table_name"]
-    warnings.simplefilter('ignore', DeprecationWarning)
