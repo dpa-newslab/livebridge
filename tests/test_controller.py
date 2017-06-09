@@ -37,12 +37,14 @@ class ControllerTests(asynctest.TestCase):
             "sqs_s3_queue": "http://foo-queue",
         }
         self.config.POLL_INTERVAL = 10
+        self.config.POLL_CONTROL_INTERVAL = 20
         self.controller = Controller(config=self.config, control_file=self.control_file)
 
     @asynctest.ignore_loop
     def test_init(self):
         assert self.controller.config== self.config
         assert self.controller.poll_interval == self.config.POLL_INTERVAL
+        assert self.controller.check_control_interval == self.config.POLL_CONTROL_INTERVAL
         assert self.controller.control_file == self.control_file
         assert isinstance(self.controller, Controller) == True
 

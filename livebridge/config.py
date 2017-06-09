@@ -22,6 +22,7 @@ LOGFILE = os.environ.get("LB_LOGFILE")
 CONTROLFILE = os.environ.get("LB_CONTROLFILE")
 
 POLL_INTERVAL = int(os.environ.get("LB_POLL_INTERVAL", 60))
+POLL_CONTROL_INTERVAL = int(os.environ.get("LB_POLL_CONTROL_INTERVAL", 60))
 
 DB = {
     "dsn": os.environ.get("LB_DB_DSN"),

@@ -27,11 +27,11 @@ class Controller(object):
         self.config = config
         self.control_file = control_file
         self.poll_interval = config.POLL_INTERVAL or 60
+        self.check_control_interval = config.POLL_CONTROL_INTERVAL or 60
         self.read_control = False
         self.tasked = []
         self.sleep_tasks = []
         self.bridges = {}
-        self.check_control_interval = 60
         self.retry_run_interval = 30
         self.control_data = None # access to data from control file
         self.shutdown = False
