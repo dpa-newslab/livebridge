@@ -27,7 +27,7 @@ POLL_CONTROL_INTERVAL = int(os.environ.get("LB_POLL_CONTROL_INTERVAL", 60))
 DB = {
     "dsn": os.environ.get("LB_DB_DSN"),
     "table_name": os.environ.get("LB_DB_TABLE", "livebridge_dev"),
-    "control_table_name": os.environ.get("LB_DB_CONTROL_TABLE", "livebridge_dev_control")
+    "control_table_name": os.environ.get("LB_DB_CONTROL_TABLE")
 }
 
 AWS = {
