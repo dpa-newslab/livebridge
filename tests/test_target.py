@@ -231,7 +231,7 @@ class BaseTargetTests(asynctest.TestCase):
         assert res == {}
         self.target.update_item.call_count == 1
 
-    async def test_handle_update_failingupdate_item(self):
+    async def test_handle_update_failing_update_item(self):
         self.target.update_item = asynctest.CoroutineMock(return_value={})
         res = await self.target._handle_update(self.post)
         assert res == {}
