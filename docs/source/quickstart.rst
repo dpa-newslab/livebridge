@@ -25,30 +25,36 @@ A **livebridge** command will be available afterwards.
 Settings
 --------
 
-:ref:`The specific bridges will be specified in an extra .yaml control file! <control>`
+:ref:`The specific bridges will be specified in an extra .yaml control file or in a database table! <control>`
 
 Some global settings are defined in `livebridge/config.py`_. These values can be set through **environment variables**.  Following variables for configuration are available:
 
 * **LB_CONTROLFILE** - path to control file, overrides **--control** commandline argument.
 * **LB_LOGLEVEL** - Python logging level, *INFO* is default, can be *DEBUG, INFO, WARNING, ERROR* or *CRITICAL*
 * **LB_LOGFILE** - path to write a logfile, *optional*
-* **LB_POLL_INTERVAL** - interval in seconds for polling an API for new posts when using a polling-source, defaults to 60 seconds. 
-  **Please be attentitive how often you are polling your source. Liveticker have other constraints like RSS_Feeds!**
+* **LB_POLL_INTERVAL** - interval in seconds for polling an API for new posts when using a polling-source, defaults to **60** seconds.
+  **Please be attentitive how often you are polling your source. Liveticker have other constraints like RSS Feeds!**
+* **LB_POLL_CONTROL_INTERVAL** - interval in seconds for polling for control data changes, defaults to **60** seconds.
 
 To use any **SQL** database supported by SQLALchemy_ as storage backend, you have to specify the following two environment variables:
 
 * **LB_DB_DSN** - dsn database url for connecting with a database, see http://docs.sqlalchemy.org/en/latest/core/engines.html for details.
-* **LB_DB_TABLE** - name of the database table, that will be created, defaults to **livebridge_dev**. Be sure the database already exists and the database user from the **dsn-url** string has sufficient rights.
+* **LB_DB_TABLE** - name of the database table which stores distribution related data, defaults to **livebridge_dev**.
+* **LB_DB_CONTROL_TABLE** - name of the database table, which stores control data in JSON format, overrides **--control**.
+
+ **Be sure the database already exists and the database user from the dsn-url string has sufficient rights.**
 
 Since livebridge also supports `AWS DynamoDB`_ as storage backend, following **Amazon AWS** related config variables are available:
 
-* **LB_AWS_ACCESS_KEY**
-* **LB_AWS_SECRET_KEY**
+* **LB_AWS_ACCESS_KEY** - AWS access key
+* **LB_AWS_SECRET_KEY** - AWS secret access key
 * **LB_AWS_REGION** - defaults to **eu-central-1**
 * **LB_DYNAMO_ENDPOINT**  - Endpoint url for DynamoDB. Can be empty, except when using a local DynamoDB.
-* **LB_DYNAMO_TABLE** - Tablename, defaults to **livebridge_posts**. The DynamoDB table will be automatically created, if it not exists. *Sufficient* `AWS IAM`_ *rights are required.*
+* **LB_DYNAMO_TABLE** - Tablename, defaults to **livebridge-posts**.
+* **LB_DYNAMO_CONTROL_TABLE** - name of the DynamoDB table, which stores control data in JSON format, overrides **--control**.
 * **LB_SQS_S3_QUEUE** - SQS-QueueUrl for listening for control file changes on S3.
 
+ **The DynamoDB tables will be automatically created, if defined and they're not existing. Sufficient** `AWS IAM`_ **rights are required.**
 
 Testing
 -------
