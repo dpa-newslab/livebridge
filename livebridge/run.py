@@ -26,22 +26,33 @@ from livebridge.components import get_db_client
 from livebridge.loader import load_extensions
 
 
-def main(**kwargs):
-    # disable bot logging
-    logging.getLogger('botocore').setLevel(logging.ERROR)
-    logging.getLogger('websockets').setLevel(logging.INFO)
-
-    # check for controlfile parameter
+def read_args(**kwargs):
+    """Read controlfile parameter."""
     if kwargs.get("control"):
         args = Namespace(control=kwargs["control"])
     elif config.CONTROLFILE:
         args = Namespace(control=config.CONTROLFILE)
+    elif config.DB.get("control_table_name"):
+        args = Namespace(control="sql")
+    elif config.AWS.get("control_table_name"):
+        args = Namespace(control="dynamodb")
     else:
         # read cli args
         parser = argparse.ArgumentParser()
         parser.add_argument("--control", required=True, help="Control file, can be path.")
         args = parser.parse_args()
+    return args
 
+
+def main(**kwargs):
+    # disable bot logging
+    logging.getLogger('botocore').setLevel(logging.ERROR)
+    logging.getLogger('websockets').setLevel(logging.INFO)
+
+    #read args
+    args = read_args(**kwargs)
+
+    # initialize loop
     loop = asyncio.get_event_loop() if not kwargs.get("loop") else kwargs["loop"]
 
     # load extensions

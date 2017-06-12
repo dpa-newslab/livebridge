@@ -16,7 +16,8 @@
 import asynctest
 import unittest.mock
 import os.path
-from livebridge import LiveBridge
+from livebridge import LiveBridge, config
+
 
 class RunTests(asynctest.TestCase):
 
@@ -64,3 +65,38 @@ class RunTests(asynctest.TestCase):
                                 main()
                                 assert self.loop.run_forever.call_count == 1
                                 assert self.loop.close.call_count == 1
+
+
+class ArgsTests(asynctest.TestCase):
+
+    async def test_read_args_file(self):
+        self.control_file = os.path.join(os.path.dirname(__file__), "files", "control.yaml")
+        config.CONTROLFILE = self.control_file
+        from livebridge.run import read_args
+        args = read_args()
+        assert args.control == self.control_file
+        config.CONTROLFILE = None
+
+    @asynctest.ignore_loop
+    def test_read_args_kwargs(self):
+        from livebridge.run import read_args
+        args = read_args(**{"control": "foobaz"})
+        assert args.control == "foobaz"
+
+    @asynctest.ignore_loop
+    def test_read_args_sql(self):
+        from livebridge.run import read_args
+        config.DB["control_table_name"] = "foobaz"
+        config.AWS["control_table_name"] = "foobaz"
+        args = read_args()
+        assert args.control == "sql"
+        config.DB["control_table_name"] = None
+        config.AWS["control_table_name"] = None
+
+    @asynctest.ignore_loop
+    def test_read_args_dynamo(self):
+        from livebridge.run import read_args
+        config.AWS["control_table_name"] = "foobaz"
+        args = read_args()
+        assert args.control == "dynamodb"
+        config.AWS["control_table_name"] = None
