@@ -7,6 +7,6 @@ pytest==3.0.3
 pytest-cov==2.4.0
 python-dateutil==2.5.3
 PyYAML==3.12
-Sphinx==1.5a2
+Sphinx==1.6.2
 sqlalchemy-aio==0.1b1
 websockets==3.2
