@@ -112,25 +112,28 @@ class ControlFileTest(asynctest.TestCase):
     async def test_load_by_s3_url(self):
         file_path = os.path.join(os.path.dirname(__file__), "files", "control.yaml")
         yaml_str = open(file_path).read()
-        self.control._load_from_s3 = lambda x: yaml_str
+        self.control._load_from_s3 = asynctest.CoroutineMock(return_value=yaml_str)
         control = await self.control.load("s3://foobaz/control.yaml", resolve_auth=True)
 
         assert control["auth"]["dev"]["api_key"] == "F00Baz"
         assert control["auth"]["live"]["api_key"] == "Foobar"
 
-    @asynctest.ignore_loop
-    def test_load_from_s3(self):
+    async def test_load_from_s3(self):
         s3_url = "s3://foobaz/control.yaml"
-        mock_client = unittest.mock.Mock()
-        mock_client.get_object.return_value = {"Body":StringIO("foo")}
-        with unittest.mock.patch("boto3.client") as patched:
-            patched.return_value = mock_client
-            control_data = self.control._load_from_s3(s3_url)
+        s3_content = asynctest.MagicMock()
+        s3_content.read = asynctest.CoroutineMock(return_value="foo")
+        mock_client = asynctest.MagicMock()
+        mock_client.get_object = asynctest.CoroutineMock(return_value={"Body": s3_content})
+        mock_client.close = asynctest.CoroutineMock(return_value=True)
+        mock_session = unittest.mock.MagicMock()
+        mock_session.create_client = unittest.mock.MagicMock(return_value=mock_client)
+        with asynctest.patch("aiobotocore.get_session") as patched:
+            patched.return_value = mock_session
+            control_data = await self.control._load_from_s3(s3_url)
             assert control_data == "foo"
             assert patched.call_count == 1
-            assert patched.call_args[0] == ('s3',)
-            assert patched.call_args[1]["region_name"] == "eu-central-1"
-            assert type(patched.call_args[1]["config"]) == botocore.config.Config
+            assert mock_session.create_client.call_args[0][0] == "s3"
+            assert mock_session.create_client.call_args[1]["region_name"] == "eu-central-1"
             mock_client.get_object.assert_called_once_with(Bucket='foobaz', Key='control.yaml')
 
     async def test_controlfile_without_auth(self):

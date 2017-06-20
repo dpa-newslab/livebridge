@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import aiobotocore
-import boto3
 import json
 import logging
 import os
@@ -91,7 +90,7 @@ class ControlFile(BaseControl):
         if not path.startswith("s3://"):
             body = self._load_from_file(path)
         else:
-            body = self._load_from_s3(path)
+            body = await self._load_from_s3(path)
         return yaml.load(body)
 
     def _load_from_file(self, path):
@@ -105,16 +104,15 @@ class ControlFile(BaseControl):
 
         return body
 
-    def _load_from_s3(self, url):
+    async def _load_from_s3(self, url):
         bucket, key = url.split('/', 2)[-1].split('/', 1)
         logger.info("Loading control file from s3: {} - {}".format(bucket, key))
-        config = Config(signature_version="s3v4") if self.config["region"] in ["eu-central-1"] else None
-        client = boto3.client(
-            's3',
-            region_name=self.config["region"],
-            aws_access_key_id=self.config["access_key"] or None,
-            aws_secret_access_key=self.config["secret_key"] or None,
-            config=config,
-        )
-        control_file = client.get_object(Bucket=bucket, Key=key)
-        return control_file["Body"].read()
+        session = aiobotocore.get_session()
+        client = session.create_client('s3',
+             region_name=self.config["region"],
+             aws_secret_access_key=self.config["secret_key"] or None,
+             aws_access_key_id=self.config["access_key"] or None)
+        control_file = await client.get_object(Bucket=bucket, Key=key)
+        control_data = await control_file["Body"].read()
+        await client.close()
+        return control_data
