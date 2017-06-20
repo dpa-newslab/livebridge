@@ -43,19 +43,18 @@ See https://github.com/dpa-newslab/livebridge for more infos.
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-        'aiohttp==1.0.5',
-        'asynctest==0.9.0',
-        'bleach==1.4.3',
+        'aiobotocore==0.3.3',
+        'aiohttp==2.1.0',
+        'asynctest==0.10.0',
+        'bleach==2.0.0',
         'PyYAML==3.12',
-        'aiobotocore==0.0.5',
-        'boto3==1.3.1',
-        'websockets==3.2',
-        'sqlalchemy-aio==0.1b1',
-        'python-dateutil==2.5.3',
+        'websockets==3.3',
+        'sqlalchemy-aio==0.11.0',
+        'python-dateutil==2.6.0',
       ],
       entry_points="""
-      [console_scripts]  
+      [console_scripts]
       livebridge = livebridge.run:main
-      """,       
+      """,
       )
 
