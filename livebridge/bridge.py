@@ -33,7 +33,7 @@ class LiveBridge(object):
         self.label = self.config.get("label", "-")
         self.db = get_db_client()
         self.queue = asyncio.Queue()
-        self.queue_task = asyncio.ensure_future(self._queue_consumer())
+        self.queue_task = None
         self.sleep_tasks = []
 
     def __repr__(self):
@@ -48,7 +48,10 @@ class LiveBridge(object):
         return self.api_client
 
     def stop(self):
-        self.queue_task.cancel()
+        # stop queue task first
+        if self.queue_task:
+            self.queue_task.cancel()
+        # stop sleeping tasks
         for task in self.sleep_tasks:
             task.cancel()
         return True
@@ -91,9 +94,14 @@ class LiveBridge(object):
                 item["count"], item["post"], item["target"], exc))
             item["count"] = item["count"] + 1
             await self._sleep(5*item["count"])
-            await self.queue.put(item)
+            await self._put_to_queue(item)
         else:
             logger.info("POST {post.id} distributed to {target.target_id} [{count}]".format(**item))
+
+    async def _put_to_queue(self, item):
+        if not self.queue_task:
+            self.queue_task = asyncio.ensure_future(self._queue_consumer())
+        await self.queue.put(item)
 
     async def _process_action(self, task):
         fut = asyncio.ensure_future(task["target"].handle_post(task["post"]))
@@ -122,6 +130,6 @@ class LiveBridge(object):
                 for target in self.targets:
                     post = copy.deepcopy(new_post)
                     item = {"post":post, "target": target, "count": 0}
-                    await self.queue.put(item)
+                    await self._put_to_queue(item)
         except Exception as exc:
             logger.error("Handling new posts failed [{}]: {}".format(self.source, exc))

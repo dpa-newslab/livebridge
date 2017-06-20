@@ -81,12 +81,14 @@ class ControllerTests(asynctest.TestCase):
     async def test_run_failing(self):
         self.controller.start_tasks = MagicMock()
         self.controller.control_file = "/does/not/exist.yaml"
+        self.controller.retry_run = asynctest.CoroutineMock(return_value=True)
         assert len(self.controller.tasked) == 0
         assert self.controller.control_data == None
         await self.controller.run()
         assert len(self.controller.tasked) == 1
         assert type(self.controller.tasked[0]) == asyncio.Task
         assert self.controller.start_tasks.called == 0
+        assert self.controller.retry_run.called == 1
         assert self.controller.control_data == None
 
     async def test_run_failing_reuse_existing_control(self):
@@ -122,11 +124,15 @@ class ControllerTests(asynctest.TestCase):
         SOURCE_MAP["liveblog"] = Source
         SOURCE_MAP["scrible"] = Source
         SOURCE_MAP["another"] = Source
+        self.controller.run_stream = asynctest.CoroutineMock(return_value=True)
+        self.controller.check_control_change = asynctest.CoroutineMock(return_value=True)
         self.controller.control_data = ControlData(self.config)
         await self.controller.control_data.load(self.control_file, resolve_auth=True)
         assert self.controller.bridges == {}
         assert self.controller.tasked == []
         self.controller.start_tasks()
+        assert self.controller.run_stream.call_count == 2
+        assert self.controller.check_control_change.call_count == 1
 
         assert len(self.controller.bridges) == 2
         for bridge in self.controller.bridges:
@@ -246,8 +252,7 @@ class ControllerTests(asynctest.TestCase):
         await self.controller.stop_bridges()
         assert sleeper.cancel.call_count == 1
 
-    @asynctest.ignore_loop
-    def test_append_streaming_bridge(self):
+    async def test_append_streaming_bridge(self):
         class Source:
             mode = "streaming"
             def __init__(self, **kwargs):
@@ -255,10 +260,12 @@ class ControllerTests(asynctest.TestCase):
         SOURCE_MAP["liveblog"] = Source
         assert len(self.controller.bridges) == 0
         config = {"mode": "streaming", "type": "liveblog", "targets": [{"type": "scribble"}]}
+        self.controller.run_stream = asynctest.CoroutineMock(return_value="foo")
         self.controller.append_bridge(config)
         assert len(self.controller.bridges) == 1
         for bridge in self.controller.bridges.keys():
-            assert self.controller.bridges[bridge].__name__ == "run_stream"
+            assert type(bridge) == LiveBridge
+            assert bridge.source.mode == "streaming"
 
     @asynctest.ignore_loop
     def test_append_poller_bridge(self):
@@ -269,10 +276,12 @@ class ControllerTests(asynctest.TestCase):
         SOURCE_MAP["liveblog"] = Source
         assert len(self.controller.bridges) == 0
         config = {"mode": "polling", "type": "liveblog", "targets": [{"type": "scribble"}]}
+        self.controller.run_poller = asynctest.CoroutineMock(return_value="foo")
         self.controller.append_bridge(config)
         assert len(self.controller.bridges) == 1
         for bridge in self.controller.bridges.keys():
-            assert self.controller.bridges[bridge].__name__ == "run_poller"
+            assert type(bridge) == LiveBridge
+            assert bridge.source.mode == "polling"
 
     async def test_remove_bridge(self):
         bridge1 = MagicMock()
@@ -293,7 +302,9 @@ class ControllerTests(asynctest.TestCase):
         assert self.controller.run.called == 1
 
     async def test_sleep_cancelled(self):
-        self.controller.sleep_tasks = MagicMock()
-        self.controller.sleep_tasks.append = MagicMock(side_effect=[asyncio.CancelledError()])
-        res = await self.controller.sleep(3)
-        assert res == True
+        with asynctest.patch("asyncio.ensure_future") as mocked_ensure:
+            mocked_ensure.return_value = True
+            self.controller.sleep_tasks = MagicMock()
+            self.controller.sleep_tasks.append = MagicMock(side_effect=[asyncio.CancelledError()])
+            res = await self.controller.sleep(3)
+            assert res == True

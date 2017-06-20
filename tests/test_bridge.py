@@ -34,28 +34,42 @@ class LiveBridgeTest(asynctest.TestCase):
         self.bridge.api_client.last_updated = None
         self.sc = BaseTarget()
 
-    @asynctest.ignore_loop
-    def test_init(self):
+    async def test_init(self):
         assert self.bridge.source_id == self.source_id
         assert self.bridge.endpoint == self.endpoint
         assert self.bridge.label == self.label
 
-    @asynctest.ignore_loop
-    def test_client_init(self):
+    async def test_client_init(self):
         assert repr(self.bridge) == "<LiveBridge [Testlabel] https://example.com/api 12345>"
 
-    @asynctest.ignore_loop
-    def test_add_target(self):
+    async def test_add_target(self):
         assert len(self.bridge.targets) == 0
         self.bridge.add_target(self.sc)
         assert len(self.bridge.targets) == 1
 
-    @asynctest.ignore_loop
-    def test_stop(self):
+    async def test_put_to_queue(self):
+        with asynctest.patch("asyncio.ensure_future") as mocked_ensure:
+            mocked_ensure.return_value = "test"
+            self.bridge._queue_consumer = asynctest.CoroutineMock(return_value="test")
+            self.bridge.queue = asynctest.MagicMock()
+            self.bridge.queue.put = asynctest.CoroutineMock(return_value=None)
+            await self.bridge._put_to_queue({"foo": "baz"})
+            assert self.bridge._queue_consumer.call_count ==  1
+            assert self.bridge.queue.put.call_count == 1
+            assert self.bridge.queue_task == "test"
+
+            await self.bridge._put_to_queue({"foo": "baz"})
+            assert self.bridge._queue_consumer.call_count ==  1
+            assert self.bridge.queue.put.call_count == 2
+            assert self.bridge.queue_task == "test"
+
+    async def test_stop(self):
+        self.bridge.queue_task = asynctest.MagicMock()
+        self.bridge.queue_task.cancel = asynctest.CoroutineMock(return_value=None)
         sleep_task = asynctest.MagicMock()
         self.bridge.sleep_tasks.append(sleep_task)
-        self.bridge.queue_task.cancel = lambda: "return"
         assert self.bridge.stop() == True
+        assert self.bridge.queue_task.cancel.call_count == 1
 
     async def test_sleep_cancel(self):
         self.loop.call_later(3, self.bridge.stop)
@@ -90,12 +104,12 @@ class LiveBridgeTest(asynctest.TestCase):
             "count": 0
         }
         future = asyncio.Future()
-        self.bridge.queue.put = asynctest.CoroutineMock(return_value=True)
+        self.bridge._put_to_queue = asynctest.CoroutineMock(return_value=True)
         future.exception = asynctest.CoroutineMock(return_value=Exception("TestException"))
         await self.bridge._action_done(future, item_in)
         item_in["count"] = 1
-        assert self.bridge.queue.put.call_count == 1
-        assert self.bridge.queue.put.call_args == asynctest.call(item_in)
+        assert self.bridge._put_to_queue.call_count == 1
+        assert self.bridge._put_to_queue.call_args == asynctest.call(item_in)
 
     async def test_process_action(self):
         task = {
@@ -106,7 +120,7 @@ class LiveBridgeTest(asynctest.TestCase):
         task["target"].handle_post = asynctest.CoroutineMock(return_value=True)
         await self.bridge._process_action(task)
         assert task["target"].handle_post.call_count == 1
-        assert task["target"].handle_post.call_args == asynctest.call(task["post"]) 
+        assert task["target"].handle_post.call_args == asynctest.call(task["post"])
 
     async def test_queue_consumer(self):
         task = {
@@ -136,7 +150,8 @@ class LiveBridgeTest(asynctest.TestCase):
 
     async def test_check_posts(self):
         self.bridge.new_posts = asynctest.CoroutineMock(return_value=None)
-        self.bridge.api_client.poll =  asynctest.CoroutineMock(return_value=["one", "two"])
+        self.bridge.api_client.poll = asynctest.CoroutineMock(return_value=["one", "two"])
+        self.bridge._put_to_queue = asynctest.CoroutineMock(return_value=True)
         res = await self.bridge.check_posts()
         assert res == True
         assert self.bridge.api_client.poll.call_count == 1
@@ -144,7 +159,7 @@ class LiveBridgeTest(asynctest.TestCase):
 
     async def test_check_posts_empty(self):
         self.bridge.source.get = asynctest.CoroutineMock(side_effect=Exception)
-        self.bridge.source.poll = asynctest.CoroutineMock(return_value=False)#side_effect=Exception)
+        self.bridge.source.poll = asynctest.CoroutineMock(return_value=False)
         assert self.bridge.source.last_updated == None
         res = await self.bridge.check_posts()
         assert res == True
@@ -177,9 +192,11 @@ class LiveBridgeTest(asynctest.TestCase):
         api_res.updated = "2016-10-31T10:10:10+0:00"
 
         # test one
+        self.bridge._put_to_queue = asynctest.CoroutineMock(return_value=True)
+
         res = await self.bridge.new_posts([api_res])
         assert res == None
-        self.bridge.stop()
+        assert self.bridge._put_to_queue.call_count == 1
 
     async def test_new_posts_failing(self):
         res = await self.bridge.new_posts(lambda: Exception())

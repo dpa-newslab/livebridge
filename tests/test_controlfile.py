@@ -138,6 +138,14 @@ class ControlFileTest(asynctest.TestCase):
         control = await self.control.load(file_path, resolve_auth=True)
         assert 1 == True
 
+    async def test_check_control_change_inactive(self):
+        self.control._sqs_client = asynctest.MagicMock()
+        self.control._sqs_client.receive_message = asynctest.CoroutineMock(return_value=[])
+        self.control.config["sqs_s3_queue"] = False
+        res = await self.control.check_control_change()
+        assert res ==  False
+        assert self.control._sqs_client.receive_message.call_count == 0
+
     async def test_check_control_change(self):
         messages = {"Messages": [{"Body": '{"Records": []}', "ReceiptHandle": "baz"}]}
         sqs_client = asynctest.MagicMock()
