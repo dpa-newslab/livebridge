@@ -17,4 +17,5 @@
 .. _pytest: http://pytest.org/
 .. _asynctest: http://asynctest.readthedocs.io/
 .. _pytest-cov: https://pypi.python.org/pypi/pytest-cov
+.. _virtualenv: https://pypi.python.org/pypi/virtualenv
 

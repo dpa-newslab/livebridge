@@ -21,6 +21,8 @@ A **livebridge** command will be available afterwards.
     usage: livebridge [-h] --control CONTROL
     livebridge: error: the following arguments are required: --control
 
+.. note::
+    It is recommended, to install Livebridge in a dedicated Virtualenv_ Python environment!
 
 Settings
 --------
