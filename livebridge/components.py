@@ -15,7 +15,7 @@
 # limitations under the License.
 import logging
 from livebridge import config
-from livebridge.storages import DynamoClient, SQLStorage
+from livebridge.storages import DynamoClient, SQLStorage, MongoStorage
 
 
 logger = logging.getLogger(__name__)
@@ -78,9 +78,13 @@ def add_target(cls):
 
 
 def get_db_client(**kwargs):
-    if kwargs.get("dsn") or config.DB.get("dsn"):
+    dsn = kwargs.get("dsn") or config.DB.get("dsn")
+    if dsn:
         params = config.DB if not kwargs else kwargs
-        return SQLStorage(**params)
+        if dsn.startswith("mongodb://"):
+            return MongoStorage(**params)
+        else:
+            return SQLStorage(**params)
     # default dynamodb
     params = config.AWS if not kwargs else kwargs
     return DynamoClient(**params)

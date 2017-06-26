@@ -2,6 +2,8 @@ aiobotocore==0.3.3
 aiohttp==2.1.0
 asynctest==0.10.0
 bleach==2.0.0
+dsnparse==0.1.4
+motor==1.1
 pytest==3.1.2
 pytest-cov==2.5.1
 python-dateutil==2.6.0
