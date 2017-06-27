@@ -174,13 +174,12 @@ class MongoStorage(BaseStorage):
 
     async def get_control(self, updated=None):
         try:
-            query = {"key": "control"}
+            query = {"type": "control"}
             if updated:
                 query["updated"] = {"$gt": updated}
             coll = (await self.db)[self.control_table_name]
             doc = await coll.find_one(query)
             if doc:
-                doc["updated"] = doc["updated"].isoformat() if doc.get("updated") else ""
                 return doc
         except Exception as exc:
             logger.error("[DB] Error when querying for a control data on {}".format(self.control_table_name))

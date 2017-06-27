@@ -254,16 +254,16 @@ class MongoStorageTests(asynctest.TestCase):
         item = {
             'updated': datetime(2017, 6, 1, 11, 3, 1),
             'data': {"bridges": [{"foo": "bar"}], "auth": {"foo": "baz"}},
-            '_id': ObjectId(b"012345678901"), 'key': 'control'}
+            '_id': ObjectId(b"012345678901"), 'type': 'control'}
         coll = asynctest.MagicMock(spec=AsyncIOMotorCollection)
         coll.find_one = asynctest.CoroutineMock(return_value = item)
         self.client._db = {self.control_table_name: coll}
         res = await self.client.get_control(updated=updated)
         assert res["data"]["auth"] ==  {"foo": "baz"}
         assert res["data"]["bridges"] == [{"foo": "bar"}]
-        assert res["updated"] == "2017-06-01T11:03:01"
+        assert res["updated"] == item["updated"]
         assert coll.find_one.call_count == 1
-        assert coll.find_one.call_args[0][0]["key"] == "control"
+        assert coll.find_one.call_args[0][0]["type"] == "control"
 
     async def test_get_control_failing(self):
         coll = asynctest.MagicMock(spec=AsyncIOMotorCollection)
