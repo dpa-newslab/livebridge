@@ -17,14 +17,14 @@ import asynctest
 from datetime import datetime
 from livebridge.config import DB
 from livebridge.storages import SQLStorage
-from livebridge.controldata.sql import SQLControl
+from livebridge.controldata.storage import StorageControl
 
 
-class SQLControlTest(asynctest.TestCase):
+class StorageControlTest(asynctest.TestCase):
 
     def setUp(self):
         DB["dsn"] = "sqlite://"
-        self.control = SQLControl()
+        self.control = StorageControl()
 
     def tearDown(self):
         del DB["dsn"]

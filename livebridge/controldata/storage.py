@@ -19,7 +19,7 @@ from livebridge.components import get_db_client
 
 logger = logging.getLogger(__name__)
 
-class SQLControl(BaseControl):
+class StorageControl(BaseControl):
 
     def __init__(self):
         self._db_client = None
