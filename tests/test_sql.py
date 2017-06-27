@@ -85,7 +85,7 @@ class SQLStorageTests(asynctest.TestCase):
         self.client._engine = asynctest.MagicMock()
         self.client._engine.execute = asynctest.CoroutineMock(return_value=db_res)
         res = await self.client.get_last_updated("source")
-        assert type(item["updated"]) == datetime
+        assert type(res) == datetime
         assert res.year == 2016
         assert res.month ==  10
         assert res.second == 43
