@@ -19,7 +19,7 @@ from livebridge.components import get_converter, add_converter
 from livebridge.base import BaseConverter
 
 
-class TestConverter(BaseConverter):
+class MockConverter(BaseConverter):
     source = "foo"
     target = "baz"
 
@@ -27,20 +27,20 @@ class TestConverter(BaseConverter):
 class ConverterTest(asynctest.TestCase):
 
     async def setUp(self):
-        self.converter = TestConverter()
-        add_converter(TestConverter)
+        self.converter = MockConverter()
+        add_converter(MockConverter)
 
     @asynctest.ignore_loop
     def test_get_converter(self):
         converter = get_converter("foo", "baz")
-        assert type(converter) == TestConverter
+        assert type(converter) == MockConverter
         assert converter.source == "foo"
         assert converter.target == "baz"
 
         assert None == get_converter("foo", "foobaz")
 
     async def test_not_implemented(self):
-        converter = TestConverter()
+        converter = MockConverter()
         try:
             c = await converter.convert({})
         except Exception as e:

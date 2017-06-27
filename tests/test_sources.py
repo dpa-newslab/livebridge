@@ -19,7 +19,7 @@ from livebridge.base import BaseSource, PollingSource, StreamingSource
 from livebridge.storages.base import BaseStorage
 from livebridge.components import get_source, add_source
 
-class TestSource(StreamingSource):
+class MockSource(StreamingSource):
     type = "test"
     def __init__(self, *, config={}, **kwargs):
         self.foo = config.get("foo")
@@ -46,7 +46,7 @@ class BaseSourcesTest(asynctest.TestCase):
 
     @asynctest.ignore_loop
     def test_get_source(self):
-        source = TestSource
+        source = MockSource
         add_source(source)
         conf = {"type": "test", "foo": "baz"}
         new_source = get_source(conf)

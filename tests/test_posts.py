@@ -19,14 +19,14 @@ from livebridge.components import get_post, add_post
 from livebridge.base import BasePost
 from tests import load_json
 
-class TestPost(BasePost):
+class MockPost(BasePost):
     source = "test"
 
 class PostTest(unittest.TestCase):
 
     def setUp(self):
-        self.post = TestPost({})
-        add_post(TestPost)
+        self.post = MockPost({})
+        add_post(MockPost)
 
     def test_parent_methods(self):
         with self.assertRaises(NotImplementedError):
@@ -66,7 +66,7 @@ class PostTest(unittest.TestCase):
         source = MagicMock()
         source.type = "test"
         post = get_post(source, api_doc, content="foobaz", images=["/tmp/test.jsp"])
-        assert type(post) == TestPost
+        assert type(post) == MockPost
         assert post.images == images
         assert post.content == content
         assert post.data == api_doc

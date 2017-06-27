@@ -21,7 +21,7 @@ from livebridge.storages import DynamoClient
 from livebridge.components import get_target, add_target
 
 
-class TestTarget(BaseTarget):
+class MockTarget(BaseTarget):
     type = "test"
     def __init__(self, *, config={}, **kwargs):
         self.foo = config.get("foo")
@@ -50,7 +50,7 @@ class BaseTargetTests(asynctest.TestCase):
 
     @asynctest.ignore_loop
     def test_get_target(self):
-        target = TestTarget
+        target = MockTarget
         add_target(target)
         conf = {"type": target.type, "foo": "baz"}
         new_target = get_target(conf)
