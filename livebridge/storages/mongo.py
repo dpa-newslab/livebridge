@@ -26,9 +26,6 @@ from livebridge.storages.base import BaseStorage
 logger = logging.getLogger(__name__)
 
 
-"""
-    https://docs.mongodb.com/manual/reference/connection-string/
-"""
 class MongoStorage(BaseStorage):
 
     _instance = None
