@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016, 2017 dpa-infocom GmbH
+# Copyright 2017 dpa-infocom GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ import dsnparse
 import json
 import logging
 import motor
+from pymongo import DESCENDING
 from motor.motor_asyncio import AsyncIOMotorClient
 from bson.objectid import ObjectId
 from livebridge.storages.base import BaseStorage
@@ -66,6 +67,7 @@ class MongoStorage(BaseStorage):
                 # create table
                 logger.info("Creating MongoDB collection [{}]".format(self.table_name))
                 await db.create_collection(self.table_name)
+                await db[self.table_name].create_index([("target_id", DESCENDING),("post_id",DESCENDING)])
                 created = True
             # create control collection if not already created.
             if not self.control_table_name in collections:

@@ -49,10 +49,6 @@ class MongoStorageTests(asynctest.TestCase):
         self.client = MongoStorage(**params)
         self.target_id = "scribble-max.mustermann@dpa-info.com-1234567890"
 
-    #async def tearDown(self):
-    #    if os.path.exists("./tests/tests.db"):
-    #        os.remove("./tests/tests.db")
-
     @asynctest.ignore_loop
     def test_init(self):
         assert self.client.dsn == self.dsn
@@ -86,24 +82,29 @@ class MongoStorageTests(asynctest.TestCase):
         self.client._db = asynctest.MagicMock()
         self.client._db.collection_names = asynctest.CoroutineMock(return_value=[self.table_name, self.control_table_name])
         self.client._db.create_collection = asynctest.CoroutineMock(return_value=True)
+        self.client._db[self.table_name].create_index = asynctest.CoroutineMock(return_value=True)
         res = await self.client.setup()
         assert res == False
         assert self.client._db.create_collection.call_count == 0
+        assert self.client._db[self.table_name].create_index.call_count == 0
 
         self.client._db.collection_names = asynctest.CoroutineMock(return_value=[self.control_table_name])
         res = await self.client.setup()
         assert res == True
         assert self.client._db.create_collection.call_count == 1
+        assert self.client._db[self.table_name].create_index.call_count == 1
 
         self.client._db.collection_names = asynctest.CoroutineMock(return_value=[self.table_name])
         res = await self.client.setup()
         assert res == True
         assert self.client._db.create_collection.call_count == 2
+        assert self.client._db[self.table_name].create_index.call_count == 1
 
         self.client._db.collection_names = asynctest.CoroutineMock(return_value=[])
         res = await self.client.setup()
         assert res == True
         assert self.client._db.create_collection.call_count == 4
+        assert self.client._db[self.table_name].create_index.call_count == 2
 
     async def test_setup_failing(self):
         self.client._db = asynctest.MagicMock()
