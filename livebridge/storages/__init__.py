@@ -17,3 +17,4 @@ from livebridge import config
 from livebridge.storages.dynamo import DynamoClient
 from livebridge.storages.sql import SQLStorage
 from livebridge.storages.mongo import MongoStorage
+from livebridge.storages.dummy import DummyStorage
