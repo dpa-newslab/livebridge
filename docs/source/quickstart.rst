@@ -38,9 +38,9 @@ Some global settings are defined in `livebridge/config.py`_. These values can be
   **Please be attentitive how often you are polling your source. Liveticker have other constraints like RSS Feeds!**
 * **LB_POLL_CONTROL_INTERVAL** - interval in seconds for polling for control data changes, defaults to **60** seconds.
 
-To use any **SQL** database supported by SQLALchemy_ as storage backend, you have to specify the following two environment variables:
+To use MongoDB_ or any **SQL** database supported by SQLALchemy_ as storage backend, you have to specify the following two environment variables:
 
-* **LB_DB_DSN** - dsn database url for connecting with a database, see http://docs.sqlalchemy.org/en/latest/core/engines.html for details.
+* **LB_DB_DSN** - dsn database url for connecting with a database, see docs for `SQLAlchemy engines`_ or `MongoDB connection strings`_ for details.
 * **LB_DB_TABLE** - name of the database table which stores distribution related data, defaults to **livebridge_dev**.
 * **LB_DB_CONTROL_TABLE** - name of the database table, which stores control data in JSON format, overrides **--control**.
 

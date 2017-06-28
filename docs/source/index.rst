@@ -28,7 +28,7 @@ Features
 * syndicate one source to various targets in realtime.
 * CRUD - create, update, delete of resources over different services.
 * extensible for all kinds of services with plugins
-* supported storage backends: DynamoDB, MySQL, PostgreSQL, MSSQL, Oracle and others
+* supported storage backends: MongoDB, DynamoDB, MySQL, PostgreSQL, MSSQL, Oracle and others
 * await/async based, Python 3.5
 * (non-persistent) queues for retrying the distribution of a post.
 * focus on robustness and stability

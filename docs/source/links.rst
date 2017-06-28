@@ -18,4 +18,6 @@
 .. _asynctest: http://asynctest.readthedocs.io/
 .. _pytest-cov: https://pypi.python.org/pypi/pytest-cov
 .. _virtualenv: https://pypi.python.org/pypi/virtualenv
-
+.. _mongodb: https://www.mongodb.com
+.. _`SQLAlchemy engines`: http://docs.sqlalchemy.org/en/latest/core/engines.html
+.. _`MongoDB connection strings`: https://docs.mongodb.com/manual/reference/connection-string/
