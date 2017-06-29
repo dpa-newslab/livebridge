@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 dpa-infocom GmbH
+# Copyright 2017 dpa-infocom GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,11 +13,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import asyncio
 import asynctest
-import os
 from datetime import datetime
-from bson.objectid import ObjectId
 from livebridge.storages.base import BaseStorage
 from livebridge.storages import DummyStorage
 from livebridge.components import get_db_client
@@ -100,7 +97,7 @@ class DummyStorageTests(asynctest.TestCase):
 
     async def test_get_post(self):
         item = {
-            "_id": ObjectId(b"012345678901"),
+            "_id": "012345678901",
             "updated": datetime.strptime("2016-10-19T10:13:43+00:00", "%Y-%m-%dT%H:%M:%S+00:00"),
             "target_doc": {"target":"doc"}
         }
@@ -116,6 +113,6 @@ class DummyStorageTests(asynctest.TestCase):
         item = {
             'updated': datetime(2017, 6, 1, 11, 3, 1),
             'data': {"bridges": [{"foo": "bar"}], "auth": {"foo": "baz"}},
-            '_id': ObjectId(b"012345678901"), 'type': 'control'}
+            '_id': "012345678901", 'type': 'control'}
         res = await self.client.get_control(updated=updated)
         assert res == False
