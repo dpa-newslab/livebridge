@@ -29,6 +29,7 @@ Features
 * CRUD - create, update, delete of resources over different services.
 * extensible for all kinds of services with plugins
 * supported storage backends: MongoDB, DynamoDB, MySQL, PostgreSQL, MSSQL, Oracle and others
+* no storage backend needed for simple forwarding distribution of posts.
 * await/async based, Python 3.5
 * (non-persistent) queues for retrying the distribution of a post.
 * focus on robustness and stability
