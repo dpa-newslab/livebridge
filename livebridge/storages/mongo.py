@@ -14,9 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import dsnparse
-import json
 import logging
-import motor
 from pymongo import DESCENDING
 from motor.motor_asyncio import AsyncIOMotorClient
 from bson.objectid import ObjectId
