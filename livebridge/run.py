@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 dpa-infocom GmbH
+# Copyright 2016, 2017 dpa-infocom GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ from argparse import Namespace
 from livebridge import config, LiveBridge
 from livebridge.controller import Controller
 from livebridge.components import get_db_client
+from livebridge.web import WebApi
 from livebridge.loader import load_extensions
 
 
@@ -49,7 +50,7 @@ def main(**kwargs):
     logging.getLogger('botocore').setLevel(logging.ERROR)
     logging.getLogger('websockets').setLevel(logging.INFO)
 
-    #read args
+    # read args
     args = read_args(**kwargs)
 
     # initialize loop
@@ -62,9 +63,12 @@ def main(**kwargs):
     db_connector = get_db_client()
     loop.run_until_complete(db_connector.setup())
 
-    # Controller manages the tasks
+    # controller manages the tasks / data
     controller = Controller(config=config, control_file=args.control)
     asyncio.ensure_future(controller.run())
+
+    # start http api
+    server = WebApi(controller=controller, loop=loop)
 
     # add signal handler
     for signame in ('SIGINT', 'SIGTERM'):
@@ -79,6 +83,7 @@ def main(**kwargs):
     try:
         loop.run_forever()
     finally:
+        server.shutdown()
         livebridge.shutdown()
         loop.stop()
         loop.close()
