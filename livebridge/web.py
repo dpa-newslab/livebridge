@@ -23,13 +23,14 @@ logger = logging.getLogger(__name__)
 
 class WebApi(object):
 
-    def __init__(self, *, controller, loop):
+    def __init__(self, *, config, controller, loop):
+        self.config = config
         self.loop = loop
         self.app = web.Application()
         self.app["controller"] = controller
         self._add_routes()
         self.handler = self.app.make_handler()
-        f = self.loop.create_server(self.handler, '0.0.0.0', 8080)
+        f = self.loop.create_server(self.handler, self.config["host"], self.config["port"])
         self.srv = loop.run_until_complete(f)
 
     def _add_routes(self):

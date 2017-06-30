@@ -68,7 +68,7 @@ def main(**kwargs):
     asyncio.ensure_future(controller.run())
 
     # start http api
-    server = WebApi(controller=controller, loop=loop)
+    server = WebApi(config=config.WEB, controller=controller, loop=loop)
 
     # add signal handler
     for signame in ('SIGINT', 'SIGTERM'):
