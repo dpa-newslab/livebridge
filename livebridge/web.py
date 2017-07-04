@@ -13,12 +13,29 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import asyncio
 import logging
+import uuid
 from aiohttp import web
 
-
 logger = logging.getLogger(__name__)
+
+_tokens = {}
+
+
+async def auth_middleware(app, handler):
+    async def middleware_handler(request):
+        try:
+            # check auth header
+            if not request.path == "/api/v1/session":
+                token = request.headers.get("X-Auth-Token")
+                if token not in _tokens.values():
+                    raise web.HTTPUnauthorized()
+            # return response
+            response = await handler(request)
+            return response
+        except web.HTTPException as ex:
+            raise
+    return middleware_handler
 
 
 class WebApi(object):
@@ -26,17 +43,34 @@ class WebApi(object):
     def __init__(self, *, config, controller, loop):
         self.config = config
         self.loop = loop
-        self.app = web.Application()
+
+        # start server
+        self.app = web.Application(loop=loop, middlewares=[auth_middleware])
         self.app["controller"] = controller
-        self._add_routes()
+        self.app.router.add_get("/", self.index_handler)
+        self.app.router.add_get("/api/v1/controlfile", self.control_get)
+        self.app.router.add_post("/api/v1/controlfile", self.control_post)
+        self.app.router.add_post("/api/v1/session", self.login)
         self.handler = self.app.make_handler()
         f = self.loop.create_server(self.handler, self.config["host"], self.config["port"])
         self.srv = loop.run_until_complete(f)
 
-    def _add_routes(self):
-        self.app.router.add_get("/", self.index_handler)
-        self.app.router.add_get("/api/v1/controlfile", self.control_get)
-        self.app.router.add_post("/api/v1/controlfile", self.control_post)
+    async def login(self, request):
+        try:
+            assert self.config["auth"]["user"]
+            assert self.config["auth"]["password"]
+        except AssertionError:
+            logger.error("HTTP Auth credentials are missing!")
+            return web.json_response({"error": "Internal Server Error"}, status=500)
+
+        params = await request.post()
+        user = params.get('username', None)
+        if (user == self.config["auth"]["user"] and
+            params.get('password', None) == self.config["auth"]["password"]):
+            # User is in our database, remember their login details
+            _tokens[user] = str(uuid.uuid4())
+            return web.json_response({"token":_tokens[user]})
+        raise web.HTTPUnauthorized()
 
     async def index_handler(self, request):
         return web.json_response({})

@@ -43,6 +43,8 @@ AWS = {
 WEB = {
     "host": os.environ.get("LB_WEB_HOST"),
     "port": os.environ.get("LB_WEB_PORT"),
-    "user": os.environ.get("LB_WEB_USER"),
-    "pwd": os.environ.get("LB_WEB_PWD"),
+    "auth": {
+        "user": os.environ.get("LB_WEB_USER"),
+        "password": os.environ.get("LB_WEB_PWD")
+    }
 }
