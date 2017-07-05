@@ -48,8 +48,8 @@ class WebApi(object):
         self.app = web.Application(loop=loop, middlewares=[auth_middleware])
         self.app["controller"] = controller
         self.app.router.add_get("/", self.index_handler)
-        self.app.router.add_get("/api/v1/controlfile", self.control_get)
-        self.app.router.add_post("/api/v1/controlfile", self.control_post)
+        self.app.router.add_get("/api/v1/controldata", self.control_get)
+        self.app.router.add_put("/api/v1/controldata", self.control_put)
         self.app.router.add_post("/api/v1/session", self.login)
         self.handler = self.app.make_handler()
         f = self.loop.create_server(self.handler, self.config["host"], self.config["port"])
@@ -78,8 +78,8 @@ class WebApi(object):
     async def control_get(self, request):
         return web.json_response({"foo": "GET"})
 
-    async def control_post(self, request):
-        return web.json_response({"foo": "POST"})
+    async def control_put(self, request):
+        return web.json_response({"foo": "PUT"})
 
     def shutdown(self):
         logger.debug("Shutting down web API!")
