@@ -82,6 +82,11 @@ class Controller(object):
             logger.info("RESTART BRIDGES")
             asyncio.ensure_future(self.run())
 
+    async def load_control_data(self):
+        control_data = ControlData(config=self.config)
+        await control_data.load(self.control_file, resolve_auth=True)
+        return control_data
+
     async def retry_run(self):
         logger.info("Will retry loading control file in 30 seconds.")
         await asyncio.sleep(self.retry_run_interval)
@@ -92,8 +97,7 @@ class Controller(object):
         loaded = False
         control_data = None
         try:
-            control_data = ControlData(config=self.config)
-            await control_data.load(self.control_file, resolve_auth=True)
+            control_data = await self.load_control_data()
             loaded = True
         except Exception as exc:
             logger.error("Error when reading control file.")
