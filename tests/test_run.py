@@ -50,21 +50,29 @@ class RunTests(asynctest.TestCase):
         control_file = os.path.join(os.path.dirname(__file__), "files", "control.yaml")
         db_connector = asynctest.MagicMock()
         db_connector.setup = asynctest.CoroutineMock(return_value=True)
+        web_config = {"host": "0.0.0.0", "port": 9090}
+        web_server = asynctest.MagicMock(spec="livebridge.web.WebApi")
+        web_server.shutdown = asynctest.CoroutineMock(return_value=True)
         with asynctest.patch("livebridge.config.CONTROLFILE") as mocked_config:
             mocked_config.return_value = control_file
-            with asynctest.patch("livebridge.components.get_db_client") as mocked_db_client:
-                mocked_db_client.return_value = db_connector
-                with asynctest.patch("livebridge.controller.Controller") as mocked_controller:
-                    mocked_controller.run = asynctest.CoroutineMock(return_value=True)
-                    with asynctest.patch("asyncio.get_event_loop") as patched:
-                        patched.return_value = self.loop
-                        with asynctest.patch("asyncio.ensure_future") as mocked_ensure:
-                            mocked_ensure.return_value = True
-                            with asynctest.patch("livebridge.LiveBridge.finish") as patched2:
-                                from livebridge.run import main
-                                main()
-                                assert self.loop.run_forever.call_count == 1
-                                assert self.loop.close.call_count == 1
+            with asynctest.patch("livebridge.web.WebApi") as mocked_server:
+                mocked_server.return_value = web_server
+                with asynctest.patch("livebridge.config.WEB") as mocked_web_config:
+                    mocked_web_config.return_value = web_config
+                    with asynctest.patch("livebridge.components.get_db_client") as mocked_db_client:
+                        mocked_db_client.return_value = db_connector
+                        with asynctest.patch("livebridge.controller.Controller") as mocked_controller:
+                            mocked_controller.run = asynctest.CoroutineMock(return_value=True)
+                            with asynctest.patch("asyncio.get_event_loop") as patched:
+                                patched.return_value = self.loop
+                                with asynctest.patch("asyncio.ensure_future") as mocked_ensure:
+                                    mocked_ensure.return_value = True
+                                    with asynctest.patch("livebridge.LiveBridge.finish") as patched2:
+                                        from livebridge.run import main
+                                        main()
+                                        assert self.loop.run_forever.call_count == 1
+                                        assert self.loop.close.call_count == 1
+                                        assert web_server.shutdown.call_count == 1
 
 
 class ArgsTests(asynctest.TestCase):

@@ -68,7 +68,8 @@ def main(**kwargs):
     asyncio.ensure_future(controller.run())
 
     # start http api
-    server = WebApi(config=config.WEB, controller=controller, loop=loop)
+    if config.WEB.get("host") and config.WEB.get("port"):
+        server = WebApi(config=config.WEB, controller=controller, loop=loop)
 
     # add signal handler
     for signame in ('SIGINT', 'SIGTERM'):
@@ -83,7 +84,8 @@ def main(**kwargs):
     try:
         loop.run_forever()
     finally:
-        server.shutdown()
+        if config.WEB.get("host") and config.WEB.get("port"):
+            server.shutdown()
         livebridge.shutdown()
         loop.stop()
         loop.close()
