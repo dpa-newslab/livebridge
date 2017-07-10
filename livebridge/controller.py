@@ -82,6 +82,10 @@ class Controller(object):
             logger.info("RESTART BRIDGES")
             asyncio.ensure_future(self.run())
 
+    async def save_control_data(self, doc):
+        control_data = ControlData(config=self.config)
+        return await control_data.save(self.control_file, doc)
+
     async def load_control_data(self):
         control_data = ControlData(config=self.config)
         await control_data.load(self.control_file, resolve_auth=True)

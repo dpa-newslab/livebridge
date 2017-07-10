@@ -64,15 +64,22 @@ class ControlData(object):
                 if target not in filtered["bridges"][index]["targets"]:
                     filtered["bridges"][index]["targets"].append(target)
                 else:
-                   logger.info("Filtering double target [{}] from source [{}]".format(target, source))
+                    logger.info("Filtering double target [{}] from source [{}]".format(target, source))
         return filtered
 
-    async def load(self, path, *, resolve_auth=False):
-        control_data = {}
+    async def _set_client(self, path):
+        if self.control_client:
+            return self.control_client
+
+        # set client for control data
         if self.CONTROL_DATA_CLIENTS.get(path):
             self.control_client = self.CONTROL_DATA_CLIENTS.get(path)()
         else:
             self.control_client = self.CONTROL_DATA_CLIENTS.get("file")()
+
+    async def load(self, path, *, resolve_auth=False):
+        control_data = {}
+        await self._set_client(path)
         control_data = await self.control_client.load(path)
 
         # filter duplicates
@@ -81,6 +88,10 @@ class ControlData(object):
         if resolve_auth:
             control_data = self._resolve_auth(control_data)
         self.control_data = control_data
+
+    async def save(self, path, data):
+        await self._set_client(path)
+        return await self.control_client.save(path, data)
 
     def list_bridges(self):
         return self.control_data.get("bridges", [])

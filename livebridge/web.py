@@ -76,10 +76,18 @@ class WebApi(object):
         return web.json_response({})
 
     async def control_get(self, request):
-        return web.json_response({"foo": "GET"})
+        control_data = await self.app["controller"].load_control_data()
+        return web.json_response(control_data.control_data)
 
     async def control_put(self, request):
-        return web.json_response({"foo": "PUT"})
+        try:
+            params = await request.post()
+            if request.has_body:
+                uploaded_doc = await request.json()
+                res = await self.app["controller"].save_control_data(uploaded_doc)
+            return web.json_response({"ok": "true"})
+        except Exception as e:
+            return web.json_response({"error": "true", "msg": str(e)}, status=500)
 
     def shutdown(self):
         logger.debug("Shutting down web API!")

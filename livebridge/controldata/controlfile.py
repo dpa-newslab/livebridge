@@ -116,3 +116,21 @@ class ControlFile(BaseControl):
         control_data = await control_file["Body"].read()
         await client.close()
         return control_data
+
+    async def save(self, path, data):
+        res = False
+        yaml_data = yaml.dump(data, indent=4, default_flow_style=False)
+        if not path.startswith("s3://"):
+            res = self._save_to_file(path, yaml_data)
+        else:
+            res = await self._save_to_s3(path, yaml_data)
+        return res
+
+    def _save_to_file(self, path, data):
+        logger.info("Saving control file to disk.")
+        if not os.access(path, os.W_OK):
+            raise IOError("Path for control file not writable: {}".format(data))
+
+        file = open(path, "w")
+        body = file.write(data)
+        file.close()
