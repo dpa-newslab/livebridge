@@ -29,11 +29,15 @@ class ControlFile(BaseControl):
 
     def __init__(self):
         self._sqs_client = None
+        self._s3_client = None
         self.config = AWS
 
     def __del__(self):
         if self._sqs_client:
             self._sqs_client.close()
+
+        if self._s3_client:
+            self._s3_client.close()
 
     @property
     async def sqs_client(self):
@@ -48,6 +52,17 @@ class ControlFile(BaseControl):
         await self._purge_sqs_queue()
 
         return self._sqs_client
+
+    @property
+    def s3_client(self):
+        if self._s3_client:
+            return self._s3_client
+        session = aiobotocore.get_session()
+        self._s3_client = session.create_client('s3',
+             region_name=self.config["region"],
+             aws_secret_access_key=self.config["secret_key"] or None,
+             aws_access_key_id=self.config["access_key"] or None)
+        return self._s3_client
 
     async def _purge_sqs_queue(self):
         # purge queue before starting watching
@@ -104,18 +119,29 @@ class ControlFile(BaseControl):
 
         return body
 
+    def _save_to_file(self, path, data):
+        logger.info("Saving control file to disk.")
+        if not os.access(path, os.W_OK):
+            raise IOError("Path for control file not writable: {}".format(data))
+
+        file = open(path, "w")
+        body = file.write(data)
+        file.close()
+
+        return True
+
     async def _load_from_s3(self, url):
         bucket, key = url.split('/', 2)[-1].split('/', 1)
         logger.info("Loading control file from s3: {} - {}".format(bucket, key))
-        session = aiobotocore.get_session()
-        client = session.create_client('s3',
-             region_name=self.config["region"],
-             aws_secret_access_key=self.config["secret_key"] or None,
-             aws_access_key_id=self.config["access_key"] or None)
-        control_file = await client.get_object(Bucket=bucket, Key=key)
+        control_file = await self.s3_client.get_object(Bucket=bucket, Key=key)
         control_data = await control_file["Body"].read()
-        await client.close()
         return control_data
+
+    async def _save_to_s3(self, url, data):
+        bucket, key = url.split('/', 2)[-1].split('/', 1)
+        logger.info("Saving control file to s3: {} - {}".format(bucket, key))
+        response = await self.s3_client.put_object(Body=data, Bucket=bucket, Key=key)
+        return True
 
     async def save(self, path, data):
         res = False
@@ -125,12 +151,3 @@ class ControlFile(BaseControl):
         else:
             res = await self._save_to_s3(path, yaml_data)
         return res
-
-    def _save_to_file(self, path, data):
-        logger.info("Saving control file to disk.")
-        if not os.access(path, os.W_OK):
-            raise IOError("Path for control file not writable: {}".format(data))
-
-        file = open(path, "w")
-        body = file.write(data)
-        file.close()

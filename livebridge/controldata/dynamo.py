@@ -54,3 +54,6 @@ class DynamoControl(BaseControl):
         self._checksum = self._get_checksum(control_data)
         return control_data
 
+    async def save(self, path, data):
+        db_client = await self.db_client
+        return await db_client.save_control(data)

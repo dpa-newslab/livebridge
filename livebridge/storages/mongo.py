@@ -15,6 +15,7 @@
 # limitations under the License.
 import dsnparse
 import logging
+from datetime import datetime
 from pymongo import DESCENDING
 from motor.motor_asyncio import AsyncIOMotorClient
 from bson.objectid import ObjectId
@@ -180,5 +181,18 @@ class MongoStorage(BaseStorage):
                 return doc
         except Exception as exc:
             logger.error("[DB] Error when querying for a control data on {}".format(self.control_table_name))
+            logger.error(exc)
+        return False
+
+    async def save_control(self, data):
+        try:
+            query = {"type": "control"}
+            doc = {"type": "control", "data": data, "updated": datetime.now()}
+            coll = (await self.db)[self.control_table_name]
+            await coll.replace_one(query, doc)
+            logger.info("[DB] Control data was saved.")
+            return True
+        except Exception as exc:
+            logger.error("[DB] Error when saving control data on {}".format(self.control_table_name))
             logger.error(exc)
         return False

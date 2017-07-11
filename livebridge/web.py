@@ -86,8 +86,10 @@ class WebApi(object):
                 uploaded_doc = await request.json()
                 res = await self.app["controller"].save_control_data(uploaded_doc)
             return web.json_response({"ok": "true"})
-        except Exception as e:
-            return web.json_response({"error": "true", "msg": str(e)}, status=500)
+        except Exception as exc:
+            logger.error("Error handling PUT controldata")
+            logger.exception(exc)
+            return web.json_response({"error": "true", "msg": str(exc)}, status=500)
 
     def shutdown(self):
         logger.debug("Shutting down web API!")

@@ -15,6 +15,7 @@
 # limitations under the License.
 import json
 import logging
+from datetime import datetime
 from sqlalchemy_aio import ASYNCIO_STRATEGY
 from sqlalchemy import create_engine, MetaData, Table, Column,\
                        Integer, String, Text, Boolean, DateTime
@@ -68,7 +69,7 @@ class SQLStorage(BaseStorage):
                      Column("id", Integer(), primary_key=True),
                      Column("type", String(150), index=True),
                      Column("data", Text()),
-                     Column("updated", DateTime()),
+                     Column("updated", DateTime())
                     )
 
     async def setup(self):
@@ -218,7 +219,7 @@ class SQLStorage(BaseStorage):
             table = self._get_control_table()
             sql = table.select().where(table.c.type == "control")
             if updated: # check for updated timestamp
-                sql = sql.where(table.c.updated != updated.strftime("%Y-%m-%d %H:%M:%S"))
+                sql = sql.where(table.c.updated != updated)
             sql = sql.limit(1)
             result = await db.execute(sql)
             item = await result.first()
@@ -228,5 +229,32 @@ class SQLStorage(BaseStorage):
                 return item
         except Exception as exc:
             logger.error("[DB] Error when querying for a control data on {}".format(self.control_table_name))
+            logger.error(exc)
+        return False
+
+    async def save_control(self, data):
+        try:
+            db = await self.db
+            table = self._get_control_table()
+            existing = await self.get_control()
+            updated=datetime.now()
+            if existing:
+                # update
+                sql = table.update().where(table.c.type == "control").values(
+                    data=json.dumps(data),
+                    updated=updated
+                )
+            else:
+                # create
+                sql = table.insert().values(
+                    type="control",
+                    data=json.dumps(data),
+                    updated=updated
+                )
+            await db.execute(sql)
+            logger.info("[DB] Control data was saved.")
+            return True
+        except Exception as exc:
+            logger.error("[DB] Error when saving control data on {}".format(self.control_table_name))
             logger.error(exc)
         return False

@@ -80,8 +80,16 @@ class BaseStorage(object):
         :returns: - list of dictionaries."""
         raise NotImplementedError()
 
-    def get_control(self):
+    async def get_control(self):
         """Method for retrieving of control data form storage.
 
         :returns: - dictionary"""
+        raise NotImplementedError()
+
+    async def save_control(self, data):
+        """Method for saving control data in storage.
+
+        :param data: control_data
+        :type dict:
+        :returns: - boolean"""
         raise NotImplementedError()

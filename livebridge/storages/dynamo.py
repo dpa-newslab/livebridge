@@ -307,3 +307,25 @@ class DynamoClient(BaseStorage):
             logger.error("[DB] Error when querying for control_data on {}".format(self.control_table_name))
             logger.error(exc)
         return False
+
+    async def save_control(self, data):
+        params = {
+            "TableName": self.control_table_name,
+            "ConditionExpression": "id = :value",
+            "ExpressionAttributeValues": {
+                ":value": {"S": "control"},
+            },
+            "Item": {
+                "id": {"S": "control"},
+                "data": {"S": json.dumps(data)}
+            }
+        }
+        try:
+            db = await self.db
+            await db.put_item(**params)
+            logger.info("[DB] Control data was saved.")
+            return True
+        except BotoCoreError as exc:
+            logger.error("[DB] Error when saving control_data on {}".format(self.control_table_name))
+            logger.error(exc)
+        return False
