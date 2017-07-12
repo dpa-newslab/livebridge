@@ -189,9 +189,12 @@ class MongoStorage(BaseStorage):
             query = {"type": "control"}
             doc = {"type": "control", "data": data, "updated": datetime.now()}
             coll = (await self.db)[self.control_table_name]
-            await coll.replace_one(query, doc)
-            logger.info("[DB] Control data was saved.")
-            return True
+            res = await coll.replace_one(query, doc, upsert=True)
+            if res.modified_count != 1 and not res.upserted_id:
+                logger.error("[DB] Control data was not saved.")
+            else:
+                logger.info("[DB] Control data was saved.")
+                return True
         except Exception as exc:
             logger.error("[DB] Error when saving control data on {}".format(self.control_table_name))
             logger.error(exc)

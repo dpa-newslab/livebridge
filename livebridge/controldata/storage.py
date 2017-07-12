@@ -37,8 +37,8 @@ class StorageControl(BaseControl):
         return await db_client.get_control(updated=updated)
 
     async def check_control_change(self):
-        if not self._updated: # do not check without prior data
-            return False
+        #if not self._updated: # do not check without prior data
+        #    return False
 
         try:
             control_data = await self._load_control_data(updated=self._updated)
@@ -50,9 +50,10 @@ class StorageControl(BaseControl):
 
     async def load(self, path):
         control_data = await self._load_control_data()
-        if control_data.get("updated"):
+        if control_data and control_data.get("updated"):
             self._updated = control_data["updated"]
-        return control_data.get("data")
+            return control_data.get("data")
+        return {}
 
     async def save(self, path, data):
         db_client = await self.db_client

@@ -57,8 +57,13 @@ class Controller(object):
         while True and self.shutdown != True:
             is_changed = await self.control_data.check_control_change()
             if is_changed == True:
-                self.read_control = True
-                await self.stop_bridges()
+                if self.bridges:
+                    # running bridges
+                    self.read_control = True
+                    await self.stop_bridges()
+                else:
+                    logger.info("No running bridges found, start with new control data.")
+                    asyncio.ensure_future(self.run())
                 return True
             await self.sleep(self.check_control_interval)
 

@@ -85,7 +85,13 @@ class WebApi(object):
             if request.has_body:
                 uploaded_doc = await request.json()
                 res = await self.app["controller"].save_control_data(uploaded_doc)
-            return web.json_response({"ok": "true"})
+                if res:
+                    return web.json_response({"ok": "true"})
+                else:
+                    return web.json_response({"ok": "false", "msg": "Controldata was not saved."}, status=400)
+            else:
+                return web.json_response({"ok": "false", "msg": "No request body found."}, status=400)
+
         except Exception as exc:
             logger.error("Error handling PUT controldata")
             logger.exception(exc)

@@ -43,7 +43,8 @@ class DynamoControl(BaseControl):
     async def check_control_change(self):
         try:
             control_data = await self._load_control_data()
-            if self._checksum and self._checksum != self._get_checksum(control_data):
+            if control_data and self._checksum \
+                and self._checksum != self._get_checksum(control_data):
                 return True
         except Exception as exc:
             logger.error("Error checking dynamo control data change with: {}".format(exc))

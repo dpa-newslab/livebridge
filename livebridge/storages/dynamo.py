@@ -311,7 +311,7 @@ class DynamoClient(BaseStorage):
     async def save_control(self, data):
         params = {
             "TableName": self.control_table_name,
-            "ConditionExpression": "id = :value",
+            "ConditionExpression": "id = :value OR attribute_not_exists(id)",
             "ExpressionAttributeValues": {
                 ":value": {"S": "control"},
             },

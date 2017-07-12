@@ -17,6 +17,7 @@ import aiobotocore
 import json
 import logging
 import os
+import os.path
 import yaml
 from botocore.client import Config
 from botocore.exceptions import ClientError
@@ -121,10 +122,11 @@ class ControlFile(BaseControl):
 
     def _save_to_file(self, path, data):
         logger.info("Saving control file to disk.")
-        if not os.access(path, os.W_OK):
-            raise IOError("Path for control file not writable: {}".format(data))
+        directory = os.path.dirname(os.path.abspath(path))
+        if not os.access(directory, os.W_OK):
+            raise IOError("Path for control file not writable: {}".format(path))
 
-        file = open(path, "w")
+        file = open(path, "w+")
         body = file.write(data)
         file.close()
 
