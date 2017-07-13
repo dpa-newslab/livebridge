@@ -32,6 +32,7 @@ class ControlFile(BaseControl):
         self._sqs_client = None
         self._s3_client = None
         self.config = AWS
+        self._updated_local = None
 
     def __del__(self):
         if self._sqs_client:
@@ -75,10 +76,24 @@ class ControlFile(BaseControl):
         except ClientError as exc:
             logger.warning("Purging SQS queue failed with: {}".format(exc))
 
-    async def check_control_change(self):
+    async def check_control_change(self, control_path):
         if not self.config.get("sqs_s3_queue", False):
-            return False
+            return await self._check_local_changes(control_path)
+        else:
+            return await self._check_s3_changes()
 
+    async def _check_local_changes(self, control_path):
+        is_changed = False
+        try:
+            last_updated = os.stat(control_path).st_mtime
+            if last_updated != self._updated_local:
+                is_changed = True
+            self._updated_local = last_updated
+        except Exception as exc:
+            logger.error("Error fetching last updated time of local control file: {}".format(exc))
+        return is_changed
+
+    async def _check_s3_changes(self):
         client = await self.sqs_client
         # check for update events
         try:
@@ -116,6 +131,7 @@ class ControlFile(BaseControl):
 
         file = open(path, "r")
         body = file.read()
+        self._updated_local = os.stat(path).st_mtime
         file.close()
 
         return body

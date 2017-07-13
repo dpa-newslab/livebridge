@@ -55,7 +55,7 @@ class Controller(object):
         # check for update events
         logger.info("Starting watching for control data changes.")
         while True and self.shutdown != True:
-            is_changed = await self.control_data.check_control_change()
+            is_changed = await self.control_data.check_control_change(self.control_file)
             if is_changed == True:
                 if self.bridges:
                     # running bridges

@@ -40,7 +40,7 @@ class DynamoControl(BaseControl):
         db_client = await self.db_client
         return await db_client.get_control()
 
-    async def check_control_change(self):
+    async def check_control_change(self, control_path=None):
         try:
             control_data = await self._load_control_data()
             if control_data and self._checksum \

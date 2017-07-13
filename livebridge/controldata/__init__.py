@@ -96,5 +96,5 @@ class ControlData(object):
     def list_bridges(self):
         return self.control_data.get("bridges", [])
 
-    async def check_control_change(self):
-        return await self.control_client.check_control_change()
+    async def check_control_change(self, control_path):
+        return await self.control_client.check_control_change(control_path=control_path)

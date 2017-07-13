@@ -36,7 +36,7 @@ class StorageControl(BaseControl):
         db_client = await self.db_client
         return await db_client.get_control(updated=updated)
 
-    async def check_control_change(self):
+    async def check_control_change(self, *, control_path=None):
         #if not self._updated: # do not check without prior data
         #    return False
 
