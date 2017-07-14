@@ -140,7 +140,22 @@ class ControlFileTest(asynctest.TestCase):
         control = await self.control.load(file_path, resolve_auth=True)
         assert 1 == True
 
-    async def test_check_control_change_inactive(self):
+    async def test_check_local_changes(self):
+        path = "/tmp/test.txt"
+        mocked_stat = asynctest.MagicMock(spec="os.stat")
+        mocked_stat.st_mtime = 1479129162
+        mocked_stat.st_mode = 33024
+        with asynctest.patch("os.stat") as patched:
+            patched.return_value = mocked_stat
+            res = await self.control._check_local_changes(path)
+            assert res == True
+
+            # raise exception
+            patched.side_effect = Exception("Test-Error")
+            res = await self.control._check_local_changes(path)
+            assert res == False
+
+    async def test_sqs_check_control_change_inactive(self):
         self.control._sqs_client = asynctest.MagicMock()
         self.control._sqs_client.receive_message = asynctest.CoroutineMock(return_value=[])
         self.control.config["sqs_s3_queue"] = False
@@ -148,7 +163,7 @@ class ControlFileTest(asynctest.TestCase):
         assert res ==  False
         assert self.control._sqs_client.receive_message.call_count == 0
 
-    async def test_check_control_change(self):
+    async def test_sqs_check_control_change(self):
         messages = {"Messages": [{"Body": '{"Records": []}', "ReceiptHandle": "baz"}]}
         sqs_client = asynctest.MagicMock()
         sqs_client.purge_queue = asynctest.CoroutineMock(return_value=None)
@@ -162,7 +177,7 @@ class ControlFileTest(asynctest.TestCase):
             QueueUrl=self.control.config["sqs_s3_queue"],
             ReceiptHandle="baz")
 
-    async def test_check_control_change_with_exception(self):
+    async def test_sqs_check_control_change_with_exception(self):
         sqs_client = asynctest.MagicMock()
         sqs_client.purge_queue = asynctest.CoroutineMock(return_value=None)
         sqs_client.receive_message = asynctest.CoroutineMock(side_effect=[Exception()])
@@ -171,7 +186,7 @@ class ControlFileTest(asynctest.TestCase):
         sqs_client.receive_message.assert_called_once_with(
             QueueUrl=self.control.config["sqs_s3_queue"])
 
-    async def test_check_control_change_with_records(self):
+    async def test_sqs_check_control_change_with_records(self):
         messages = {"Messages": [{"Body": '{"Records": [{"foo":"baz"}]}', "ReceiptHandle": "baz"}]}
         sqs_client = asynctest.MagicMock()
         sqs_client.purge_queue = asynctest.CoroutineMock(
@@ -181,3 +196,39 @@ class ControlFileTest(asynctest.TestCase):
         self.control._sqs_client = sqs_client
         res = await self.control.check_control_change()
         assert res == True
+
+    """async def test_save(self):
+        self.control._save_to_s3 = asynctest.CoroutineMock(return_value=True)
+        self.control._save_to_file = asynctest.CoroutineMock(return_value=True)
+        res = await self.control.save("tmp/test", {"foo": "bla"})
+        assert res == True
+        assert self.control._save_to_file.call_count == 1
+        assert self.control._save_to_file.call_args == asynctest.call('tmp/test', 'foo: bla\n')
+        assert self.control._save_to_s3.call_count == 0
+
+        res = await self.control.save("s3://tmp/test", {"foo": "bla"})
+        assert res == True
+        assert self.control._save_to_file.call_count == 1
+        assert self.control._save_to_s3.call_count == 1
+        assert self.control._save_to_s3.call_args == asynctest.call('s3://tmp/test', 'foo: bla\n')
+
+    @asynctest.patch("builtins.open", unittest.mock.mock_open())
+    async def test_to_file(self):
+        path = "/tmp/baz.txt"
+        data = 'foo: "bar"'
+        res = await self.control._save_to_file(path, data)
+        assert open.return_value.write.call_count == 1
+        assert open.return_value.write.call_args[0] == unittest.mock._Call((data,))
+
+        with self.assertRaises(OSError):
+            path = "/foo/bar/check/baz.txt"
+            res = await self.control._save_to_file(path, data)
+            assert open.return_value.write.call_count == 0
+
+    async def test_save_to_s3(self):
+        self.control._s3_client = asynctest.MagicMock()
+        self.control._s3_client.put_object = asynctest.CoroutineMock(return_value=True)
+        path = "s3://foo/bar/baz.txt"
+        data = 'foo: "bar"'
+        res = await self.control._save_to_s3(path, data)
+        assert res == True"""

@@ -25,6 +25,8 @@ from livebridge.bridge import LiveBridge
 from livebridge.components import SOURCE_MAP
 from livebridge import config
 
+from tests import load_file
+
 class ControllerTests(asynctest.TestCase):
 
     def setUp(self):
@@ -53,12 +55,25 @@ class ControllerTests(asynctest.TestCase):
         self.controller.shutdown = True
 
     async def test_check_control_change(self):
+        self.controller.bridges = ["one", "two"]
+        self.controller.stop_bridges = asynctest.CoroutineMock(return_value=True)
         self.controller.control_data = asynctest.MagicMock()
         self.controller.control_data.check_control_change = asynctest.CoroutineMock(return_value=True)
         assert self.controller.read_control != True
         res = await self.controller.check_control_change()
         assert res == True
         assert self.controller.read_control == True
+        assert  self.controller.stop_bridges.call_count == 1
+
+    async def test_check_no_control_change(self):
+        self.controller.control_data = asynctest.MagicMock()
+        self.controller.control_data.check_control_change = asynctest.CoroutineMock(return_value=True)
+        self.controller.run = asynctest.CoroutineMock(return_value=True)
+        assert self.controller.read_control != True
+        res = await self.controller.check_control_change()
+        assert res == True
+        assert self.controller.read_control == False
+        assert self.controller.run.call_count == 1
 
     async def test_check_control_change_with_exception(self):
         self.controller.check_control_interval = 2
@@ -153,7 +168,6 @@ class ControllerTests(asynctest.TestCase):
         SOURCE_MAP["another"] = Source
         self.controller.control_data = ControlData(self.config)
         await self.controller.control_data.load(self.control_file, resolve_auth=True)
-        print(self.controller.config.AWS)
         del self.controller.config.AWS["sqs_s3_queue"]
         self.controller.start_tasks()
 
@@ -308,3 +322,8 @@ class ControllerTests(asynctest.TestCase):
             self.controller.sleep_tasks.append = MagicMock(side_effect=[asyncio.CancelledError()])
             res = await self.controller.sleep(3)
             assert res == True
+
+    """async def test_save_control_data(self):#, mocked):
+        doc = load_file("control.yaml")
+        res = await self.controller.save_control_data(doc)
+        assert res == True"""

@@ -76,7 +76,7 @@ class ControlFile(BaseControl):
         except ClientError as exc:
             logger.warning("Purging SQS queue failed with: {}".format(exc))
 
-    async def check_control_change(self, control_path):
+    async def check_control_change(self, control_path=None):
         if not self.config.get("sqs_s3_queue", False):
             return await self._check_local_changes(control_path)
         else:
@@ -136,7 +136,7 @@ class ControlFile(BaseControl):
 
         return body
 
-    def _save_to_file(self, path, data):
+    async def _save_to_file(self, path, data):
         logger.info("Saving control file to disk.")
         directory = os.path.dirname(os.path.abspath(path))
         if not os.access(directory, os.W_OK):
@@ -155,8 +155,8 @@ class ControlFile(BaseControl):
         control_data = await control_file["Body"].read()
         return control_data
 
-    async def _save_to_s3(self, url, data):
-        bucket, key = url.split('/', 2)[-1].split('/', 1)
+    async def _save_to_s3(self, path, data):
+        bucket, key = path.split('/', 2)[-1].split('/', 1)
         logger.info("Saving control file to s3: {} - {}".format(bucket, key))
         response = await self.s3_client.put_object(Body=data, Bucket=bucket, Key=key)
         return True
@@ -165,7 +165,7 @@ class ControlFile(BaseControl):
         res = False
         yaml_data = yaml.dump(data, indent=4, default_flow_style=False)
         if not path.startswith("s3://"):
-            res = self._save_to_file(path, yaml_data)
+            res = await self._save_to_file(path, yaml_data)
         else:
             res = await self._save_to_s3(path, yaml_data)
         return res

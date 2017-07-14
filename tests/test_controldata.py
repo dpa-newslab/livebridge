@@ -17,6 +17,7 @@ import asynctest
 import os
 from livebridge.controldata import ControlData
 from livebridge.controldata.base import BaseControl
+from livebridge.controldata.controlfile import ControlFile
 
 class BaseControlTest(asynctest.TestCase):
 
@@ -42,12 +43,22 @@ class ControlDataTests(asynctest.TestCase):
         }
         self.control = ControlData(self.config)
 
+    async def test_set_client(self):
+        client = await self.control._set_client(path="file")
+        assert type(self.control.control_client) == ControlFile
+
+        self.control.control_client =  "Foo"
+        client = await self.control._set_client(path="file")
+        assert client == "Foo"
+
     async def test_check_control_change(self):
         control_client = asynctest.MagicMock()
         control_client.check_control_change = asynctest.CoroutineMock(return_value=True)
         self.control.control_client = control_client
-        res = await self.control.check_control_change()
+        res = await self.control.check_control_change(control_path="/foo")
         assert res == True
+        assert control_client.check_control_change.call_count == 1
+        assert control_client.check_control_change.call_args == asynctest.call(control_path="/foo")
 
     async def test_iter_bridges(self):
         file_path = os.path.join(os.path.dirname(__file__), "files", "control.yaml")
@@ -167,3 +178,11 @@ class ControlDataTests(asynctest.TestCase):
         assert len(cleared["bridges"][1]["targets"]) == 1
         assert len(cleared["bridges"][2]["targets"]) == 0
 
+    async def test_save(self):
+        self.control.control_client = asynctest.MagicMock(spec=ControlFile)
+        self.control.control_client.save.return_value = True
+        path = "/tmp/foo"
+        data = {"foo": "baz"}
+        res = await self.control.save(path, data)
+        assert res == True
+        assert self.control.control_client.save.call_count == 1

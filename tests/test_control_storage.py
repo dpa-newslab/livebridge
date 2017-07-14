@@ -58,7 +58,7 @@ class StorageControlTest(asynctest.TestCase):
         self.control._load_control_data = asynctest.CoroutineMock(return_value={})
         res = await self.control.check_control_change()
         assert res == False
-        assert self.control._load_control_data.call_count == 0
+        assert self.control._load_control_data.call_count == 1
 
     async def test_check_control_change_with_exception(self):
         self.control._updated = datetime.now()
@@ -67,12 +67,23 @@ class StorageControlTest(asynctest.TestCase):
         assert res == False
         assert self.control._load_control_data.call_count == 1
 
+    async def test_save(self):
+        self.control._db_client =  asynctest.MagicMock(spec=SQLStorage)
+        self.control._db_client.save_control.return_value = "foo"
+        res = await self.control.save("/tmp/path", {"foo": "data"})
+        assert res == "foo"
+
     async def test_load(self):
         data = {"data": {"auth": {}, "bridges": []}, "updated": datetime.now()}
         self.control._load_control_data = asynctest.CoroutineMock(return_value=data)
         res = await self.control.load("path")
         assert res == data["data"]
         assert self.control._load_control_data.call_count == 1
+
+        # nothing loaded
+        self.control._load_control_data.return_value = False
+        res = await self.control.load("path")
+        assert res == {}
 
     async def test_load_control_data(self):
         data = {"auth": {}, "bridges": []}
