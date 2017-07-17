@@ -25,7 +25,6 @@ from livebridge.bridge import LiveBridge
 from livebridge.components import SOURCE_MAP
 from livebridge import config
 
-from tests import load_file
 
 class ControllerTests(asynctest.TestCase):
 
@@ -323,7 +322,16 @@ class ControllerTests(asynctest.TestCase):
             res = await self.controller.sleep(3)
             assert res == True
 
-    """async def test_save_control_data(self):#, mocked):
-        doc = load_file("control.yaml")
+    async def test_save_control_data(self):#, mocked):
+        doc = {"foo": "baz"}
+        self.controller.control_file =  "/tmp/lb_test_controller_save"
         res = await self.controller.save_control_data(doc)
-        assert res == True"""
+        assert res == True
+
+        assert os.path.exists(self.controller.control_file) == 1
+
+        f = open(self.controller.control_file)
+        assert 'foo: baz\n' == f.read()
+        f.close()
+
+        os.remove(self.controller.control_file)

@@ -48,3 +48,6 @@ class StoragesTest(asynctest.TestCase):
 
         with self.assertRaises(NotImplementedError):
             await self.storage.get_control()
+
+        with self.assertRaises(NotImplementedError):
+            await self.storage.save_control(data={})

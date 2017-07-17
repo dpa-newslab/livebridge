@@ -213,3 +213,28 @@ class SQLStorageTests(asynctest.TestCase):
     async def test_get_control_failing_with_tstamp(self):
         res = await self.client.get_control(updated="string")
         assert res == False
+
+    async def test_save_control(self):
+        data = {"foo": "bar"}
+        self.client._engine = asynctest.MagicMock()
+        self.client._engine.execute = asynctest.CoroutineMock(return_value=True)
+        # update
+        self.client.get_control = asynctest.CoroutineMock(return_value=True)
+        res = await self.client.save_control(data=data)
+        assert res == True
+        assert self.client._engine.execute.call_count == 1
+        assert str(self.client._engine.execute.call_args[0][0]) == \
+                "UPDATE test_control_table SET data=:data, updated=:updated WHERE test_control_table.type = :type_1"
+
+        # insert new one
+        self.client.get_control = asynctest.CoroutineMock(return_value=False)
+        res = await self.client.save_control(data=data)
+        assert res == True
+        assert self.client._engine.execute.call_count == 2
+        assert str(self.client._engine.execute.call_args[0][0]) == \
+                "INSERT INTO test_control_table (type, data, updated) VALUES (:type, :data, :updated)"
+
+    async def test_save_control_failing(self):
+        self.client.get_control = asynctest.CoroutineMock(side_effect=Exception("Test-Error"))
+        res = await self.client.save_control({"foo": "bar"})
+        assert res == False

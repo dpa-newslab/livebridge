@@ -274,3 +274,28 @@ class MongoStorageTests(asynctest.TestCase):
     async def test_get_control_failing_with_tstamp(self):
         res = await self.client.get_control(updated="string")
         assert res == False
+
+    async def test_save_control(self):
+        data = {"foo": "bar"}
+        update_res = asynctest.MagicMock(spec="pymongo.results.UpdateResult", modified_count=1, upserted_id=None)
+        coll = asynctest.MagicMock(spec=AsyncIOMotorCollection)
+        coll.replace_one = asynctest.CoroutineMock(return_value=update_res)
+        self.client._db = {self.control_table_name: coll}
+        res = await self.client.save_control(data)
+        assert res == True
+        assert coll.replace_one.call_count == 1
+        assert coll.replace_one.call_args[0][1]["data"] == data
+        assert coll.replace_one.call_args[0][0] == {"type": "control"}
+        assert coll.replace_one.call_args[1] == {"upsert": True}
+
+        # replace operation fails
+        update_res.modified_count = 0
+        res = await self.client.save_control(data)
+        assert res == False
+
+    async def test_save_control_failing(self):
+        coll = asynctest.MagicMock(spec=AsyncIOMotorCollection)
+        coll.replace_one.side_effect = Exception("Test-Error")
+        self.client._db = {self.control_table_name: coll}
+        res = await self.client.save_control(data={"foo": "baz"})
+        assert res == False

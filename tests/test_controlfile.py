@@ -197,7 +197,7 @@ class ControlFileTest(asynctest.TestCase):
         res = await self.control.check_control_change()
         assert res == True
 
-    """async def test_save(self):
+    async def test_save(self):
         self.control._save_to_s3 = asynctest.CoroutineMock(return_value=True)
         self.control._save_to_file = asynctest.CoroutineMock(return_value=True)
         res = await self.control.save("tmp/test", {"foo": "bla"})
@@ -231,4 +231,4 @@ class ControlFileTest(asynctest.TestCase):
         path = "s3://foo/bar/baz.txt"
         data = 'foo: "bar"'
         res = await self.control._save_to_s3(path, data)
-        assert res == True"""
+        assert res == True

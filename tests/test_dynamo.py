@@ -342,3 +342,20 @@ class DynamoClientTests(asynctest.TestCase):
         db.query = asynctest.CoroutineMock(side_effect=BotoCoreError)
         res = await self.client.get_control()
         assert res == False
+
+    async def test_save_control(self):
+        doc = {"foo": "bar"}
+        db = await self.client.db
+        db.put_item = asynctest.CoroutineMock(return_value=True)
+        res = await self.client.save_control(doc)
+        db.put_item.assert_called_once_with(
+            ExpressionAttributeValues={':value': {'S': 'control'}},
+            ConditionExpression='id = :value OR attribute_not_exists(id)',
+            Item={'id': {'S': 'control'}, 'data': {'S': '{"foo": "bar"}'}},
+            TableName=self.client.control_table_name)
+
+    async def test_save_control_failing(self):
+        db = await self.client.db
+        db.put_item = asynctest.CoroutineMock(side_effect=BotoCoreError)
+        res = await self.client.save_control({"foo": "bar"})
+        assert res == False

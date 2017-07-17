@@ -65,3 +65,13 @@ class DynamoControlTest(asynctest.TestCase):
         self.control._db_client.get_control = asynctest.CoroutineMock(return_value=data)
         res = await self.control._load_control_data()
         assert res == data
+
+    async def test_save(self):
+        self.control._db_client = asynctest.MagicMock(spec=DynamoClient)
+        self.control._db_client.save_control.return_value = True
+        path = "/tmp/lb_dynamo_test_save.txt"
+        data = {"foo": "bla"}
+        res = await self.control.save(path, data)
+        assert res == True
+        assert self.control._db_client.save_control.call_count == 1
+        assert self.control._db_client.save_control.call_args[0][0] == data
