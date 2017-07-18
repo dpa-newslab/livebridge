@@ -53,7 +53,7 @@ class WebApi(object):
         self.app.router.add_post("/api/v1/session", self.login)
         self.handler = self.app.make_handler()
         f = self.loop.create_server(self.handler, self.config["host"], self.config["port"])
-        self.srv = loop.run_until_complete(f)
+        self.srv = loop.run_until_complete(f) if not loop.is_running() else None
 
     async def login(self, request):
         try:
@@ -90,7 +90,7 @@ class WebApi(object):
                 else:
                     return web.json_response({"ok": "false", "msg": "Controldata was not saved."}, status=400)
             else:
-                return web.json_response({"ok": "false", "msg": "No request body found."}, status=400)
+                return web.json_response({"ok": "false", "msg": "No request body was found."}, status=400)
 
         except Exception as exc:
             logger.error("Error handling PUT controldata")
@@ -99,7 +99,8 @@ class WebApi(object):
 
     def shutdown(self):
         logger.debug("Shutting down web API!")
-        self.srv.close()
+        if self.srv:
+            self.srv.close()
         self.loop.run_until_complete(self.srv.wait_closed())
         self.loop.run_until_complete(self.app.shutdown())
         self.loop.run_until_complete(self.handler.shutdown(60.0))
