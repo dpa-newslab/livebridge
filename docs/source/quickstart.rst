@@ -61,6 +61,17 @@ Since livebridge also supports `AWS DynamoDB`_ as storage backend, following **A
 
  **The DynamoDB tables will be automatically created, if defined and they're not existing. Sufficient** `AWS IAM`_ **rights are required.**
 
+.. _webapisettings:
+
+For using the :ref:`Web-API <webapi>` following settings have to be set:
+
+* **LB_WEB_HOST** - the host the server is listening on. *0.0.0.0* or *127.0.0.1* for example.
+* **LB_WEB_PORT** - the port the server is listening on, *8080* for example.
+* **LB_WEB_USER** - Username of the API user. *Only a single user supported at the moment!*
+* **LB_WEB_PWD** - Password of the API user.
+
+See :ref:`Web-API <webapi>` for more details.
+
 Testing
 -------
 

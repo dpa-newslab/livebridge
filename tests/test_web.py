@@ -121,7 +121,6 @@ class WebApiTestCase(AioHTTPTestCase):
         assert res.status == 200
         assert (await res.json()) == doc
 
-
     @unittest_run_loop
     async def test_put_controldata(self):
         data = '{"foo": "bla"}'
