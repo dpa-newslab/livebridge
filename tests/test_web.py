@@ -78,12 +78,13 @@ class WebApiTestCase(AioHTTPTestCase):
             request = await self.client.request(u[0], u[1])
             assert request.status == 401
             text = await request.text()
-            assert "401: Unauthorized" in text
+            assert '{"error": "Invalid token."}' in text
 
     @unittest_run_loop
     async def test_login_failing(self):
         request = await self.client.request("GET", "/api/v1/session")
         assert request.status == 405
+        assert (await request.json()) == {"error": "Method Not Allowed"}
 
         request = await self.client.request("POST", "/api/v1/session")
         assert request.status == 401
@@ -91,10 +92,12 @@ class WebApiTestCase(AioHTTPTestCase):
         data = {"username": self.config["auth"]["user"], "password": "foo"}
         request = await self.client.request("POST", "/api/v1/session", data=data)
         assert request.status == 401
+        assert (await request.json()) == {"error": "Unauthorized"}
 
         self.config["auth"]["password"] = None
         request = await self.client.request("POST", "/api/v1/session", data=data)
-        assert request.status == 500
+        assert request.status == 400
+        assert (await request.json()) == {"error": "Auth credentials are missing."}
 
     @unittest_run_loop
     async def test_login_token(self):
@@ -136,19 +139,19 @@ class WebApiTestCase(AioHTTPTestCase):
         self.controller.save_control_data = asynctest.CoroutineMock(return_value=False)
         res= await self.client.request("PUT", "/api/v1/controldata", data=data, headers=headers)
         assert res.status == 400
-        assert (await res.json()) == {"msg": "Controldata was not saved.", "ok": "false"}
+        assert (await res.json()) == {"error": "Controldata was not saved."}
         assert self.controller.save_control_data.call_count == 1
 
         # no payload
         self.controller.save_control_data = asynctest.CoroutineMock(return_value=False)
         res= await self.client.request("PUT", "/api/v1/controldata", data=None, headers=headers)
         assert res.status == 400
-        assert (await res.json()) == {"msg": "No request body was found.", "ok": "false"}
+        assert (await res.json()) == {"error": "No request body was found."}
         assert self.controller.save_control_data.call_count == 0
 
         # exception gets raised
         self.controller.save_control_data = asynctest.CoroutineMock(side_effect=Exception("Test-Error"))
         res= await self.client.request("PUT", "/api/v1/controldata", data=data, headers=headers)
         assert res.status == 500
-        assert (await res.json()) == {"msg": "Test-Error", "error": "true"}
+        assert (await res.json()) == {"error": "Internal Server Error"}
         assert self.controller.save_control_data.call_count == 1

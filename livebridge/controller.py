@@ -91,9 +91,9 @@ class Controller(object):
         control_data = ControlData(config=self.config)
         return await control_data.save(self.control_file, doc)
 
-    async def load_control_data(self):
+    async def load_control_data(self, resolve_auth=True):
         control_data = ControlData(config=self.config)
-        await control_data.load(self.control_file, resolve_auth=True)
+        await control_data.load(self.control_file, resolve_auth=resolve_auth)
         return control_data
 
     async def retry_run(self):

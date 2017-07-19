@@ -29,13 +29,27 @@ async def auth_middleware(app, handler):
             if not request.path == "/api/v1/session":
                 token = request.headers.get("X-Auth-Token")
                 if token not in _tokens.values():
-                    raise web.HTTPUnauthorized()
+                    return web.json_response({"error": "Invalid token."}, status=401)
             # return response
             response = await handler(request)
             return response
         except web.HTTPException as ex:
             raise
     return middleware_handler
+
+
+def error_overrides(overrides):
+    async def middleware(app, handler):
+        async def middleware_handler(request):
+            try:
+                response = await handler(request)
+                return response
+            except web.HTTPException as ex:
+                override = overrides.get(ex.status)
+                if override:
+                    return await override(request, ex)
+        return middleware_handler
+    return middleware
 
 
 class WebApi(object):
@@ -45,12 +59,13 @@ class WebApi(object):
         self.loop = loop
 
         # start server
-        self.app = web.Application(loop=loop, middlewares=[auth_middleware])
+        middlewares = [error_overrides({405: self.handle_405}), auth_middleware]
+        self.app = web.Application(loop=loop, middlewares=middlewares)
         self.app["controller"] = controller
         self.app.router.add_get("/", self.index_handler)
         self.app.router.add_get("/api/v1/controldata", self.control_get)
         self.app.router.add_put("/api/v1/controldata", self.control_put)
-        self.app.router.add_post("/api/v1/session", self.login)
+        self.app.router.add_post("/api/v1/session", self.login, expect_handler=web.Request.json)
         self.handler = self.app.make_handler()
         f = self.loop.create_server(self.handler, self.config["host"], self.config["port"])
         self.srv = loop.run_until_complete(f) if not loop.is_running() else None
@@ -61,7 +76,7 @@ class WebApi(object):
             assert self.config["auth"]["password"]
         except AssertionError:
             logger.error("HTTP Auth credentials are missing!")
-            return web.json_response({"error": "Internal Server Error"}, status=500)
+            return web.json_response({"error": "Auth credentials are missing."}, status=400)
 
         params = await request.post()
         user = params.get('username', None)
@@ -70,13 +85,16 @@ class WebApi(object):
             # User is in our database, remember their login details
             _tokens[user] = str(uuid.uuid4())
             return web.json_response({"token":_tokens[user]})
-        raise web.HTTPUnauthorized()
+        return web.json_response({"error": "Unauthorized"}, status=401)
+
+    async def handle_405(self, request, response):
+        return web.json_response({"error": "Method Not Allowed"}, status=405)
 
     async def index_handler(self, request):
         return web.json_response({})
 
     async def control_get(self, request):
-        control_data = await self.app["controller"].load_control_data()
+        control_data = await self.app["controller"].load_control_data(resolve_auth=False)
         return web.json_response(control_data.control_data)
 
     async def control_put(self, request):
@@ -88,14 +106,14 @@ class WebApi(object):
                 if res:
                     return web.json_response({"ok": "true"})
                 else:
-                    return web.json_response({"ok": "false", "msg": "Controldata was not saved."}, status=400)
+                    return web.json_response({"error": "Controldata was not saved."}, status=400)
             else:
-                return web.json_response({"ok": "false", "msg": "No request body was found."}, status=400)
+                return web.json_response({"error": "No request body was found."}, status=400)
 
         except Exception as exc:
             logger.error("Error handling PUT controldata")
             logger.exception(exc)
-            return web.json_response({"error": "true", "msg": str(exc)}, status=500)
+            return web.json_response({"error": "Internal Server Error"}, status=500)
 
     def shutdown(self):
         logger.debug("Shutting down web API!")
