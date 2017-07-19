@@ -75,6 +75,8 @@ The name of the table has to be specified by an environment var, either by **LB_
 
 The data is stored as **JSON** and looks correspondent to the example above the following way:
 
+.. _controljson:
+
 .. code-block:: json
 
     {
