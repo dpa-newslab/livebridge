@@ -59,6 +59,7 @@ class WebApi(object):
         self.loop = loop
 
         # start server
+        logger.info("Starting API server ...")
         middlewares = [error_overrides({405: self.handle_405}), auth_middleware]
         self.app = web.Application(loop=loop, middlewares=middlewares)
         self.app["controller"] = controller
@@ -69,6 +70,7 @@ class WebApi(object):
         self.handler = self.app.make_handler()
         f = self.loop.create_server(self.handler, self.config["host"], self.config["port"])
         self.srv = loop.run_until_complete(f) if not loop.is_running() else None
+        logger.info("... API server started up")
 
     async def login(self, request):
         try:
