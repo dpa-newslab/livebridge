@@ -10,7 +10,7 @@ The easiest way to create your own plugin is to adapt this `skeleton plugin <htt
 
 **Setup a development environment**
 
-Follow the steps described here: http://pythonhosted.org/livebridge/developing.html. Don't forget to activate your virtual environment!
+Follow the steps described here: http://livebridge.readthedocs.io/en/latest/developing.html. Don't forget to activate your virtual environment!
 
 .. code-block:: bash
 
@@ -77,7 +77,7 @@ If you open **livebridge_skeleton/__init__.py** you can see, what and where the 
   from .converter import MyConverter
   from .target import MyTarget
 
-Here you can see all components used in this merely blank plugin. *See* `<http://pythonhosted.org/livebridge/ownplugins.html>`_ *for an description of the different parts.*
+Here you can see all components used in this merely blank plugin. *See* `<http://livebridge.readthedocs.io/en/latest/ownplugins.html>`_ *for an description of the different parts.*
  \
 
 **MySource - the plugin source**

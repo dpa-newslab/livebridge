@@ -13,7 +13,7 @@ We’re already using it in production, delivering content produced using [Sourc
 - Keep content in-sync over different services.
 - syndicate one source to various targets in realtime.
 - **CRUD** - create, update, delete of resources over different services.
-- extensible for all kinds of services with [plugins](https://pythonhosted.org/livebridge/ownplugins.html)
+- extensible for all kinds of services with [plugins](http://livebridge.readthedocs.io/en/latest/ownplugins.html)
 - supported storage backends: MongoDB, DynamoDB, MySQL, PostgreSQL, MSSQL, Oracle and others
 - [await/async](https://docs.python.org/3/library/asyncio.html) based, Python 3.5
 - (non-persistent) queues for retrying the distribution of a post.
@@ -26,12 +26,12 @@ We’re already using it in production, delivering content produced using [Sourc
 pip3 install livebridge
 ```
 **Python >=3.5 is required**. <br>
-See https://pythonhosted.org/livebridge/quickstart.html#installation for details.
+See http://livebridge.readthedocs.io/en/latest/quickstart.html#installation for details.
 
 ## Settings
 Global settings are defined in [livebridge/config.py](livebridge/config.py). These values can be set through **environment variables**.  
 
-See https://pythonhosted.org/livebridge/quickstart.html#settings for available configuration variables.
+See http://livebridge.readthedocs.io/en/latest/quickstart.html#settings for available configuration variables.
 
 ## Running
 The **livebridge** command expects a **-control=** parameter, specifying the path to a control file with the configured bridges.  **--control** can be either a **local control file** or a **remote control file** on **s3**.
@@ -45,14 +45,14 @@ livebridge --control=/path/to/control.yaml
 livebridge --control=s3://bucketname/control.yaml
 ```
 
-See https://pythonhosted.org/livebridge/control.html for more details.
+See http://livebridge.readthedocs.io/en/latest/control.html for more details.
 
 ## Documentation
 
-http://pythonhosted.org/livebridge/
+http://livebridge.readthedocs.io/en/latest/
 
 ## Plugins
-Several source and targets are available as **[plugins]( https://pythonhosted.org/livebridge/plugins.html)**. Following plugins are currently available:
+Several source and targets are available as **[plugins]( http://livebridge.readthedocs.io/en/latest/plugins.html)**. Following plugins are currently available:
 
 * **[Liveblog](https://github.com/dpa-newslab/livebridge-liveblog)**  - Provides a Liveblog liveticker as source.
 * **[Scribblelive](https://github.com/dpa-newslab/livebridge-scribblelive)**  - Provides a Scribblelive event stream as target.   Provides also a **converter** from **Liveblog** to **Scribblelive**.
@@ -63,11 +63,11 @@ Several source and targets are available as **[plugins]( https://pythonhosted.or
 It's possbile to write own service plugins and to make them available to **livebridge** as a Python module via *[PyPI](https://pypi.python.org/pypi)*.
 See *https://github.com/dpa-newslab/livebridge-slack* as an example plugin.
 
-**[Tutorial: How to build a Livebridge plugin](http://pythonhosted.org/livebridge/tutorial.html)**
+**[Tutorial: How to build a Livebridge plugin](http://livebridge.readthedocs.io/en/latest/tutorial.html)**
 
 ## Developing
 
-See http://pythonhosted.org/livebridge/developing.html
+See http://livebridge.readthedocs.io/en/latest/developing.html
 
 
 ## Testing

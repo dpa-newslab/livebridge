@@ -16,7 +16,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.20.1'
+version = '0.21.0'
 
 setup(name='livebridge',
       version=version,
@@ -51,6 +51,8 @@ See https://github.com/dpa-newslab/livebridge for more infos.
         'websockets==3.3',
         'sqlalchemy-aio==0.11.0',
         'python-dateutil==2.6.0',
+        'dsnparse==0.1.4',
+        'motor==1.1',
       ],
       entry_points="""
       [console_scripts]
