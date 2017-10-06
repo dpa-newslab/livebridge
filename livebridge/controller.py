@@ -145,6 +145,16 @@ class Controller(object):
 
         self.remove_bridge(bridge)
 
+    async def run_poller(self, *, bridge, interval=180):
+        # initialize liveblogs to watch
+        while True and self.shutdown != True:
+            logger.debug("Checked new posts for {} on {}".format(bridge.source_id, bridge.endpoint))
+            await bridge.check_posts()
+            await self.sleep(interval)
+
+        self.remove_bridge(bridge)
+        return
+
     async def sleep(self, seconds):
         if self.shutdown is True:
             # if shutdown is requested, don't fall asleep again
@@ -160,12 +170,3 @@ class Controller(object):
             self.sleep_tasks.remove(task)
         return True
 
-    async def run_poller(self, *, bridge, interval=180):
-        # initialize liveblogs to watch
-        while True and self.shutdown != True:
-            logger.debug("Checked new posts for {} on {}".format(bridge.source_id, bridge.endpoint))
-            await bridge.check_posts()
-            await self.sleep(interval)
-
-        self.remove_bridge(bridge)
-        return
