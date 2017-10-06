@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 dpa-infocom GmbH
+# Copyright 2016, 2017 dpa-infocom GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 import asyncio
 import copy
 import logging
-from livebridge.components import get_source, get_db_client
+from livebridge.components import get_source, get_db_client, get_hash
 from livebridge.base import InvalidTargetResource
 
 logger = logging.getLogger(__name__)
@@ -28,6 +28,7 @@ class LiveBridge(object):
         self.targets = []
         self.api_client = None
         self.config = config
+        self.hash = get_hash(self.config)
         self.source_id = self.config.get("source_id")
         self.endpoint = self.config.get("endpoint")
         self.label = self.config.get("label", "-")

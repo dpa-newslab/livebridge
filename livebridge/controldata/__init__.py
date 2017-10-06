@@ -15,6 +15,7 @@
 # limitations under the License.
 import copy
 import logging
+from collections import OrderedDict
 from livebridge.controldata.controlfile import ControlFile
 from livebridge.controldata.dynamo import DynamoControl
 from livebridge.controldata.storage  import StorageControl
@@ -33,6 +34,8 @@ class ControlData(object):
         self.config = config
         self.control_client = None
         self.control_data = {}
+        self.new_bridges = []
+        self.removed_bridges = []
 
     def _resolve_auth(self, data):
         for x, bridge in enumerate(data.get("bridges", [])):
@@ -87,11 +90,23 @@ class ControlData(object):
 
         if resolve_auth:
             control_data = self._resolve_auth(control_data)
+
+        # detect changes
+        self.new_bridges = [OrderedDict(n) for n in control_data.get("bridges",[]) if n not in self.control_data.get("bridges",[])]
+        self.removed_bridges = [OrderedDict(r) for r in self.control_data.get("bridges",[]) if r not in control_data.get("bridges",[])]
+
         self.control_data = control_data
+
 
     async def save(self, path, data):
         await self._set_client(path)
         return await self.control_client.save(path, data)
+
+    def list_new_bridges(self):
+        return self.new_bridges
+
+    def list_removed_bridges(self):
+        return self.removed_bridges
 
     def list_bridges(self):
         return self.control_data.get("bridges", [])

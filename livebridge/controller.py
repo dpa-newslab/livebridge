@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 dpa-infocom GmbH
+# Copyright 2016, 2017 dpa-infocom GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 # limitations under the License.
 import asyncio
 import logging
-from livebridge.components import get_target
+from livebridge.components import get_target, get_hash
 from livebridge.bridge import LiveBridge
 from livebridge.controldata import ControlData
 
@@ -60,7 +60,7 @@ class Controller(object):
                 if self.bridges:
                     # running bridges
                     self.read_control = True
-                    await self.stop_bridges()
+                    asyncio.ensure_future(self.run())
                 else:
                     logger.info("No running bridges found, start with new control data.")
                     asyncio.ensure_future(self.run())
@@ -79,6 +79,7 @@ class Controller(object):
             # custom source polling intervall set in control file?
             poll_interval = config_data["poll_interval"] if config_data.get("poll_interval") else self.poll_interval
             self.bridges[bridge] = self.run_poller(bridge=bridge, interval=poll_interval)
+        return bridge
 
     def remove_bridge(self, bridge):
         logger.info("ENDING: {}".format(bridge))
@@ -92,9 +93,10 @@ class Controller(object):
         return await control_data.save(self.control_file, doc)
 
     async def load_control_data(self, resolve_auth=True):
-        control_data = ControlData(config=self.config)
-        await control_data.load(self.control_file, resolve_auth=resolve_auth)
-        return control_data
+        if not self.control_data:
+            self.control_data = ControlData(config=self.config)
+        await self.control_data.load(self.control_file, resolve_auth=resolve_auth)
+        return self.control_data
 
     async def retry_run(self):
         logger.info("Will retry loading control file in 30 seconds.")
@@ -106,35 +108,38 @@ class Controller(object):
         loaded = False
         control_data = None
         try:
-            control_data = await self.load_control_data()
+            await self.load_control_data()
             loaded = True
         except Exception as exc:
             logger.error("Error when reading control file.")
             logger.error(exc)
             logger.info("Will try to reuse existing control data.")
 
-        # set new control data
-        if loaded:
-            logger.info("Using fetched control data.")
-            self.control_data = control_data
-
         # (re)start tasks or retry fetching control file
-        if self.control_data:
-            self.start_tasks()
+        if loaded and self.control_data:
+            logger.info("Using fetched control data.")
+            self.remove_bridges()
+            self.add_new_bridges()
+            # listen to control changes
+            self.tasked.append(asyncio.Task(self.check_control_change()))
         else:
             self.tasked.append(asyncio.Task(self.retry_run()))
 
-    def start_tasks(self):
+    def add_new_bridges(self):
         # append content bridges
-        for bridge_config in self.control_data.list_bridges():
-            self.append_bridge(bridge_config)
-
-        # create futures for bridges
-        for bridge in self.bridges:
+        for bridge_config in self.control_data.list_new_bridges():
+            bridge = self.append_bridge(bridge_config)
             self.tasked.append(asyncio.Task(self.bridges[bridge]))
 
-        # listen to s3 control changes
-        self.tasked.append(asyncio.Task(self.check_control_change()))
+    def remove_bridges(self):
+        # identify removed bridges
+        removed = [get_hash(c) for c in self.control_data.list_removed_bridges()]
+        to_stop = [bridge for bridge in self.bridges if bridge.hash in removed]
+        # stop removed bridges
+        for bridge in to_stop:
+            self.bridges[bridge].close()
+            self.remove_bridge(bridge)
+            bridge.stop()
 
     async def run_stream(self, *, bridge):
         await bridge.listen_ws()
@@ -168,7 +173,7 @@ class Controller(object):
     async def run_poller(self, *, bridge, interval=180):
         # initialize liveblogs to watch
         while True and self.read_control != True and self.shutdown != True:
-            #logger.debug("Checked new posts for {} on {}".format(bridge.source_id, bridge.endpoint))
+            logger.debug("Checked new posts for {} on {}".format(bridge.source_id, bridge.endpoint))
             await bridge.check_posts()
             await self.sleep(interval)
 

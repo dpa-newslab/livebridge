@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 dpa-infocom GmbH
+# Copyright 2016, 2017 dpa-infocom GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,7 +37,8 @@ class LiveBridge(UserDict):
         log.info("Finishing ...")
         for task in tasks:
             log.debug("... {}".format(task))
-            task.cancel()
+            if not task.exception():
+                task.cancel()
         log.info("Bye!")
 
     def shutdown(self):

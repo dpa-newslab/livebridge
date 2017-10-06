@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 dpa-infocom GmbH
+# Copyright 2016, 2017 dpa-infocom GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import hashlib
 import logging
 from livebridge import config
 from livebridge.storages import DynamoClient, SQLStorage, MongoStorage, DummyStorage
@@ -90,3 +91,7 @@ def get_db_client(**kwargs):
     # default dynamodb
     params = config.AWS if not kwargs else kwargs
     return DynamoClient(**params)
+
+
+def get_hash(data):
+    return hashlib.md5(str(data).encode("utf-8")).hexdigest()
