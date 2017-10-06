@@ -28,7 +28,6 @@ class Controller(object):
         self.control_file = control_file
         self.poll_interval = config.POLL_INTERVAL or 60
         self.check_control_interval = config.POLL_CONTROL_INTERVAL or 60
-        self.read_control = False
         self.tasked = []
         self.sleep_tasks = []
         self.bridges = {}
@@ -57,36 +56,9 @@ class Controller(object):
         while True and self.shutdown != True:
             is_changed = await self.control_data.check_control_change(self.control_file)
             if is_changed == True:
-                if self.bridges:
-                    # running bridges
-                    self.read_control = True
-                    asyncio.ensure_future(self.run())
-                else:
-                    logger.info("No running bridges found, start with new control data.")
-                    asyncio.ensure_future(self.run())
+                asyncio.ensure_future(self.run())
                 return True
             await self.sleep(self.check_control_interval)
-
-    def append_bridge(self, config_data):
-        bridge = LiveBridge(config_data)
-        for tconf in config_data.get("targets", []):
-            target_client = get_target(tconf)
-            bridge.add_target(target_client)
-        # start specific source
-        if bridge.source.mode == "streaming":
-            self.bridges[bridge] = self.run_stream(bridge=bridge)
-        elif bridge.source.mode == "polling":
-            # custom source polling intervall set in control file?
-            poll_interval = config_data["poll_interval"] if config_data.get("poll_interval") else self.poll_interval
-            self.bridges[bridge] = self.run_poller(bridge=bridge, interval=poll_interval)
-        return bridge
-
-    def remove_bridge(self, bridge):
-        logger.info("ENDING: {}".format(bridge))
-        del self.bridges[bridge]
-        if self.read_control and not self.bridges:
-            logger.info("RESTART BRIDGES")
-            asyncio.ensure_future(self.run())
 
     async def save_control_data(self, doc):
         control_data = ControlData(config=self.config)
@@ -104,7 +76,6 @@ class Controller(object):
         asyncio.ensure_future(self.run())
 
     async def run(self):
-        self.read_control = False
         loaded = False
         control_data = None
         try:
@@ -141,9 +112,28 @@ class Controller(object):
             self.remove_bridge(bridge)
             bridge.stop()
 
+    def append_bridge(self, config_data):
+        bridge = LiveBridge(config_data)
+        for tconf in config_data.get("targets", []):
+            target_client = get_target(tconf)
+            bridge.add_target(target_client)
+        # start specific source
+        if bridge.source.mode == "streaming":
+            self.bridges[bridge] = self.run_stream(bridge=bridge)
+        elif bridge.source.mode == "polling":
+            # custom source polling intervall set in control file?
+            poll_interval = config_data["poll_interval"] if config_data.get("poll_interval") else self.poll_interval
+            self.bridges[bridge] = self.run_poller(bridge=bridge, interval=poll_interval)
+        return bridge
+
+    def remove_bridge(self, bridge):
+        logger.info("ENDING: {}".format(bridge))
+        del self.bridges[bridge]
+
     async def run_stream(self, *, bridge):
         await bridge.listen_ws()
-        while True and self.read_control != True and self.shutdown != True:
+
+        while True and self.shutdown != True:
             # wait for shutdown
             await self.sleep(4)
 
@@ -156,8 +146,8 @@ class Controller(object):
         self.remove_bridge(bridge)
 
     async def sleep(self, seconds):
-        if self.read_control is True or self.shutdown is True:
-            # if shutdown or restart is requested, don't fall asleep again
+        if self.shutdown is True:
+            # if shutdown is requested, don't fall asleep again
             return True
 
         try:
@@ -172,7 +162,7 @@ class Controller(object):
 
     async def run_poller(self, *, bridge, interval=180):
         # initialize liveblogs to watch
-        while True and self.read_control != True and self.shutdown != True:
+        while True and self.shutdown != True:
             logger.debug("Checked new posts for {} on {}".format(bridge.source_id, bridge.endpoint))
             await bridge.check_posts()
             await self.sleep(interval)
