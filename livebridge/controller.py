@@ -89,27 +89,27 @@ class Controller(object):
         # (re)start tasks or retry fetching control file
         if loaded and self.control_data:
             logger.info("Using fetched control data.")
-            self.remove_bridges()
-            self.add_new_bridges()
+            await self.remove_old_bridges()
+            await self.add_new_bridges()
             # listen to control changes
             self.tasked.append(asyncio.Task(self.check_control_change()))
         else:
             self.tasked.append(asyncio.Task(self.retry_run()))
 
-    def add_new_bridges(self):
+    async def add_new_bridges(self):
         # append content bridges
         for bridge_config in self.control_data.list_new_bridges():
             bridge = self.append_bridge(bridge_config)
             self.tasked.append(asyncio.Task(self.bridges[bridge]))
 
-    def remove_bridges(self):
+    async def remove_old_bridges(self):
         # identify removed bridges
         removed = [get_hash(c) for c in self.control_data.list_removed_bridges()]
         to_stop = [bridge for bridge in self.bridges if bridge.hash in removed]
         # stop removed bridges
         for bridge in to_stop:
             self.bridges[bridge].close()
-            self.remove_bridge(bridge)
+            await self.remove_bridge(bridge)
             bridge.stop()
 
     def append_bridge(self, config_data):
@@ -126,7 +126,14 @@ class Controller(object):
             self.bridges[bridge] = self.run_poller(bridge=bridge, interval=poll_interval)
         return bridge
 
-    def remove_bridge(self, bridge):
+    async def remove_bridge(self, bridge):
+        try:
+            # special treatment for bridges with stop method
+            if hasattr(bridge.source, "stop"):
+                await bridge.source.stop()
+        except Exception as exc:
+            logger.error("Error when stopping stream: {}".format(exc))
+
         logger.info("ENDING: {}".format(bridge))
         del self.bridges[bridge]
 
@@ -137,13 +144,7 @@ class Controller(object):
             # wait for shutdown
             await self.sleep(4)
 
-        # stop bridge
-        try:
-            await bridge.source.stop()
-        except Exception as exc:
-            logger.error("Error when stopping stream: {}".format(exc))
-
-        self.remove_bridge(bridge)
+        await self.remove_bridge(bridge)
 
     async def run_poller(self, *, bridge, interval=180):
         # initialize liveblogs to watch
@@ -152,7 +153,7 @@ class Controller(object):
             await bridge.check_posts()
             await self.sleep(interval)
 
-        self.remove_bridge(bridge)
+        await self.remove_bridge(bridge)
         return
 
     async def sleep(self, seconds):
