@@ -46,5 +46,3 @@ class LiveBridge(UserDict):
         self.loop.run_until_complete(self.finish(self.controller.tasked))
         if self.loop._default_executor:
             self.loop._default_executor.shutdown(wait=True)
-
-

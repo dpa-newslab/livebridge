@@ -83,10 +83,10 @@ class WebApi(object):
         params = await request.post()
         user = params.get('username', None)
         if (user == self.config["auth"]["user"] and
-            params.get('password', None) == self.config["auth"]["password"]):
+                params.get('password', None) == self.config["auth"]["password"]):
             # User is in our database, remember their login details
             _tokens[user] = str(uuid.uuid4())
-            return web.json_response({"token":_tokens[user]})
+            return web.json_response({"token": _tokens[user]})
         return web.json_response({"error": "Unauthorized"}, status=401)
 
     async def handle_405(self, request, response):
@@ -101,7 +101,7 @@ class WebApi(object):
 
     async def control_put(self, request):
         try:
-            params = await request.post()
+            await request.post()
             if request.has_body:
                 uploaded_doc = await request.json()
                 res = await self.app["controller"].save_control_data(uploaded_doc)

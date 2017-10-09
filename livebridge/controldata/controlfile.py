@@ -19,12 +19,12 @@ import logging
 import os
 import os.path
 import yaml
-from botocore.client import Config
 from botocore.exceptions import ClientError
 from livebridge.config import AWS
 from livebridge.controldata.base import BaseControl
 
 logger = logging.getLogger(__name__)
+
 
 class ControlFile(BaseControl):
 
@@ -46,10 +46,11 @@ class ControlFile(BaseControl):
         if self._sqs_client:
             return self._sqs_client
         session = aiobotocore.get_session()
-        self._sqs_client = session.create_client('sqs',
-             region_name=self.config["region"],
-             aws_secret_access_key=self.config["secret_key"] or None,
-             aws_access_key_id=self.config["access_key"] or None)
+        self._sqs_client = session.create_client(
+            'sqs',
+            region_name=self.config["region"],
+            aws_secret_access_key=self.config["secret_key"] or None,
+            aws_access_key_id=self.config["access_key"] or None)
 
         await self._purge_sqs_queue()
 
@@ -60,10 +61,11 @@ class ControlFile(BaseControl):
         if self._s3_client:
             return self._s3_client
         session = aiobotocore.get_session()
-        self._s3_client = session.create_client('s3',
-             region_name=self.config["region"],
-             aws_secret_access_key=self.config["secret_key"] or None,
-             aws_access_key_id=self.config["access_key"] or None)
+        self._s3_client = session.create_client(
+            's3',
+            region_name=self.config["region"],
+            aws_secret_access_key=self.config["secret_key"] or None,
+            aws_access_key_id=self.config["access_key"] or None)
         return self._s3_client
 
     async def _purge_sqs_queue(self):
@@ -143,7 +145,7 @@ class ControlFile(BaseControl):
             raise IOError("Path for control file not writable: {}".format(path))
 
         file = open(path, "w+")
-        body = file.write(data)
+        file.write(data)
         file.close()
 
         return True
@@ -158,7 +160,7 @@ class ControlFile(BaseControl):
     async def _save_to_s3(self, path, data):
         bucket, key = path.split('/', 2)[-1].split('/', 1)
         logger.info("Saving control file to s3: {} - {}".format(bucket, key))
-        response = await self.s3_client.put_object(Body=data, Bucket=bucket, Key=key)
+        await self.s3_client.put_object(Body=data, Bucket=bucket, Key=key)
         return True
 
     async def save(self, path, data):

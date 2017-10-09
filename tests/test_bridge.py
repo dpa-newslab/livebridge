@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 dpa-infocom GmbH
+# Copyright 2016, 2017 dpa-infocom GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ import asynctest
 from livebridge.base import BaseTarget, InvalidTargetResource
 from livebridge.bridge import LiveBridge
 from livebridge.components import get_hash
-from tests import load_json
+
 
 class LiveBridgeTest(asynctest.TestCase):
 
@@ -26,11 +26,11 @@ class LiveBridgeTest(asynctest.TestCase):
         self.user = "foo"
         self.password = "bla"
         self.source_id = 12345
-        self.endpoint= "https://example.com/api"
-        self.label= "Testlabel"
+        self.endpoint = "https://example.com/api"
+        self.label = "Testlabel"
         self.bridge_config = {"auth": {"user": self.user, "password": self.password}, "type": "liveblog",
-                                 "source_id": self.source_id, "endpoint": self.endpoint,
-                                 "label": self.label}
+                              "source_id": self.source_id, "endpoint": self.endpoint,
+                              "label": self.label}
         self.bridge = LiveBridge(self.bridge_config)
         self.bridge.api_client = asynctest.MagicMock()
         self.bridge.api_client.last_updated = None
@@ -57,12 +57,12 @@ class LiveBridgeTest(asynctest.TestCase):
             self.bridge.queue = asynctest.MagicMock()
             self.bridge.queue.put = asynctest.CoroutineMock(return_value=None)
             await self.bridge._put_to_queue({"foo": "baz"})
-            assert self.bridge._queue_consumer.call_count ==  1
+            assert self.bridge._queue_consumer.call_count == 1
             assert self.bridge.queue.put.call_count == 1
             assert self.bridge.queue_task == "test"
 
             await self.bridge._put_to_queue({"foo": "baz"})
-            assert self.bridge._queue_consumer.call_count ==  1
+            assert self.bridge._queue_consumer.call_count == 1
             assert self.bridge.queue.put.call_count == 2
             assert self.bridge.queue_task == "test"
 
@@ -71,7 +71,7 @@ class LiveBridgeTest(asynctest.TestCase):
         self.bridge.queue_task.cancel = asynctest.CoroutineMock(return_value=None)
         sleep_task = asynctest.MagicMock()
         self.bridge.sleep_tasks.append(sleep_task)
-        assert self.bridge.stop() == True
+        assert self.bridge.stop() is True
         assert self.bridge.queue_task.cancel.call_count == 1
 
     async def test_sleep_cancel(self):
@@ -156,22 +156,22 @@ class LiveBridgeTest(asynctest.TestCase):
         self.bridge.api_client.poll = asynctest.CoroutineMock(return_value=["one", "two"])
         self.bridge._put_to_queue = asynctest.CoroutineMock(return_value=True)
         res = await self.bridge.check_posts()
-        assert res == True
+        assert res is True
         assert self.bridge.api_client.poll.call_count == 1
         self.bridge.new_posts.assert_called_once_with(["one", "two"])
 
     async def test_check_posts_empty(self):
         self.bridge.source.get = asynctest.CoroutineMock(side_effect=Exception)
         self.bridge.source.poll = asynctest.CoroutineMock(return_value=False)
-        assert self.bridge.source.last_updated == None
+        assert self.bridge.source.last_updated is None
         res = await self.bridge.check_posts()
-        assert res == True
+        assert res is True
 
     async def test_check_posts_failing(self):
         self.bridge.source.poll = asynctest.CoroutineMock(side_effect=Exception)
-        assert self.bridge.source.last_updated == None
+        assert self.bridge.source.last_updated is None
         res = await self.bridge.check_posts()
-        assert res == True
+        assert res is True
 
     async def test_new_posts(self):
         # return of target
@@ -198,12 +198,12 @@ class LiveBridgeTest(asynctest.TestCase):
         self.bridge._put_to_queue = asynctest.CoroutineMock(return_value=True)
 
         res = await self.bridge.new_posts([api_res])
-        assert res == None
+        assert res is None
         assert self.bridge._put_to_queue.call_count == 1
 
     async def test_new_posts_failing(self):
         res = await self.bridge.new_posts(lambda: Exception())
-        assert res == None
+        assert res is None
 
     async def test_listen_ws(self):
         self.bridge.source.listen = asynctest.CoroutineMock(return_value=None)
@@ -214,4 +214,4 @@ class LiveBridgeTest(asynctest.TestCase):
     @asynctest.ignore_loop
     def test_get_hash(self):
         assert get_hash({"foo": "bar"}) == "dd63dafcbd4d5b28badfcaf86fb6fcdb"
-        assert get_hash([1,2,3,4,5,6]) == "199ff5b613f5dc25dff99df513516bf9"
+        assert get_hash([1, 2, 3, 4, 5, 6]) == "199ff5b613f5dc25dff99df513516bf9"

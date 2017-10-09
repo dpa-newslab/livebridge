@@ -88,13 +88,13 @@ class LiveBridge(object):
     async def _action_done(self, future, item):
         exc = future.exception()
         if exc and type(exc) is InvalidTargetResource:
-            logger.warning("POST {post.id} could not be distributed to {target.target_id} [{count}], no retry.".format(**item))
+            logger.warning("POST {post.id} not distributed to {target.target_id} [{count}], no retry.".format(**item))
             logger.warning(exc)
         elif exc:
             logger.error("TARGET ACTION FAILED, WILL RETRY: [{}] {} {} [{}]".format(
                 item["count"], item["post"], item["target"], exc))
             item["count"] = item["count"] + 1
-            await self._sleep(5*item["count"])
+            await self._sleep(5 * item["count"])
             await self._put_to_queue(item)
         else:
             logger.info("POST {post.id} distributed to {target.target_id} [{count}]".format(**item))
@@ -130,7 +130,7 @@ class LiveBridge(object):
             for new_post in posts:
                 for target in self.targets:
                     post = copy.deepcopy(new_post)
-                    item = {"post":post, "target": target, "count": 0}
+                    item = {"post": post, "target": target, "count": 0}
                     await self._put_to_queue(item)
         except Exception as exc:
             logger.error("Handling new posts failed [{}]: {}".format(self.source, exc))

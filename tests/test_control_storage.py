@@ -38,7 +38,7 @@ class StorageControlTest(asynctest.TestCase):
         db_connector.setup = asynctest.CoroutineMock(return_value=True)
         with asynctest.patch("livebridge.components.get_db_client") as mocked_db_client:
             mocked_db_client.return_value = db_connector
-            assert self.control._db_client == None
+            assert self.control._db_client is None
             client = await self.control.db_client
             assert type(client) == SQLStorage
             assert self.control._db_client == client
@@ -51,24 +51,24 @@ class StorageControlTest(asynctest.TestCase):
         data = {"auth": {}, "bridges": []}
         self.control._load_control_data = asynctest.CoroutineMock(return_value=data)
         res = await self.control.check_control_change()
-        assert res == True
+        assert res is True
         assert self.control._load_control_data.call_count == 1
 
     async def test_check_control_change_initial(self):
         self.control._load_control_data = asynctest.CoroutineMock(return_value={})
         res = await self.control.check_control_change()
-        assert res == False
+        assert res is False
         assert self.control._load_control_data.call_count == 1
 
     async def test_check_control_change_with_exception(self):
         self.control._updated = datetime.now()
         self.control._load_control_data = asynctest.CoroutineMock(side_effect=Exception())
         res = await self.control.check_control_change()
-        assert res == False
+        assert res is False
         assert self.control._load_control_data.call_count == 1
 
     async def test_save(self):
-        self.control._db_client =  asynctest.MagicMock(spec=SQLStorage)
+        self.control._db_client = asynctest.MagicMock(spec=SQLStorage)
         self.control._db_client.save_control.return_value = "foo"
         res = await self.control.save("/tmp/path", {"foo": "data"})
         assert res == "foo"

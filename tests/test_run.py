@@ -41,7 +41,7 @@ class RunTests(asynctest.TestCase):
             patched.side_effect = [Exception()]
             with self.assertRaises(Exception):
                 from livebridge.run import main
-                livebridge = main(loop=self.loop)
+                main(loop=self.loop)
 
     async def test_run(self):
         self.loop.run_forever = asynctest.CoroutineMock(return_value=True)
@@ -67,7 +67,7 @@ class RunTests(asynctest.TestCase):
                                 patched.return_value = self.loop
                                 with asynctest.patch("asyncio.ensure_future") as mocked_ensure:
                                     mocked_ensure.return_value = True
-                                    with asynctest.patch("livebridge.LiveBridge.finish") as patched2:
+                                    with asynctest.patch("livebridge.LiveBridge.finish"):
                                         from livebridge.run import main
                                         main()
                                         assert self.loop.run_forever.call_count == 1

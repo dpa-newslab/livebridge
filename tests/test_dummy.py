@@ -44,7 +44,7 @@ class DummyStorageTests(asynctest.TestCase):
 
     @asynctest.ignore_loop
     def test_init(self):
-        assert issubclass(DummyStorage, BaseStorage) == True
+        assert issubclass(DummyStorage, BaseStorage) is True
 
     async def test_get_db_client(self):
         params = {"dsn": "dummy://"}
@@ -57,11 +57,11 @@ class DummyStorageTests(asynctest.TestCase):
 
     async def test_setup(self):
         res = await self.client.setup()
-        assert res == False
+        assert res is False
 
-    async def test_get_last_updated(self):#, mock_cursor):
+    async def test_get_last_updated(self):
         res = await self.client.get_last_updated("source")
-        assert res == None
+        assert res is None
 
     async def test_insert_post(self):
         params = {"target_id": "target-id",
@@ -73,7 +73,7 @@ class DummyStorageTests(asynctest.TestCase):
                   "updated": "2016-10-19T10:13:43+00:00",
                   "target_doc": {"foo": "doc"}}
         res = await self.client.insert_post(**params)
-        assert res == True
+        assert res is True
 
     async def test_update_post(self):
         params = {"target_id": "target-id",
@@ -82,37 +82,28 @@ class DummyStorageTests(asynctest.TestCase):
                   "text": "Text",
                   "created": datetime.utcnow(),
                   "sticky": True,
-                  "updated":  datetime.utcnow(),
+                  "updated": datetime.utcnow(),
                   "target_doc": {"foo": "doc"}}
         res = await self.client.update_post(**params)
-        assert res == True
+        assert res is True
 
     async def test_update_post_failing(self):
         res = await self.client.update_post(**{})
-        assert res == True
+        assert res is True
 
     async def test_get_known_posts(self):
         res = await self.client.get_known_posts("foo", "baz")
         assert res == []
 
     async def test_get_post(self):
-        item = {
-            "_id": "012345678901",
-            "updated": datetime.strptime("2016-10-19T10:13:43+00:00", "%Y-%m-%dT%H:%M:%S+00:00"),
-            "target_doc": {"target":"doc"}
-        }
         res = await self.client.get_post("target", "post")
-        assert res == None
+        assert res is None
 
     async def test_delete_post(self):
         res = await self.client.delete_post("target", "post")
-        assert res == True
+        assert res is True
 
     async def test_get_control(self):
         updated = datetime(2017, 6, 1, 11, 3, 2)
-        item = {
-            'updated': datetime(2017, 6, 1, 11, 3, 1),
-            'data': {"bridges": [{"foo": "bar"}], "auth": {"foo": "baz"}},
-            '_id': "012345678901", 'type': 'control'}
         res = await self.client.get_control(updated=updated)
-        assert res == False
+        assert res is False

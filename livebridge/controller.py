@@ -21,6 +21,7 @@ from livebridge.controldata import ControlData
 
 logger = logging.getLogger(__name__)
 
+
 class Controller(object):
 
     def __init__(self, config, control_file):
@@ -32,7 +33,7 @@ class Controller(object):
         self.sleep_tasks = []
         self.bridges = {}
         self.retry_run_interval = 30
-        self.control_data = None # access to data from control file
+        self.control_data = None  # access to data from control file
         self.shutdown = False
 
     async def clean_shutdown(self):
@@ -53,9 +54,9 @@ class Controller(object):
     async def check_control_change(self):
         # check for update events
         logger.info("Starting watching for control data changes.")
-        while True and self.shutdown != True:
+        while True and self.shutdown is not True:
             is_changed = await self.control_data.check_control_change(self.control_file)
-            if is_changed == True:
+            if is_changed is True:
                 asyncio.ensure_future(self.run())
                 return True
             await self.sleep(self.check_control_interval)
@@ -77,7 +78,6 @@ class Controller(object):
 
     async def run(self):
         loaded = False
-        control_data = None
         try:
             await self.load_control_data()
             loaded = True
@@ -140,7 +140,7 @@ class Controller(object):
     async def run_stream(self, *, bridge):
         await bridge.listen_ws()
 
-        while True and self.shutdown != True:
+        while True and self.shutdown is not True:
             # wait for shutdown
             await self.sleep(4)
 
@@ -148,7 +148,7 @@ class Controller(object):
 
     async def run_poller(self, *, bridge, interval=180):
         # initialize liveblogs to watch
-        while True and self.shutdown != True:
+        while True and self.shutdown is not True:
             logger.debug("Checked new posts for {} on {}".format(bridge.source_id, bridge.endpoint))
             await bridge.check_posts()
             await self.sleep(interval)
@@ -169,4 +169,3 @@ class Controller(object):
         finally:
             self.sleep_tasks.remove(task)
         return True
-

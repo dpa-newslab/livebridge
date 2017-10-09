@@ -16,6 +16,7 @@
 import asynctest
 from livebridge.storages.base import BaseStorage
 
+
 class StoragesTest(asynctest.TestCase):
 
     def setUp(self):

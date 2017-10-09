@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 class BaseControl(object):
 
     async def check_control_change(self):
@@ -21,4 +22,3 @@ class BaseControl(object):
 
     async def load(self, path):
         raise NotImplementedError()
-

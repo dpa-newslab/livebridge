@@ -23,6 +23,7 @@ from livebridge.components import get_target, add_target
 
 class MockTarget(BaseTarget):
     type = "test"
+
     def __init__(self, *, config={}, **kwargs):
         self.foo = config.get("foo")
 
@@ -37,7 +38,7 @@ class BaseTargetTests(asynctest.TestCase):
         self.converter.target = "scribble"
         livebridge.components.add_converter(self.converter)
 
-        self.target= BaseTarget()
+        self.target = BaseTarget()
         self.target.type = "test"
         self.target.target_id = "test-target"
         self.target._get_converter = MagicMock(return_value=self.converter)
@@ -60,21 +61,21 @@ class BaseTargetTests(asynctest.TestCase):
     @asynctest.ignore_loop
     def test_get_target_unkown(self):
         target = get_target({"type": "foo"})
-        assert target == None
+        assert target is None
 
     @asynctest.ignore_loop
     def test_init(self):
-        assert isinstance(self.target._db, DynamoClient) == True
-        assert isinstance(self.target, BaseTarget) == True
+        assert isinstance(self.target._db, DynamoClient) is True
+        assert isinstance(self.target, BaseTarget) is True
 
     @asynctest.ignore_loop
     def test_db(self):
-        self.target._db_client =  "foo"
-        assert self.target._db ==  "foo"
+        self.target._db_client = "foo"
+        assert self.target._db == "foo"
 
         # poperty not set
         del self.target._db_client
-        assert isinstance(self.target._db, DynamoClient) == True
+        assert isinstance(self.target._db, DynamoClient) is True
 
     @asynctest.ignore_loop
     def test_parent_methods(self):
@@ -104,7 +105,7 @@ class BaseTargetTests(asynctest.TestCase):
         self.post.get_action = MagicMock(return_value="ignore")
         self.target.handle_extras = asynctest.CoroutineMock(return_value=None)
         res = await self.target.handle_post(self.post)
-        assert res == None
+        assert res is None
         self.target._get_converter.assert_called_once_with(self.post)
         self.target.handle_extras.called == 0
 
@@ -117,11 +118,11 @@ class BaseTargetTests(asynctest.TestCase):
 
         assert self.post.content == ""
         res = await self.target.handle_post(self.post)
-        assert res == None
+        assert res is None
         self.target._handle_new.assert_called_once_with(self.post)
         self.target.handle_extras.assert_called_once_with(self.post)
         self.target._db.get_post.assert_called_once_with(self.target.target_id, self.post.id)
-        assert self.target._db.insert_post.call_count ==  1
+        assert self.target._db.insert_post.call_count == 1
         self.target._get_converter.assert_called_once_with(self.post)
         assert self.converter.convert.call_count == 1
         assert self.post.content == "converted"
@@ -136,11 +137,11 @@ class BaseTargetTests(asynctest.TestCase):
 
         assert self.post.content == ""
         res = await self.target.handle_post(self.post)
-        assert res == None
+        assert res is None
         self.target._handle_new.assert_called_once_with(self.post)
         self.target.handle_extras.assert_called_once_with(self.post)
         self.target._db.get_post.assert_called_once_with(self.target.target_id, self.post.id)
-        assert self.target._db.insert_post.call_count ==  1
+        assert self.target._db.insert_post.call_count == 1
         self.target._get_converter.assert_called_once_with(self.post)
         assert self.converter.convert.call_count == 0
         assert self.converter.remove_images.call_count == 0
@@ -154,10 +155,10 @@ class BaseTargetTests(asynctest.TestCase):
         self.target.handle_extras = asynctest.CoroutineMock(return_value=extras_doc)
         self.target._db.insert_post = asynctest.CoroutineMock(return_value=None)
         res = await self.target.handle_post(self.post)
-        assert res == None
+        assert res is None
         self.target._handle_new.assert_called_once_with(self.post)
         self.target.handle_extras.assert_called_once_with(self.post)
-        assert self.target._db.insert_post.call_count ==  1
+        assert self.target._db.insert_post.call_count == 1
 
     async def test_handle_post_update(self):
         new_doc = TargetResponse({"doc": "foo"})
@@ -166,19 +167,19 @@ class BaseTargetTests(asynctest.TestCase):
         self.target.handle_extras = asynctest.CoroutineMock(return_value=None)
         self.target._db.update_post = asynctest.CoroutineMock(return_value=None)
         res = await self.target.handle_post(self.post)
-        assert res == None
+        assert res is None
         self.target._handle_update.assert_called_once_with(self.post)
         self.target.handle_extras.assert_called_once_with(self.post)
         self.target._db.get_post.assert_called_once_with(self.target.target_id, self.post.id)
         self.target._get_converter.assert_called_once_with(self.post)
-        assert self.target._db.update_post.call_count ==  1
+        assert self.target._db.update_post.call_count == 1
 
     async def test_handle_post_delete(self):
         self.post.get_action = MagicMock(return_value="delete")
         self.target._handle_delete = asynctest.CoroutineMock(return_value={})
         self.target.handle_extras = asynctest.CoroutineMock(return_value=None)
         res = await self.target.handle_post(self.post)
-        assert res == None
+        assert res is None
         self.target._handle_delete.assert_called_once_with(self.post)
         self.target.handle_extras.called == 0
         self.target._db.get_post.assert_called_once_with(self.target.target_id, self.post.id)
@@ -186,27 +187,27 @@ class BaseTargetTests(asynctest.TestCase):
 
     async def test_handle_post_failing(self):
         self.post.is_deleted = False
-        self.converter.convert = asynctest.CoroutineMock(return_value=ConversionResult(None,[]))
+        self.converter.convert = asynctest.CoroutineMock(return_value=ConversionResult(None, []))
         res = await self.target.handle_post(self.post)
-        assert res == None
+        assert res is None
 
     async def test_handle_new(self):
         new_doc = {"doc": "foo"}
-        self.target.post_item =  asynctest.CoroutineMock(return_value=new_doc)
+        self.target.post_item = asynctest.CoroutineMock(return_value=new_doc)
         res = await self.target._handle_new(self.post)
         assert res == new_doc
 
     async def test_handle_new_failing(self):
-        self.target.post_item =  asynctest.CoroutineMock(return_value={})
+        self.target.post_item = asynctest.CoroutineMock(return_value={})
         res = await self.target._handle_new(self.post)
         assert res == ""
 
     async def test_handle_delete(self):
         new_doc = {"doc": "foo"}
         self.target.delete_item = asynctest.CoroutineMock(return_value=new_doc)
-        self.target._db.delete_post =  asynctest.CoroutineMock(return_value=True)
+        self.target._db.delete_post = asynctest.CoroutineMock(return_value=True)
         res = await self.target._handle_delete(self.post)
-        assert res == True
+        assert res is True
         self.target.delete_item.assert_called_once_with(self.post)
         self.target._db.delete_post.assert_called_once_with(self.post.target_id, self.post.id)
 
@@ -214,7 +215,7 @@ class BaseTargetTests(asynctest.TestCase):
         self.target.delete_item = asynctest.CoroutineMock(return_value=None)
         self.target._db.delete_post = asynctest.CoroutineMock()
         res = await self.target._handle_delete(self.post)
-        assert res == False
+        assert res is False
         self.target.delete_item.assert_called_once_with(self.post)
         assert self.target._db.delete_post.call_count == 0
 

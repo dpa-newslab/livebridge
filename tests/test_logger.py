@@ -16,6 +16,7 @@
 import unittest
 import logging
 
+
 class LoggerTests(unittest.TestCase):
 
     def test_logger(self):

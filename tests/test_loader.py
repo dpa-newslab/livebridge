@@ -16,9 +16,8 @@
 import unittest
 from livebridge.loader import load_extensions
 
+
 class LoaderTests(unittest.TestCase):
 
     def test_loader(self):
-        load_extensions()
-        assert 1 == True
-        # TODO
+        assert load_extensions() is None

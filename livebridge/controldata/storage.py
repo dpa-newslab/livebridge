@@ -19,6 +19,7 @@ from livebridge.components import get_db_client
 
 logger = logging.getLogger(__name__)
 
+
 class StorageControl(BaseControl):
 
     def __init__(self):
@@ -32,14 +33,11 @@ class StorageControl(BaseControl):
         self._db_client = get_db_client()
         return self._db_client
 
-    async def  _load_control_data(self, updated=None):
+    async def _load_control_data(self, updated=None):
         db_client = await self.db_client
         return await db_client.get_control(updated=updated)
 
     async def check_control_change(self, *, control_path=None):
-        #if not self._updated: # do not check without prior data
-        #    return False
-
         try:
             control_data = await self._load_control_data(updated=self._updated)
             if control_data:

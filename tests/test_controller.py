@@ -16,11 +16,9 @@
 import asynctest
 import asyncio
 import os
-from botocore.exceptions import ClientError
 from unittest.mock import MagicMock, call
 from livebridge.controller import Controller
 from livebridge.controldata import ControlData
-from livebridge.controldata.controlfile import ControlFile
 from livebridge.bridge import LiveBridge
 from livebridge.components import SOURCE_MAP, get_hash
 from livebridge import config
@@ -34,7 +32,7 @@ class ControllerTests(asynctest.TestCase):
         self.config.AWS = {
             "access_key": "foo",
             "secret_key": "baz",
-            "region":  "eu-central-1",
+            "region": "eu-central-1",
             "sqs_s3_queue": "http://foo-queue",
         }
         self.config.POLL_INTERVAL = 10
@@ -43,11 +41,11 @@ class ControllerTests(asynctest.TestCase):
 
     @asynctest.ignore_loop
     def test_init(self):
-        assert self.controller.config== self.config
+        assert self.controller.config == self.config
         assert self.controller.poll_interval == self.config.POLL_INTERVAL
         assert self.controller.check_control_interval == self.config.POLL_CONTROL_INTERVAL
         assert self.controller.control_file == self.control_file
-        assert isinstance(self.controller, Controller) == True
+        assert isinstance(self.controller, Controller) is True
 
     async def shutdown(self):
         await asyncio.sleep(3)
@@ -59,22 +57,22 @@ class ControllerTests(asynctest.TestCase):
         self.controller.control_data = asynctest.MagicMock()
         self.controller.control_data.check_control_change = asynctest.CoroutineMock(return_value=True)
         res = await self.controller.check_control_change()
-        assert res == True
-        assert  self.controller.run.call_count == 1
+        assert res is True
+        assert self.controller.run.call_count == 1
 
     async def test_check_control_change_with_exception(self):
         self.controller.check_control_interval = 2
         self.controller.control_data = asynctest.MagicMock()
         self.controller.control_data.check_control_change = asynctest.CoroutineMock(return_value=False)
         self.controller.sleep = asynctest.CoroutineMock(side_effect=[None, self.shutdown()])
-        res = await self.controller.check_control_change()
+        await self.controller.check_control_change()
         assert self.controller.control_data.check_control_change.call_count == 2
 
     async def test_run(self):
         self.controller.remove_old_bridges = asynctest.CoroutineMock(return_value=True)
         self.controller.add_new_bridges = asynctest.CoroutineMock(return_value=True)
         self.controller.check_control_change = asynctest.CoroutineMock(return_value=True)
-        assert self.controller.control_data == None
+        assert self.controller.control_data is None
         await self.controller.run()
         assert self.controller.remove_old_bridges.call_count == 1
         assert self.controller.add_new_bridges.call_count == 1
@@ -83,18 +81,19 @@ class ControllerTests(asynctest.TestCase):
 
     async def test_run_failing(self):
         self.controller.remove_old_bridges = asynctest.CoroutineMock(return_value=True)
-        self.controller.load_control_data = asynctest.CoroutineMock(side_effect=Exception("load_control_file exception"))
+        self.controller.load_control_data = asynctest.CoroutineMock(
+            side_effect=Exception("load_control_file exception"))
         self.controller.control_file = "/does/not/exist.yaml"
         self.controller.retry_run = asynctest.CoroutineMock(return_value=True)
         assert len(self.controller.tasked) == 0
-        assert self.controller.control_data == None
+        assert self.controller.control_data is None
         await self.controller.run()
         assert len(self.controller.tasked) == 1
         assert type(self.controller.tasked[0]) == asyncio.Task
         assert self.controller.load_control_data.called == 1
         assert self.controller.remove_old_bridges.called == 0
         assert self.controller.retry_run.called == 1
-        assert self.controller.control_data == None
+        assert self.controller.control_data is None
 
     async def test_run_failing_reuse_existing_control(self):
         # run with existing control
@@ -102,7 +101,7 @@ class ControllerTests(asynctest.TestCase):
         self.controller.add_new_bridges = asynctest.CoroutineMock(return_value=True)
         self.controller.retry_run = asynctest.CoroutineMock(return_value=True)
         self.controller.check_control_change = asynctest.CoroutineMock(return_value=True)
-        assert self.controller.control_data == None
+        assert self.controller.control_data is None
         await self.controller.run()
         assert type(self.controller.control_data) == ControlData
         assert self.controller.remove_old_bridges.call_count == 1
@@ -113,7 +112,8 @@ class ControllerTests(asynctest.TestCase):
 
         # run again with failing control file
         existing_control = self.controller.control_data
-        self.controller.load_control_data = asynctest.CoroutineMock(side_effect=Exception("load_control_file exception"))
+        self.controller.load_control_data = asynctest.CoroutineMock(
+            side_effect=Exception("load_control_file exception"))
         await self.controller.run()
         assert len(self.controller.tasked) == 2
         assert self.controller.remove_old_bridges.call_count == 1
@@ -125,10 +125,10 @@ class ControllerTests(asynctest.TestCase):
     async def test_run_retry(self):
         self.controller.run = asynctest.CoroutineMock()
         self.controller.retry_run_interval = 2
-        assert self.controller.control_data == None
+        assert self.controller.control_data is None
         await self.controller.retry_run()
         assert self.controller.run.called
-        assert self.controller.run.call_count ==  1
+        assert self.controller.run.call_count == 1
 
     async def test_clean_shutdown(self):
         # mock bridges
@@ -144,10 +144,10 @@ class ControllerTests(asynctest.TestCase):
         asyncio.Task(self.controller.run_poller(bridge=bridge2, interval=2))
 
         # shutdown
-        assert self.controller.shutdown == False
+        assert self.controller.shutdown is False
         assert len(self.controller.bridges) == 2
         await self.controller.clean_shutdown()
-        assert self.controller.shutdown == True
+        assert self.controller.shutdown is True
         assert len(self.controller.bridges) == 0
 
     async def test_add_new_bridge(self):
@@ -162,7 +162,7 @@ class ControllerTests(asynctest.TestCase):
         assert self.controller.append_bridge.call_args_list == [call({"foo": "baz"}), call({"bar": "baz"})]
 
     async def test_remove_old_bridges(self):
-        bridge1 = asynctest.MagicMock(hash=get_hash({"foo": "baz"}))#, close=MagicMock())
+        bridge1 = asynctest.MagicMock(hash=get_hash({"foo": "baz"}))
         bridge2 = asynctest.MagicMock(hash=get_hash({"bar": "baz"}))
         self.controller.bridges = {
             bridge1: asynctest.CoroutineMock(return_value=True),
@@ -205,7 +205,7 @@ class ControllerTests(asynctest.TestCase):
 
         # stop bridge1
         await self.controller.run_poller(bridge=bridge1)
-        assert self.controller.bridges.get(bridge1) == None
+        assert self.controller.bridges.get(bridge1) is None
         assert self.controller.bridges.get(bridge2) == bridge2
 
         # stop bridge2
@@ -239,8 +239,10 @@ class ControllerTests(asynctest.TestCase):
     async def test_append_streaming_bridge(self):
         class Source:
             mode = "streaming"
+
             def __init__(self, **kwargs):
                 pass
+
         SOURCE_MAP["liveblog"] = Source
         assert len(self.controller.bridges) == 0
         config = {"mode": "streaming", "type": "liveblog", "targets": [{"type": "scribble"}]}
@@ -253,10 +255,13 @@ class ControllerTests(asynctest.TestCase):
 
     @asynctest.ignore_loop
     def test_append_poller_bridge(self):
+
         class Source:
             mode = "polling"
+
             def __init__(self, **kwargs):
                 pass
+
         SOURCE_MAP["liveblog"] = Source
         assert len(self.controller.bridges) == 0
         config = {"mode": "polling", "type": "liveblog", "targets": [{"type": "scribble"}]}
@@ -292,17 +297,17 @@ class ControllerTests(asynctest.TestCase):
             self.controller.sleep_tasks = MagicMock()
             self.controller.sleep_tasks.append = MagicMock(side_effect=[asyncio.CancelledError()])
             res = await self.controller.sleep(3)
-            assert res == True
+            assert res is True
 
     async def test_sleep_shutdown(self):
         self.controller.shutdown = True
-        assert await self.controller.sleep(5) == False
+        assert await self.controller.sleep(5) is False
 
-    async def test_save_control_data(self):#, mocked):
+    async def test_save_control_data(self):
         doc = {"foo": "baz"}
-        self.controller.control_file =  "/tmp/lb_test_controller_save"
+        self.controller.control_file = "/tmp/lb_test_controller_save"
         res = await self.controller.save_control_data(doc)
-        assert res == True
+        assert res is True
 
         assert os.path.exists(self.controller.control_file) == 1
 

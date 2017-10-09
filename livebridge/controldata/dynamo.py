@@ -17,7 +17,9 @@ import logging
 from livebridge.controldata.base import BaseControl
 from livebridge.components import get_db_client, get_hash
 
+
 logger = logging.getLogger(__name__)
+
 
 class DynamoControl(BaseControl):
 
@@ -32,15 +34,14 @@ class DynamoControl(BaseControl):
         self._db_client = get_db_client()
         return self._db_client
 
-    async def  _load_control_data(self):
+    async def _load_control_data(self):
         db_client = await self.db_client
         return await db_client.get_control()
 
     async def check_control_change(self, control_path=None):
         try:
             control_data = await self._load_control_data()
-            if control_data and self._checksum \
-                and self._checksum != get_hash(control_data):
+            if control_data and self._checksum and self._checksum != get_hash(control_data):
                 return True
         except Exception as exc:
             logger.error("Error checking dynamo control data change with: {}".format(exc))

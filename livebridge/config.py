@@ -33,7 +33,7 @@ DB = {
 AWS = {
     "access_key": os.environ.get("LB_AWS_ACCESS_KEY", ""),
     "secret_key": os.environ.get("LB_AWS_SECRET_KEY", ""),
-    "region":  os.environ.get("LB_AWS_REGION", "eu-central-1"),
+    "region": os.environ.get("LB_AWS_REGION", "eu-central-1"),
     "endpoint_url": os.environ.get("LB_DYNAMO_ENDPOINT"),
     "table_name": os.environ.get("LB_DYNAMO_TABLE", "livebridge-dev"),
     "control_table_name": os.environ.get("LB_DYNAMO_CONTROL_TABLE"),

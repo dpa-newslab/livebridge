@@ -17,10 +17,11 @@ import unittest
 from unittest.mock import MagicMock
 from livebridge.components import get_post, add_post
 from livebridge.base import BasePost
-from tests import load_json
+
 
 class MockPost(BasePost):
     source = "test"
+
 
 class PostTest(unittest.TestCase):
 
@@ -70,21 +71,21 @@ class PostTest(unittest.TestCase):
         assert post.images == images
         assert post.content == content
         assert post.data == api_doc
-        assert source.type ==  "test"
+        assert source.type == "test"
 
     def test_target_doc(self):
-        assert self.post.target_doc == None
+        assert self.post.target_doc is None
         self.post._existing = {"target_doc": {"doc": "foo"}}
         assert self.post.target_doc == self.post._existing["target_doc"]
 
     def test_target_doc_setter(self):
-        assert self.post.target_doc == None
+        assert self.post.target_doc is None
         self.post.target_doc = {"target_doc": {"doc": "foo"}}
-        assert self.post.target_doc ==  {"target_doc": {"doc": "foo"}}
+        assert self.post.target_doc == {"target_doc": {"doc": "foo"}}
 
     def test_target_id(self):
         # from existing doc
-        assert self.post._target_id == None
+        assert self.post._target_id is None
         self.post._existing = {"target_id": "baz"}
         assert self.post.target_id == "baz"
 
@@ -93,8 +94,8 @@ class PostTest(unittest.TestCase):
         assert self.post.target_id == "foobaz"
 
     def test_existing(self):
-        assert self.post.get_existing() == None
-        assert self.post.is_known == False
+        assert self.post.get_existing() is None
+        assert self.post.is_known is False
         self.post.set_existing({"foo": "baz"})
         assert self.post.get_existing() == {"foo": "baz"}
-        assert self.post.is_known == True
+        assert self.post.is_known is True

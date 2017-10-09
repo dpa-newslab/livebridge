@@ -17,7 +17,6 @@ import asynctest
 import unittest
 import unittest.mock
 import os.path
-from io import StringIO
 from botocore.exceptions import ClientError
 from livebridge.controldata.controlfile import ControlFile
 
@@ -32,7 +31,7 @@ class ControlFileTest(asynctest.TestCase):
         self.control.config = {
             "access_key": "foo",
             "secret_key": "baz",
-            "region":  "eu-central-1",
+            "region": "eu-central-1",
             "sqs_s3_queue": "http://foo-queue",
         }
 
@@ -65,7 +64,7 @@ class ControlFileTest(asynctest.TestCase):
         await self.control._purge_sqs_queue()
         assert self.control._sqs_client.purge_queue.call_count == 1
         assert self.control._sqs_client.purge_queue.call_args == \
-                    asynctest.call(QueueUrl='http://foo-queue')
+            asynctest.call(QueueUrl='http://foo-queue')
 
     async def test_purge_sqs_queue_failing(self):
         self.control._sqs_client = asynctest.MagicMock()
@@ -74,7 +73,7 @@ class ControlFileTest(asynctest.TestCase):
         await self.control._purge_sqs_queue()
         assert self.control._sqs_client.purge_queue.call_count == 1
         assert self.control._sqs_client.purge_queue.call_args == \
-                    asynctest.call(QueueUrl='http://foo-queue')
+            asynctest.call(QueueUrl='http://foo-queue')
 
     @asynctest.ignore_loop
     def test_del(self):
@@ -94,7 +93,7 @@ class ControlFileTest(asynctest.TestCase):
         assert control_data["auth"]["live"]["api_key"] == "Foobar"
         assert control_data["bridges"][0]["source_id"] == "abcdefg"
         assert control_data["bridges"][0]["type"] == "liveblog"
-        assert control_data["bridges"][0]["endpoint"] ==  "https://example.com/api/"
+        assert control_data["bridges"][0]["endpoint"] == "https://example.com/api/"
         assert control_data["bridges"][0]["targets"][0]["event_id"] == "123456"
         assert control_data["bridges"][0]["targets"][0]["type"] == "scribble"
         assert control_data["bridges"][0]["targets"][0]["auth"] == "dev"
@@ -137,8 +136,8 @@ class ControlFileTest(asynctest.TestCase):
 
     async def test_controlfile_without_auth(self):
         file_path = os.path.join(os.path.dirname(__file__), "files", "control-no-auth.yaml")
-        control = await self.control.load(file_path, resolve_auth=True)
-        assert 1 == True
+        res = await self.control.load(file_path, resolve_auth=True)
+        assert list(res.keys()) == ["bridges"]
 
     async def test_check_local_changes(self):
         path = "/tmp/test.txt"
@@ -148,19 +147,19 @@ class ControlFileTest(asynctest.TestCase):
         with asynctest.patch("os.stat") as patched:
             patched.return_value = mocked_stat
             res = await self.control._check_local_changes(path)
-            assert res == True
+            assert res is True
 
             # raise exception
             patched.side_effect = Exception("Test-Error")
             res = await self.control._check_local_changes(path)
-            assert res == False
+            assert res is False
 
     async def test_sqs_check_control_change_inactive(self):
         self.control._sqs_client = asynctest.MagicMock()
         self.control._sqs_client.receive_message = asynctest.CoroutineMock(return_value=[])
         self.control.config["sqs_s3_queue"] = False
         res = await self.control.check_control_change()
-        assert res ==  False
+        assert res is False
         assert self.control._sqs_client.receive_message.call_count == 0
 
     async def test_sqs_check_control_change(self):
@@ -195,19 +194,19 @@ class ControlFileTest(asynctest.TestCase):
         sqs_client.delete_message = asynctest.CoroutineMock(return_value=True)
         self.control._sqs_client = sqs_client
         res = await self.control.check_control_change()
-        assert res == True
+        assert res is True
 
     async def test_save(self):
         self.control._save_to_s3 = asynctest.CoroutineMock(return_value=True)
         self.control._save_to_file = asynctest.CoroutineMock(return_value=True)
         res = await self.control.save("tmp/test", {"foo": "bla"})
-        assert res == True
+        assert res is True
         assert self.control._save_to_file.call_count == 1
         assert self.control._save_to_file.call_args == asynctest.call('tmp/test', 'foo: bla\n')
         assert self.control._save_to_s3.call_count == 0
 
         res = await self.control.save("s3://tmp/test", {"foo": "bla"})
-        assert res == True
+        assert res is True
         assert self.control._save_to_file.call_count == 1
         assert self.control._save_to_s3.call_count == 1
         assert self.control._save_to_s3.call_args == asynctest.call('s3://tmp/test', 'foo: bla\n')
@@ -216,13 +215,13 @@ class ControlFileTest(asynctest.TestCase):
     async def test_to_file(self):
         path = "/tmp/baz.txt"
         data = 'foo: "bar"'
-        res = await self.control._save_to_file(path, data)
+        await self.control._save_to_file(path, data)
         assert open.return_value.write.call_count == 1
         assert open.return_value.write.call_args[0] == unittest.mock._Call((data,))
 
         with self.assertRaises(OSError):
             path = "/foo/bar/check/baz.txt"
-            res = await self.control._save_to_file(path, data)
+            await self.control._save_to_file(path, data)
             assert open.return_value.write.call_count == 0
 
     async def test_save_to_s3(self):
@@ -231,4 +230,4 @@ class ControlFileTest(asynctest.TestCase):
         path = "s3://foo/bar/baz.txt"
         data = 'foo: "bar"'
         res = await self.control._save_to_s3(path, data)
-        assert res == True
+        assert res is True

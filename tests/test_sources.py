@@ -19,10 +19,13 @@ from livebridge.base import BaseSource, PollingSource, StreamingSource
 from livebridge.storages.base import BaseStorage
 from livebridge.components import get_source, add_source
 
+
 class MockSource(StreamingSource):
     type = "test"
+
     def __init__(self, *, config={}, **kwargs):
         self.foo = config.get("foo")
+
 
 class BaseSourcesTest(asynctest.TestCase):
 
@@ -56,7 +59,7 @@ class BaseSourcesTest(asynctest.TestCase):
     @asynctest.ignore_loop
     def test_get_source_unkown(self):
         source = get_source({"type": "foo"})
-        assert source == None
+        assert source is None
 
     async def test_filter_new_posts(self):
         source = BaseSource()
@@ -94,4 +97,4 @@ class BaseSourcesTest(asynctest.TestCase):
         # no data from storage
         source._db_client.get_last_updated = asynctest.CoroutineMock(return_value=None)
         last_updated = await source.get_last_updated("foo")
-        assert last_updated == None
+        assert last_updated is None

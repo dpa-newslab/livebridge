@@ -18,9 +18,10 @@ import logging
 from collections import OrderedDict
 from livebridge.controldata.controlfile import ControlFile
 from livebridge.controldata.dynamo import DynamoControl
-from livebridge.controldata.storage  import StorageControl
+from livebridge.controldata.storage import StorageControl
 
 logger = logging.getLogger(__name__)
+
 
 class ControlData(object):
 
@@ -92,11 +93,11 @@ class ControlData(object):
             control_data = self._resolve_auth(control_data)
 
         # detect changes
-        self.new_bridges = [OrderedDict(n) for n in control_data.get("bridges",[]) if n not in self.control_data.get("bridges",[])]
-        self.removed_bridges = [OrderedDict(r) for r in self.control_data.get("bridges",[]) if r not in control_data.get("bridges",[])]
-
+        self.new_bridges = [OrderedDict(n) for n in control_data.get("bridges", [])
+                            if n not in self.control_data.get("bridges", [])]
+        self.removed_bridges = [OrderedDict(r) for r in self.control_data.get("bridges", [])
+                                if r not in control_data.get("bridges", [])]
         self.control_data = control_data
-
 
     async def save(self, path, data):
         await self._set_client(path)

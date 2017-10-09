@@ -37,42 +37,44 @@ class ConverterTest(asynctest.TestCase):
         assert converter.source == "foo"
         assert converter.target == "baz"
 
-        assert None == get_converter("foo", "foobaz")
+        assert get_converter("foo", "foobaz") is None
 
     async def test_not_implemented(self):
         converter = MockConverter()
         try:
-            c = await converter.convert({})
+            await converter.convert({})
         except Exception as e:
             assert type(e) == NotImplementedError
 
     async def test_download_image_without_file_ext(self):
         pic_data = {
-            "href": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/7966946203766696aed8d067b04972b3a8f695aac885b51675d4117b388c1454",
+            "href": "http://newslab-liveblog-demo.s3-eu-central-1.amazonaws.com/" +
+                    "7966946203766696aed8d067b04972b3a8f695aac885b51675d4117b388c1454",
             "media": "7966946203766696aed8d067b04972b3a8f695aac885b51675d4117b388c1454",
             "mimetype": "image/jpeg",
         }
         filepath = await self.converter._download_image(pic_data)
-        assert filepath.startswith("/tmp/") == True
-        assert filepath.endswith("-{}.jpg".format(os.path.basename(pic_data["media"]))) == True
-        assert os.path.exists(filepath) == True
+        assert filepath.startswith("/tmp/") is True
+        assert filepath.endswith("-{}.jpg".format(os.path.basename(pic_data["media"]))) is True
+        assert os.path.exists(filepath) is True
         await self.converter.remove_images([filepath])
-        assert os.path.exists(filepath) == False
+        assert os.path.exists(filepath) is False
 
     async def test_download_image_with_file_ext(self):
         pic_data = {
-            "href": "https://dpa.liveblog.pro/dpa/2017013113018/47ac1bb4827ac9c8e214d3d35c202696be4569bd8d5324fd4db1548b3edf81e8.jpg",
+            "href": "https://dpa.liveblog.pro/dpa/2017013113018/" +
+                    "47ac1bb4827ac9c8e214d3d35c202696be4569bd8d5324fd4db1548b3edf81e8.jpg",
             "media": "dpa/2017013113018/b5f35ff838f87cfe73961dec8f4db10d42e1db816933b1d1816afb48ed96fb59.jpg",
             "mimetype": "image/jpeg",
         }
         filepath = await self.converter._download_image(pic_data)
-        assert filepath.startswith("/tmp/") == True
-        assert filepath.endswith(".jpg.jpg") == False
-        assert filepath.endswith("-{}".format(os.path.basename(pic_data["media"]))) == True
-        assert os.path.exists(filepath) == True
+        assert filepath.startswith("/tmp/") is True
+        assert filepath.endswith(".jpg.jpg") is False
+        assert filepath.endswith("-{}".format(os.path.basename(pic_data["media"]))) is True
+        assert os.path.exists(filepath) is True
         await self.converter.remove_images([filepath])
-        assert os.path.exists(filepath) == False
+        assert os.path.exists(filepath) is False
 
     async def test_remove_invalid_images(self):
         res = await self.converter.remove_images(["/non/path/file"])
-        assert res == None
+        assert res is None

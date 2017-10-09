@@ -28,6 +28,7 @@ logger = logging.getLogger(__name__)
 class MongoStorage(BaseStorage):
 
     _instance = None
+
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
             cls._instance = super(MongoStorage, cls).__new__(cls)
@@ -59,14 +60,14 @@ class MongoStorage(BaseStorage):
             db = await self.db
             collections = await db.collection_names()
             created = False
-            if not self.table_name in collections:
+            if self.table_name not in collections:
                 # create table
                 logger.info("Creating MongoDB collection [{}]".format(self.table_name))
                 await db.create_collection(self.table_name)
-                await db[self.table_name].create_index([("target_id", DESCENDING),("post_id",DESCENDING)])
+                await db[self.table_name].create_index([("target_id", DESCENDING), ("post_id", DESCENDING)])
                 created = True
             # create control collection if not already created.
-            if not self.control_table_name in collections:
+            if self.control_table_name not in collections:
                 # create table
                 logger.info("Creating MongoDB control data collection [{}]".format(self.control_table_name))
                 await db.create_collection(self.control_table_name)
@@ -94,7 +95,7 @@ class MongoStorage(BaseStorage):
         try:
             object_ids = list(map(lambda x: ObjectId(x), post_ids))
             coll = (await self.db)[self.table_name]
-            cursor = coll.find({"source_id": source_id, "_id": { "$in": object_ids}})
+            cursor = coll.find({"source_id": source_id, "_id": {"$in": object_ids}})
             async for doc in cursor:
                 results.append(str(doc["_id"]))
         except Exception as exc:
@@ -116,19 +117,20 @@ class MongoStorage(BaseStorage):
 
     async def insert_post(self, **kwargs):
         try:
+            target_id = kwargs.get("target_id")
             doc = {
-               "target_id": kwargs.get("target_id"),
+                "target_id": target_id,
                 "post_id": str(kwargs.get("post_id")),
                 "source_id": kwargs.get("source_id"),
                 "text": kwargs.get("text") or " ",
                 "sticky": str(int(kwargs.get("sticky", False))),
                 "created": kwargs.get("created"),
                 "updated": kwargs.get("updated"),
-                "target_id": kwargs.get("target_id"),
+                "target_id": target_id,
                 "target_doc": kwargs.get("target_doc", "")
             }
             coll = (await self.db)[self.table_name]
-            res = await coll.insert_one(doc)
+            await coll.insert_one(doc)
             logger.info("[DB] Post {} {} was saved!".format(kwargs["source_id"], kwargs["post_id"]))
             return True
         except Exception as exc:
@@ -138,15 +140,16 @@ class MongoStorage(BaseStorage):
 
     async def update_post(self, **kwargs):
         try:
+            target_id = kwargs.get("target_id")
             doc = {
-               "target_id": kwargs.get("target_id"),
+                "target_id": target_id,
                 "post_id": str(kwargs.get("post_id")),
                 "source_id": kwargs.get("source_id"),
                 "text": kwargs.get("text") or " ",
                 "sticky": str(int(kwargs.get("sticky", 0))),
                 "created": kwargs.get("created"),
                 "updated": kwargs.get("updated"),
-                "target_id": kwargs.get("target_id"),
+                "target_id": target_id,
                 "target_doc": kwargs.get("target_doc", "")
             }
             coll = (await self.db)[self.table_name]

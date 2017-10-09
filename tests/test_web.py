@@ -16,8 +16,8 @@
 import asynctest
 import unittest
 from aiohttp.test_utils import AioHTTPTestCase, unittest_run_loop
-from aiohttp import web
 from livebridge.web import WebApi
+
 
 class WebApiTestCase(AioHTTPTestCase):
 
@@ -26,12 +26,12 @@ class WebApiTestCase(AioHTTPTestCase):
         Override the get_app method to return your application.
         """
         self.config = {
-                "host": "localhost",
-                "port": 9990,
-                "auth": { "user": "test", "password": "testpwd"}}
+            "host": "localhost",
+            "port": 9990,
+            "auth": {"user": "test", "password": "testpwd"}}
         self.controller = asynctest.MagicMock(spec="livebridge.controller.Controller")
         self.server = WebApi(config=self.config, controller=self.controller, loop=self.loop)
-        return self.server.app#web.Application()
+        return self.server.app
 
     @unittest_run_loop
     async def test_init_with_loop(self):
@@ -61,7 +61,7 @@ class WebApiTestCase(AioHTTPTestCase):
         request = await self.client.request("POST", "/api/v1/session", data=data)
         assert request.status == 200
         res = await request.json()
-        assert res.get("token") != None
+        assert res.get("token") is not None
         return res["token"]
 
     # the unittest_run_loop decorator can be used in tandem with
@@ -129,7 +129,7 @@ class WebApiTestCase(AioHTTPTestCase):
         data = '{"foo": "bla"}'
         headers = {"X-Auth-Token": await self._get_token()}
         self.controller.save_control_data = asynctest.CoroutineMock(return_value=True)
-        res= await self.client.request("PUT", "/api/v1/controldata", data=data, headers=headers)
+        res = await self.client.request("PUT", "/api/v1/controldata", data=data, headers=headers)
         assert res.status == 200
         assert (await res.json()) == {"ok": "true"}
         assert self.controller.save_control_data.call_count == 1
@@ -137,21 +137,21 @@ class WebApiTestCase(AioHTTPTestCase):
 
         # saving fails
         self.controller.save_control_data = asynctest.CoroutineMock(return_value=False)
-        res= await self.client.request("PUT", "/api/v1/controldata", data=data, headers=headers)
+        res = await self.client.request("PUT", "/api/v1/controldata", data=data, headers=headers)
         assert res.status == 400
         assert (await res.json()) == {"error": "Controldata was not saved."}
         assert self.controller.save_control_data.call_count == 1
 
         # no payload
         self.controller.save_control_data = asynctest.CoroutineMock(return_value=False)
-        res= await self.client.request("PUT", "/api/v1/controldata", data=None, headers=headers)
+        res = await self.client.request("PUT", "/api/v1/controldata", data=None, headers=headers)
         assert res.status == 400
         assert (await res.json()) == {"error": "No request body was found."}
         assert self.controller.save_control_data.call_count == 0
 
         # exception gets raised
         self.controller.save_control_data = asynctest.CoroutineMock(side_effect=Exception("Test-Error"))
-        res= await self.client.request("PUT", "/api/v1/controldata", data=data, headers=headers)
+        res = await self.client.request("PUT", "/api/v1/controldata", data=data, headers=headers)
         assert res.status == 500
         assert (await res.json()) == {"error": "Internal Server Error"}
         assert self.controller.save_control_data.call_count == 1

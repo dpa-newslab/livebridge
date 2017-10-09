@@ -18,7 +18,7 @@ import logging
 from datetime import datetime
 from sqlalchemy_aio import ASYNCIO_STRATEGY
 from sqlalchemy import create_engine, MetaData, Table, Column,\
-                       Integer, String, Text, Boolean, DateTime
+    Integer, String, Text, Boolean, DateTime
 from sqlalchemy.schema import CreateTable
 from sqlalchemy.sql import select
 from livebridge.storages.base import BaseStorage
@@ -26,12 +26,14 @@ from livebridge.storages.base import BaseStorage
 
 logger = logging.getLogger(__name__)
 
-"""
-http://docs.sqlalchemy.org/en/latest/core/engines.html
-"""
+
 class SQLStorage(BaseStorage):
+    """
+    http://docs.sqlalchemy.org/en/latest/core/engines.html
+    """
 
     _instance = None
+
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
             cls._instance = super(SQLStorage, cls).__new__(cls)
@@ -61,16 +63,14 @@ class SQLStorage(BaseStorage):
                      Column("text", Text()),
                      Column("created", DateTime()),
                      Column("updated", DateTime(), index=True),
-                     Column("target_doc", Text()),
-                    )
+                     Column("target_doc", Text()))
 
     def _get_control_table(self):
         return Table(self.control_table_name, MetaData(),
                      Column("id", Integer(), primary_key=True),
                      Column("type", String(150), index=True),
                      Column("data", Text()),
-                     Column("updated", DateTime())
-                    )
+                     Column("updated", DateTime()))
 
     async def setup(self):
         """Setting up SQL table, if it not exists."""
@@ -107,11 +107,11 @@ class SQLStorage(BaseStorage):
             db = await self.db
             table = self._get_table()
             result = await db.execute(
-                            table.select().where(
-                                table.c.source_id == source_id
-                            ).order_by(
-                                table.c.updated.desc()
-                            ).limit(1))
+                table.select().where(
+                    table.c.source_id == source_id
+                ).order_by(
+                    table.c.updated.desc()
+                ).limit(1))
             item = await result.first()
             tstamp = item["updated"] if item else None
             return tstamp
@@ -179,18 +179,18 @@ class SQLStorage(BaseStorage):
             table = self._get_table()
             sql = table.update().where(
                 table.c.target_id == kwargs.get("target_id")
-                ).where(
-                    table.c.post_id == kwargs.get("post_id")
-                ).values(
-                    target_id=kwargs.get("target_id"),
-                    post_id=kwargs.get("post_id"),
-                    source_id=kwargs.get("source_id"),
-                    text=kwargs.get("text"),
-                    sticky=int(kwargs.get("sticky", "0")),
-                    created=kwargs.get("created"),
-                    updated=kwargs.get("updated"),
-                    target_doc=json.dumps(kwargs.get("target_doc")) if kwargs.get("target_doc") else ""
-                )
+            ).where(
+                table.c.post_id == kwargs.get("post_id")
+            ).values(
+                target_id=kwargs.get("target_id"),
+                post_id=kwargs.get("post_id"),
+                source_id=kwargs.get("source_id"),
+                text=kwargs.get("text"),
+                sticky=int(kwargs.get("sticky", "0")),
+                created=kwargs.get("created"),
+                updated=kwargs.get("updated"),
+                target_doc=json.dumps(kwargs.get("target_doc")) if kwargs.get("target_doc") else ""
+            )
             await db.execute(sql)
             logger.info("[DB] Post {} {} was updated!".format(kwargs.get("post_id"), kwargs.get("target_id")))
             return True
@@ -218,7 +218,7 @@ class SQLStorage(BaseStorage):
             db = await self.db
             table = self._get_control_table()
             sql = table.select().where(table.c.type == "control")
-            if updated: # check for updated timestamp
+            if updated:  # check for updated timestamp
                 sql = sql.where(table.c.updated != updated)
             sql = sql.limit(1)
             result = await db.execute(sql)
@@ -237,7 +237,7 @@ class SQLStorage(BaseStorage):
             db = await self.db
             table = self._get_control_table()
             existing = await self.get_control()
-            updated=datetime.now()
+            updated = datetime.now()
             if existing:
                 # update
                 sql = table.update().where(table.c.type == "control").values(

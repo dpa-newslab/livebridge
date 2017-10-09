@@ -31,6 +31,7 @@ class DynamoClient(BaseStorage):
     date_fmt = "%Y-%m-%dT%H:%M:%S+00:00"
 
     _instance = None
+
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
             cls._instance = super(DynamoClient, cls).__new__(cls)
@@ -150,7 +151,7 @@ class DynamoClient(BaseStorage):
                 "target_id": {"S": kwargs.get("target_id")},
                 "post_id": {"S": str(kwargs.get("post_id"))},
                 "source_id": {"S": kwargs.get("source_id")},
-                "text":  {"S": kwargs.get("text") or " "},
+                "text": {"S": kwargs.get("text") or " "},
                 "sticky": {"N": str(int(kwargs.get("sticky", False)))},
                 "created": {"S": datetime.strftime(kwargs.get("created"), self.date_fmt)},
                 "updated": {"S": datetime.strftime(kwargs.get("updated"), self.date_fmt)},

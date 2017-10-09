@@ -75,10 +75,10 @@ def main(**kwargs):
     for signame in ('SIGINT', 'SIGTERM'):
         loop.add_signal_handler(getattr(signal, signame), functools.partial(loop.stop))
 
-    livebridge = LiveBridge(loop=loop, controller=controller)
+    lb = LiveBridge(loop=loop, controller=controller)
 
     if kwargs.get("loop"):
-        return livebridge
+        return lb
 
     # run
     try:
@@ -86,6 +86,6 @@ def main(**kwargs):
     finally:
         if config.WEB.get("host") and config.WEB.get("port"):
             server.shutdown()
-        livebridge.shutdown()
+        lb.shutdown()
         loop.stop()
         loop.close()

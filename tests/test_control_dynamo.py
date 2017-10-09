@@ -28,7 +28,7 @@ class DynamoControlTest(asynctest.TestCase):
         assert self.control._db_client == client
 
     async def test_new_db_client(self):
-        assert self.control._db_client == None
+        assert self.control._db_client is None
         client = await self.control.db_client
         assert type(client) == DynamoClient
         assert self.control._db_client == client
@@ -42,14 +42,14 @@ class DynamoControlTest(asynctest.TestCase):
         self.control._checksum = "no-foobaz"
         self.control._get_checksum = asynctest.CoroutineMock(return_value="foobaz")
         res = await self.control.check_control_change()
-        assert res == True
+        assert res is True
         assert self.control._load_control_data.call_count == 1
         self.control._get_checksum.called_once_with(data)
 
     async def test_check_control_change_with_exception(self):
         self.control._load_control_data = asynctest.CoroutineMock(side_effect=Exception())
         res = await self.control.check_control_change()
-        assert res == False
+        assert res is False
         assert self.control._load_control_data.call_count == 1
 
     async def test_load(self):
@@ -72,6 +72,6 @@ class DynamoControlTest(asynctest.TestCase):
         path = "/tmp/lb_dynamo_test_save.txt"
         data = {"foo": "bla"}
         res = await self.control.save(path, data)
-        assert res == True
+        assert res is True
         assert self.control._db_client.save_control.call_count == 1
         assert self.control._db_client.save_control.call_args[0][0] == data

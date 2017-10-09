@@ -51,7 +51,7 @@ class MongoStorageTests(asynctest.TestCase):
     def test_init(self):
         assert self.client.dsn == self.dsn
         assert self.client.table_name == self.table_name
-        assert issubclass(MongoStorage, BaseStorage) == True
+        assert issubclass(MongoStorage, BaseStorage) is True
 
     async def test_db(self):
         db = await self.client.db
@@ -78,29 +78,30 @@ class MongoStorageTests(asynctest.TestCase):
 
     async def test_setup(self):
         self.client._db = asynctest.MagicMock()
-        self.client._db.collection_names = asynctest.CoroutineMock(return_value=[self.table_name, self.control_table_name])
+        self.client._db.collection_names = asynctest.CoroutineMock(
+            return_value=[self.table_name, self.control_table_name])
         self.client._db.create_collection = asynctest.CoroutineMock(return_value=True)
         self.client._db[self.table_name].create_index = asynctest.CoroutineMock(return_value=True)
         res = await self.client.setup()
-        assert res == False
+        assert res is False
         assert self.client._db.create_collection.call_count == 0
         assert self.client._db[self.table_name].create_index.call_count == 0
 
         self.client._db.collection_names = asynctest.CoroutineMock(return_value=[self.control_table_name])
         res = await self.client.setup()
-        assert res == True
+        assert res is True
         assert self.client._db.create_collection.call_count == 1
         assert self.client._db[self.table_name].create_index.call_count == 1
 
         self.client._db.collection_names = asynctest.CoroutineMock(return_value=[self.table_name])
         res = await self.client.setup()
-        assert res == True
+        assert res is True
         assert self.client._db.create_collection.call_count == 2
         assert self.client._db[self.table_name].create_index.call_count == 1
 
         self.client._db.collection_names = asynctest.CoroutineMock(return_value=[])
         res = await self.client.setup()
-        assert res == True
+        assert res is True
         assert self.client._db.create_collection.call_count == 4
         assert self.client._db[self.table_name].create_index.call_count == 2
 
@@ -108,9 +109,9 @@ class MongoStorageTests(asynctest.TestCase):
         self.client._db = asynctest.MagicMock()
         self.client._db.collection_names = asynctest.CoroutineMock(side_effect=Exception("Test-Error"))
         res = await self.client.setup()
-        assert res == False
+        assert res is False
 
-    async def test_get_last_updated(self):#, mock_cursor):
+    async def test_get_last_updated(self):
         item = {"updated": datetime.strptime("2016-10-19T10:13:43+00:00", "%Y-%m-%dT%H:%M:%S+00:00")}
         cursor = MockGenerator([item])
         cursor.sort = asynctest.MagicMock(spec=AsyncIOMotorCursor)
@@ -128,14 +129,14 @@ class MongoStorageTests(asynctest.TestCase):
         # no date
         cursor.data = []
         res = await self.client.get_last_updated("source")
-        assert res == None
+        assert res is None
 
     async def test_get_last_updated_failing(self):
         coll = asynctest.MagicMock(spec=AsyncIOMotorCollection)
         coll.find.side_effect = Exception("Test-Error")
         self.client._db = {self.table_name: coll}
         res = await self.client.get_last_updated("source")
-        assert res == None
+        assert res is None
 
     async def test_insert_post(self):
         params = {"target_id": "target-id",
@@ -150,7 +151,7 @@ class MongoStorageTests(asynctest.TestCase):
         coll.insert_one = asynctest.CoroutineMock(return_value=True)
         self.client._db = {self.table_name: coll}
         res = await self.client.insert_post(**params)
-        assert res == True
+        assert res is True
         assert coll.insert_one.call_count == 1
         assert coll.insert_one.call_args[0][0]["created"] == params["created"]
         assert coll.insert_one.call_args[0][0]["sticky"] == "1"
@@ -158,7 +159,7 @@ class MongoStorageTests(asynctest.TestCase):
         # failing
         coll.insert_one.side_effect = Exception("Test-Error")
         res = await self.client.insert_post(**params)
-        assert res == False
+        assert res is False
 
     async def test_update_post(self):
         params = {"target_id": "target-id",
@@ -167,13 +168,13 @@ class MongoStorageTests(asynctest.TestCase):
                   "text": "Text",
                   "created": datetime.utcnow(),
                   "sticky": True,
-                  "updated":  datetime.utcnow(),
+                  "updated": datetime.utcnow(),
                   "target_doc": {"foo": "doc"}}
         coll = asynctest.MagicMock(spec=AsyncIOMotorCollection)
         coll.replace_one = asynctest.CoroutineMock(return_value=True)
         self.client._db = {self.table_name: coll}
         res = await self.client.update_post(**params)
-        assert res == True
+        assert res is True
         assert coll.replace_one.call_count == 1
         assert coll.replace_one.call_args[0][0]["target_id"] == params["target_id"]
         assert coll.replace_one.call_args[0][0]["post_id"] == params["post_id"]
@@ -185,13 +186,14 @@ class MongoStorageTests(asynctest.TestCase):
         coll.replace_one.side_effect = Exception()
         self.client._db = {self.table_name: coll}
         res = await self.client.update_post(**{})
-        assert res == False
+        assert res is False
         assert coll.replace_one.call_count == 1
 
     async def test_get_known_posts(self):
-        source_id =  "source-id"
-        post_ids = [b"oneoneoneone", b"twotwotwotwo", b"threethreeth", b"fourfourfour", b"fivefivefive", b"sixsixsixsix"]
-        cursor = MockGenerator([{"_id": "twotwotwotwo"},{"_id": "fourfourfourfour"},{"_id": "sixsixsixsix"}])
+        source_id = "source-id"
+        post_ids = [b"oneoneoneone", b"twotwotwotwo", b"threethreeth", b"fourfourfour",
+                    b"fivefivefive", b"sixsixsixsix"]
+        cursor = MockGenerator([{"_id": "twotwotwotwo"}, {"_id": "fourfourfourfour"}, {"_id": "sixsixsixsix"}])
         coll = asynctest.MagicMock(spec=AsyncIOMotorCollection)
         coll.find.return_value = cursor
         self.client._db = {self.table_name: coll}
@@ -214,10 +216,10 @@ class MongoStorageTests(asynctest.TestCase):
         item = {
             "_id": ObjectId(b"012345678901"),
             "updated": datetime.strptime("2016-10-19T10:13:43+00:00", "%Y-%m-%dT%H:%M:%S+00:00"),
-            "target_doc": {"target":"doc"}
+            "target_doc": {"target": "doc"}
         }
         coll = asynctest.MagicMock(spec=AsyncIOMotorCollection)
-        coll.find_one = asynctest.CoroutineMock(return_value = item)
+        coll.find_one = asynctest.CoroutineMock(return_value=item)
         self.client._db = {self.table_name: coll}
         res = await self.client.get_post("target", "post")
         assert res["target_doc"] == {'target': 'doc'}
@@ -228,14 +230,14 @@ class MongoStorageTests(asynctest.TestCase):
         coll.find_one.side_effect = Exception("Test-Error")
         self.client._db = {self.table_name: coll}
         res = await self.client.get_post("target", "post")
-        assert res == None
+        assert res is None
 
     async def test_delete_post(self):
         coll = asynctest.MagicMock(spec=AsyncIOMotorCollection)
         coll.remove = asynctest.CoroutineMock(return_value=True)
         self.client._db = {self.table_name: coll}
         res = await self.client.delete_post("target", "post")
-        assert res == True
+        assert res is True
         assert coll.remove.call_count == 1
         assert coll.remove.call_args[0][0]["target_id"] == "target"
         assert coll.remove.call_args[0][0]["post_id"] == "post"
@@ -245,7 +247,7 @@ class MongoStorageTests(asynctest.TestCase):
         coll.remove.side_effect = Exception("Test-Error")
         self.client._db = {self.table_name: coll}
         res = await self.client.delete_post("target", "post")
-        assert res == False
+        assert res is False
         assert coll.remove.call_count == 1
 
     async def test_get_control(self):
@@ -255,10 +257,10 @@ class MongoStorageTests(asynctest.TestCase):
             'data': {"bridges": [{"foo": "bar"}], "auth": {"foo": "baz"}},
             '_id': ObjectId(b"012345678901"), 'type': 'control'}
         coll = asynctest.MagicMock(spec=AsyncIOMotorCollection)
-        coll.find_one = asynctest.CoroutineMock(return_value = item)
+        coll.find_one = asynctest.CoroutineMock(return_value=item)
         self.client._db = {self.control_table_name: coll}
         res = await self.client.get_control(updated=updated)
-        assert res["data"]["auth"] ==  {"foo": "baz"}
+        assert res["data"]["auth"] == {"foo": "baz"}
         assert res["data"]["bridges"] == [{"foo": "bar"}]
         assert res["updated"] == item["updated"]
         assert coll.find_one.call_count == 1
@@ -269,11 +271,11 @@ class MongoStorageTests(asynctest.TestCase):
         coll.find_one.side_effect = Exception("Test-Error")
         self.client._db = {self.control_table_name: coll}
         res = await self.client.get_control()
-        assert res == False
+        assert res is False
 
     async def test_get_control_failing_with_tstamp(self):
         res = await self.client.get_control(updated="string")
-        assert res == False
+        assert res is False
 
     async def test_save_control(self):
         data = {"foo": "bar"}
@@ -282,7 +284,7 @@ class MongoStorageTests(asynctest.TestCase):
         coll.replace_one = asynctest.CoroutineMock(return_value=update_res)
         self.client._db = {self.control_table_name: coll}
         res = await self.client.save_control(data)
-        assert res == True
+        assert res is True
         assert coll.replace_one.call_count == 1
         assert coll.replace_one.call_args[0][1]["data"] == data
         assert coll.replace_one.call_args[0][0] == {"type": "control"}
@@ -291,11 +293,11 @@ class MongoStorageTests(asynctest.TestCase):
         # replace operation fails
         update_res.modified_count = 0
         res = await self.client.save_control(data)
-        assert res == False
+        assert res is False
 
     async def test_save_control_failing(self):
         coll = asynctest.MagicMock(spec=AsyncIOMotorCollection)
         coll.replace_one.side_effect = Exception("Test-Error")
         self.client._db = {self.control_table_name: coll}
         res = await self.client.save_control(data={"foo": "baz"})
-        assert res == False
+        assert res is False

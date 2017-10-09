@@ -19,6 +19,7 @@ from livebridge.controldata import ControlData
 from livebridge.controldata.base import BaseControl
 from livebridge.controldata.controlfile import ControlFile
 
+
 class BaseControlTest(asynctest.TestCase):
 
     def setUp(self):
@@ -32,13 +33,14 @@ class BaseControlTest(asynctest.TestCase):
         with self.assertRaises(NotImplementedError):
             await self.base.load("path")
 
+
 class ControlDataTests(asynctest.TestCase):
 
     def setUp(self):
         self.config = {
             "access_key": "foo",
             "secret_key": "baz",
-            "region":  "eu-central-1",
+            "region": "eu-central-1",
             "sqs_s3_queue": "http://foo-queue",
         }
         self.control = ControlData(self.config)
@@ -47,7 +49,7 @@ class ControlDataTests(asynctest.TestCase):
         client = await self.control._set_client(path="file")
         assert type(self.control.control_client) == ControlFile
 
-        self.control.control_client =  "Foo"
+        self.control.control_client = "Foo"
         client = await self.control._set_client(path="file")
         assert client == "Foo"
 
@@ -56,13 +58,13 @@ class ControlDataTests(asynctest.TestCase):
         control_client.check_control_change = asynctest.CoroutineMock(return_value=True)
         self.control.control_client = control_client
         res = await self.control.check_control_change(control_path="/foo")
-        assert res == True
+        assert res is True
         assert control_client.check_control_change.call_count == 1
         assert control_client.check_control_change.call_args == asynctest.call(control_path="/foo")
 
     async def test_iter_bridges(self):
         file_path = os.path.join(os.path.dirname(__file__), "files", "control.yaml")
-        control = await self.control.load(file_path)
+        await self.control.load(file_path)
         bridges = self.control.list_bridges()
         assert len(bridges) == 2
         for b in bridges:
@@ -83,7 +85,7 @@ class ControlDataTests(asynctest.TestCase):
         assert control["auth"]["dev"]["api_key"] == "F00Baz"
         assert control["auth"]["live"]["api_key"] == "Foobar"
         assert control["bridges"][0]["source_id"] == "abcdefg"
-        assert control["bridges"][0]["endpoint"] ==  "https://example.com/api/"
+        assert control["bridges"][0]["endpoint"] == "https://example.com/api/"
         assert control["bridges"][0]["type"] == "liveblog"
         assert control["bridges"][0]["targets"][0]["event_id"] == "123456"
         assert control["bridges"][0]["targets"][0]["type"] == "scribble"
@@ -146,12 +148,13 @@ class ControlDataTests(asynctest.TestCase):
                     {'event_id': '123456', 'type': 'scribble', 'auth': 'dev'},
                 ],
                 'auth': 'slack'
-            }],
+            }
+        ],
             'auth': {
                 'dev': {'api_key': 'F00Baz', 'user': 'dev', 'password': 'pwd'},
                 'slack': {'token': 'token-str'},
-                'live': {'api_key': 'Foobar','user': 'prod','password': 'pwd2'}
-            }
+                'live': {'api_key': 'Foobar', 'user': 'prod', 'password': 'pwd2'}
+        }
         }
         cleared = self.control._remove_doubles(control)
         assert len(cleared["bridges"]) == 3
@@ -184,14 +187,13 @@ class ControlDataTests(asynctest.TestCase):
         path = "/tmp/foo"
         data = {"foo": "baz"}
         res = await self.control.save(path, data)
-        assert res == True
+        assert res is True
         assert self.control.control_client.save.call_count == 1
 
     @asynctest.ignore_loop
     def test_list_new_bridges(self):
         self.control.new_bridges = ["foo", "bar"]
         assert self.control.list_new_bridges() == ["foo", "bar"]
-
 
     @asynctest.ignore_loop
     def test_list_removed_bridges(self):

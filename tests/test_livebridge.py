@@ -16,6 +16,7 @@
 import asynctest
 from livebridge import LiveBridge
 
+
 class LoaderTests(asynctest.TestCase):
 
     def setUp(self):
@@ -41,12 +42,12 @@ class LoaderTests(asynctest.TestCase):
     @asynctest.ignore_loop
     def test_shutdown(self):
         self.lb.controller.clean_shutdown = asynctest.CoroutineMock(return_value=True)
-        self.lb.controller.tasked = [1,2]
+        self.lb.controller.tasked = [1, 2]
         self.lb.finish = asynctest.CoroutineMock(return_value=True)
         self.loop._default_executor = asynctest.MagicMock(shutdown=asynctest.CoroutineMock(return_value=True))
 
         self.lb.shutdown()
         assert self.lb.controller.clean_shutdown.call_count == 1
         assert self.lb.finish.call_count == 1
-        assert self.lb.finish.call_args == asynctest.call([1,2])
+        assert self.lb.finish.call_args == asynctest.call([1, 2])
         assert self.loop._default_executor.shutdown.call_count == 1
