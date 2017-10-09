@@ -186,3 +186,14 @@ class ControlDataTests(asynctest.TestCase):
         res = await self.control.save(path, data)
         assert res == True
         assert self.control.control_client.save.call_count == 1
+
+    @asynctest.ignore_loop
+    def test_list_new_bridges(self):
+        self.control.new_bridges = ["foo", "bar"]
+        assert self.control.list_new_bridges() == ["foo", "bar"]
+
+
+    @asynctest.ignore_loop
+    def test_list_removed_bridges(self):
+        self.control.removed_bridges = ["foo", "baz"]
+        assert self.control.list_removed_bridges() == ["foo", "baz"]

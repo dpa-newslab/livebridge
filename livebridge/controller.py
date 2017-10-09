@@ -154,12 +154,11 @@ class Controller(object):
             await self.sleep(interval)
 
         await self.remove_bridge(bridge)
-        return
 
     async def sleep(self, seconds):
         if self.shutdown is True:
             # if shutdown is requested, don't fall asleep again
-            return True
+            return False
 
         try:
             task = asyncio.ensure_future(asyncio.sleep(seconds))

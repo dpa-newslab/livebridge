@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 dpa-infocom GmbH
+# Copyright 2016, 2017 dpa-infocom GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,13 +29,14 @@ class LoaderTests(asynctest.TestCase):
 
     async def test_finish(self):
         tasks = [
-            asynctest.MagicMock(cancel=asynctest.CoroutineMock()),
-            asynctest.MagicMock(cancel=asynctest.CoroutineMock()),
-            asynctest.MagicMock(cancel=asynctest.CoroutineMock()),
+            asynctest.MagicMock(cancel=asynctest.CoroutineMock(), exception=asynctest.MagicMock(return_value=False)),
+            asynctest.MagicMock(cancel=asynctest.CoroutineMock(), exception=asynctest.MagicMock(return_value=False)),
+            asynctest.MagicMock(cancel=asynctest.CoroutineMock(), exception=asynctest.MagicMock(return_value=True))
         ]
         await self.lb.finish(tasks)
-        for t in tasks:
-            assert t.cancel.call_count == 1
+        assert tasks[0].cancel.call_count == 1
+        assert tasks[1].cancel.call_count == 1
+        assert tasks[2].cancel.call_count == 0
 
     @asynctest.ignore_loop
     def test_shutdown(self):

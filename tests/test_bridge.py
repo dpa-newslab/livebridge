@@ -17,6 +17,7 @@ import asyncio
 import asynctest
 from livebridge.base import BaseTarget, InvalidTargetResource
 from livebridge.bridge import LiveBridge
+from livebridge.components import get_hash
 from tests import load_json
 
 class LiveBridgeTest(asynctest.TestCase):
@@ -27,9 +28,10 @@ class LiveBridgeTest(asynctest.TestCase):
         self.source_id = 12345
         self.endpoint= "https://example.com/api"
         self.label= "Testlabel"
-        self.bridge = LiveBridge({"auth": {"user": self.user, "password": self.password}, "type": "liveblog",
+        self.bridge_config = {"auth": {"user": self.user, "password": self.password}, "type": "liveblog",
                                  "source_id": self.source_id, "endpoint": self.endpoint,
-                                 "label": self.label})
+                                 "label": self.label}
+        self.bridge = LiveBridge(self.bridge_config)
         self.bridge.api_client = asynctest.MagicMock()
         self.bridge.api_client.last_updated = None
         self.sc = BaseTarget()
@@ -38,6 +40,7 @@ class LiveBridgeTest(asynctest.TestCase):
         assert self.bridge.source_id == self.source_id
         assert self.bridge.endpoint == self.endpoint
         assert self.bridge.label == self.label
+        assert self.bridge.hash == get_hash(self.bridge_config)
 
     async def test_client_init(self):
         assert repr(self.bridge) == "<LiveBridge [Testlabel] https://example.com/api 12345>"
@@ -207,3 +210,8 @@ class LiveBridgeTest(asynctest.TestCase):
         res = await self.bridge.listen_ws()
         assert type(res) == asyncio.Task
         self.bridge.source.listen.assert_called_once_with(self.bridge.new_posts)
+
+    @asynctest.ignore_loop
+    def test_get_hash(self):
+        assert get_hash({"foo": "bar"}) == "dd63dafcbd4d5b28badfcaf86fb6fcdb"
+        assert get_hash([1,2,3,4,5,6]) == "199ff5b613f5dc25dff99df513516bf9"
