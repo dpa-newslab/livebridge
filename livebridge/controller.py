@@ -88,9 +88,13 @@ class Controller(object):
 
         # (re)start tasks or retry fetching control file
         if loaded and self.control_data:
-            logger.info("Using fetched control data.")
-            await self.remove_old_bridges()
-            await self.add_new_bridges()
+            try:
+                logger.info("Using fetched control data.")
+                await self.remove_old_bridges()
+                await self.add_new_bridges()
+            except Exception as exp:
+                logger.error("Error when adding/removing bridges")
+                logger.exception(exp)
             # listen to control changes
             self.tasked.append(asyncio.Task(self.check_control_change()))
         else:
@@ -133,6 +137,7 @@ class Controller(object):
                 await bridge.source.stop()
         except Exception as exc:
             logger.error("Error when stopping stream: {}".format(exc))
+            logger.exception(exc)
 
         logger.info("ENDING: {}".format(bridge))
         del self.bridges[bridge]
@@ -149,7 +154,7 @@ class Controller(object):
     async def run_poller(self, *, bridge, interval=180):
         # initialize liveblogs to watch
         while True and self.shutdown is not True:
-            logger.debug("Checked new posts for {} on {}".format(bridge.source_id, bridge.endpoint))
+            #logger.debug("Checked new posts for {} on {}".format(bridge.source_id, bridge.endpoint))
             await bridge.check_posts()
             await self.sleep(interval)
 
