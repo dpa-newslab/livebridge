@@ -58,6 +58,7 @@ class Controller(object):
             is_changed = await self.control_data.check_control_change(self.control_file)
             if is_changed is True:
                 asyncio.ensure_future(self.run())
+                logger.info("Stopped watching for control data changes.")
                 return True
             await self.sleep(self.check_control_interval)
 
