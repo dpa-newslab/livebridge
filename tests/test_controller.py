@@ -39,6 +39,13 @@ class ControllerTests(asynctest.TestCase):
         self.config.POLL_CONTROL_INTERVAL = 20
         self.controller = Controller(config=self.config, control_file=self.control_file)
 
+    def _get_mock_bridge(self):
+        bridge = asynctest.MagicMock()
+        bridge.check_posts = asynctest.CoroutineMock()
+        bridge.source = asynctest.MagicMock()
+        bridge.source.stop = asynctest.CoroutineMock()
+        return bridge
+
     @asynctest.ignore_loop
     def test_init(self):
         assert self.controller.config == self.config
@@ -95,6 +102,19 @@ class ControllerTests(asynctest.TestCase):
         assert self.controller.retry_run.called == 1
         assert self.controller.control_data is None
 
+    async def test_run_failing_missing_module(self):
+        self.controller.remove_old_bridges = asynctest.CoroutineMock(side_effect=Exception("Error in control-data"))
+        self.controller.check_control_change = asynctest.CoroutineMock(return_value=True)
+        self.controller.retry_run = asynctest.CoroutineMock(return_value=True)
+        assert len(self.controller.tasked) == 0
+        assert self.controller.control_data is None
+        await self.controller.run()
+        assert len(self.controller.tasked) == 1
+        assert type(self.controller.tasked[0]) == asyncio.Task
+        assert self.controller.remove_old_bridges.called == 1
+        assert self.controller.check_control_change.call_count == 1
+        assert self.controller.retry_run.called == 0
+
     async def test_run_failing_reuse_existing_control(self):
         # run with existing control
         self.controller.remove_old_bridges = asynctest.CoroutineMock(return_value=True)
@@ -132,14 +152,12 @@ class ControllerTests(asynctest.TestCase):
 
     async def test_clean_shutdown(self):
         # mock bridges
-        bridge1 = MagicMock()
-        bridge1.check_posts = asynctest.CoroutineMock()
-        bridge2 = MagicMock()
-        bridge2.check_posts = asynctest.CoroutineMock()
+        bridge1 = self._get_mock_bridge()
+        bridge2 = self._get_mock_bridge()
 
         # run mock bridges
         self.controller.run = asynctest.CoroutineMock()
-        self.controller.bridges = {bridge1: bridge1, bridge2: bridge2}
+        self.controller.bridges = {bridge1: bridge1.check_posts(), bridge2: bridge2.check_posts()}
         asyncio.Task(self.controller.run_poller(bridge=bridge1, interval=2))
         asyncio.Task(self.controller.run_poller(bridge=bridge2, interval=2))
 
@@ -186,7 +204,7 @@ class ControllerTests(asynctest.TestCase):
         self.controller.sleep = asynctest.CoroutineMock(return_value=True)
 
         # mock bridge
-        bridge1 = MagicMock()
+        bridge1 = self._get_mock_bridge()
         bridge1.check_posts = mock_routine
 
         self.controller.bridges = {bridge1: bridge1}
@@ -196,10 +214,10 @@ class ControllerTests(asynctest.TestCase):
         assert self.controller.sleep.call_count == 1
 
     async def test_run_poller_stopped(self):
-        # make some mock bridges
-        bridge1 = MagicMock()
-        bridge2 = MagicMock()
-        bridge1.check_posts = asynctest.CoroutineMock()
+        # mock bridges
+        bridge1 = self._get_mock_bridge()
+        bridge2 = self._get_mock_bridge()
+
         self.controller.bridges = {bridge1: bridge1, bridge2: bridge2}
         self.controller.shutdown = True
 
@@ -273,23 +291,31 @@ class ControllerTests(asynctest.TestCase):
             assert bridge.source.mode == "polling"
 
     async def test_remove_bridge(self):
-        bridge1 = MagicMock(source=MagicMock())
-        bridge2 = MagicMock()
-        bridge2.source = MagicMock()
-        bridge2.source.stop = asynctest.CoroutineMock(return_value=True)
-        self.controller.bridges = {bridge1: "foo", bridge2: "baz"}
+        # mock bridges
+        bridge1 = self._get_mock_bridge()
+        bridge2 = self._get_mock_bridge()
+        bridge3 = self._get_mock_bridge()
+        bridge3.source.stop.side_effect=Exception("bridge.source.stop Exception")
+        self.controller.bridges = {bridge1: "foo", bridge2: "baz", bridge3: "bar"}
 
         # remove bridge 1
         await self.controller.remove_bridge(bridge1)
-        assert len(self.controller.bridges) == 1
+        assert len(self.controller.bridges) == 2
         assert bridge1 not in self.controller.bridges.keys()
         assert bridge2 in self.controller.bridges.keys()
-        assert bridge2.source.stop.call_count == 0
+        assert bridge3 in self.controller.bridges.keys()
+        assert bridge1.source.stop.call_count == 1
 
         # remove bridge 2
         await self.controller.remove_bridge(bridge2)
+        assert len(self.controller.bridges) == 1
+        assert bridge2 not in self.controller.bridges.keys()
+        assert bridge3 in self.controller.bridges.keys()
+
+        # remove bridge 3
+        await self.controller.remove_bridge(bridge3)
         assert len(self.controller.bridges) == 0
-        assert bridge2.source.stop.call_count == 1
+        assert bridge3 not in self.controller.bridges.keys()
 
     async def test_sleep_cancelled(self):
         with asynctest.patch("asyncio.ensure_future") as mocked_ensure:

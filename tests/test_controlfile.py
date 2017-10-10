@@ -154,13 +154,15 @@ class ControlFileTest(asynctest.TestCase):
             res = await self.control._check_local_changes(path)
             assert res is False
 
-    async def test_sqs_check_control_change_inactive(self):
-        self.control._sqs_client = asynctest.MagicMock()
-        self.control._sqs_client.receive_message = asynctest.CoroutineMock(return_value=[])
+    async def test_check_control_empty_sqs_param(self):
+        self.control._check_local_changes = asynctest.CoroutineMock(return_value="foo")
+        self.control._check_s3_changes = asynctest.CoroutineMock(return_value="foo")
         self.control.config["sqs_s3_queue"] = False
         res = await self.control.check_control_change()
-        assert res is False
+        assert res is "foo"
         assert self.control._sqs_client.receive_message.call_count == 0
+        assert self.control._check_local_changes.call_count == 1
+        assert self.control._check_s3_changes.call_count == 0
 
     async def test_sqs_check_control_change(self):
         messages = {"Messages": [{"Body": '{"Records": []}', "ReceiptHandle": "baz"}]}
