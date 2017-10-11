@@ -155,7 +155,7 @@ class Controller(object):
     async def run_poller(self, *, bridge, interval=180):
         # initialize liveblogs to watch
         while True and self.shutdown is not True:
-            #logger.debug("Checked new posts for {} on {}".format(bridge.source_id, bridge.endpoint))
+            # logger.debug("Checked new posts for {} on {}".format(bridge.source_id, bridge.endpoint))
             await bridge.check_posts()
             await self.sleep(interval)
 

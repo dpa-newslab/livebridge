@@ -295,7 +295,7 @@ class ControllerTests(asynctest.TestCase):
         bridge1 = self._get_mock_bridge()
         bridge2 = self._get_mock_bridge()
         bridge3 = self._get_mock_bridge()
-        bridge3.source.stop.side_effect=Exception("bridge.source.stop Exception")
+        bridge3.source.stop.side_effect = Exception("bridge.source.stop Exception")
         self.controller.bridges = {bridge1: "foo", bridge2: "baz", bridge3: "bar"}
 
         # remove bridge 1
