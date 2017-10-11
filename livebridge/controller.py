@@ -93,13 +93,16 @@ class Controller(object):
                 logger.info("Using fetched control data.")
                 await self.remove_old_bridges()
                 await self.add_new_bridges()
+                # listen to control changes
+                self.tasked.append(asyncio.Task(self.check_control_change()))
+                return True
             except Exception as exp:
                 logger.error("Error when adding/removing bridges")
                 logger.exception(exp)
-            # listen to control changes
-            self.tasked.append(asyncio.Task(self.check_control_change()))
-        else:
-            self.tasked.append(asyncio.Task(self.retry_run()))
+
+        # something went wrong, retry again
+        self.tasked.append(asyncio.Task(self.retry_run()))
+        return False
 
     async def add_new_bridges(self):
         # append content bridges

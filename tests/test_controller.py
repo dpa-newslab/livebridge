@@ -112,8 +112,8 @@ class ControllerTests(asynctest.TestCase):
         assert len(self.controller.tasked) == 1
         assert type(self.controller.tasked[0]) == asyncio.Task
         assert self.controller.remove_old_bridges.called == 1
-        assert self.controller.check_control_change.call_count == 1
-        assert self.controller.retry_run.called == 0
+        assert self.controller.check_control_change.call_count == 0
+        assert self.controller.retry_run.called == 1
 
     async def test_run_failing_reuse_existing_control(self):
         # run with existing control
