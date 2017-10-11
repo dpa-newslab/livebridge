@@ -73,6 +73,4 @@ License
 
 **Apache License, Version 2.0 - see** LICENSE_ **for details.**
 
-Copyright 2016 dpa-infocom GmbH
-
 .. include:: links.rst
