@@ -68,7 +68,7 @@ class LiveBridge(object):
         try:
             posts = await self.source.poll()
             if posts:
-                asyncio.ensure_future(self.new_posts(posts))
+                await self.new_posts(posts)
         except Exception as exc:
             logger.error("Fatal checking {}{}".format(getattr(self, "endpoint", "-"), self.source_id))
             logger.exception(exc)
@@ -86,6 +86,10 @@ class LiveBridge(object):
         return True
 
     async def _action_done(self, future, item):
+        # set task as done
+        self.queue.task_done()
+
+        # handle action result
         exc = future.exception()
         if exc and type(exc) is InvalidTargetResource:
             logger.warning("POST {post.id} not distributed to {target.target_id} [{count}], no retry.".format(**item))
@@ -113,9 +117,9 @@ class LiveBridge(object):
         try:
             while True:
                 task = await self.queue.get()
-                self.queue.task_done()
                 if task["count"] > 10:
                     logger.debug("DISTRIBUTION ABORTED: {post.id} {target.target_id} [{count}]".format(**task))
+                    self.queue.task_done()
                     continue
                 asyncio.ensure_future(self._process_action(task))
         except asyncio.CancelledError:
@@ -132,5 +136,7 @@ class LiveBridge(object):
                     post = copy.deepcopy(new_post)
                     item = {"post": post, "target": target, "count": 0}
                     await self._put_to_queue(item)
+                # wait until post is processed
+                await self.queue.join()
         except Exception as exc:
             logger.error("Handling new posts failed [{}]: {}".format(self.source, exc))
