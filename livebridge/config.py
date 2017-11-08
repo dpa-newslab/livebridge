@@ -24,6 +24,9 @@ CONTROLFILE = os.environ.get("LB_CONTROLFILE")
 POLL_INTERVAL = int(os.environ.get("LB_POLL_INTERVAL", 60))
 POLL_CONTROL_INTERVAL = int(os.environ.get("LB_POLL_CONTROL_INTERVAL", 60))
 
+RETRY_MULTIPLIER = int(os.environ.get("LB_RETRY_MULTIPLIER", 5))
+MAX_RETRIES = int(os.environ.get("LB_MAX_RETRIES", 10))
+
 DB = {
     "dsn": os.environ.get("LB_DB_DSN"),
     "table_name": os.environ.get("LB_DB_TABLE", "livebridge_dev"),

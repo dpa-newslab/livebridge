@@ -37,6 +37,8 @@ Some global settings are defined in `livebridge/config.py`_. These values can be
 * **LB_POLL_INTERVAL** - interval in seconds for polling an API for new posts when using a polling-source, defaults to **60** seconds.
   **Please be attentitive how often you are polling your source. Liveticker have other constraints like RSS Feeds!**
 * **LB_POLL_CONTROL_INTERVAL** - interval in seconds for polling for control data changes, defaults to **60** seconds.
+* **LB_MAX_RETRIES** - number of maximal retries for redistributing a failed item, defaults to **10**.
+* **LB_RETRY_MULTIPLIER** - delay multiplier for retrying a failed distribution, defaults to **5** seconds. Retry delay is calclulated by multiplicating **LB_RETRY_MULTIPLIER** with the **number of the last retry**.
 
 To use MongoDB_ or any **SQL** database supported by SQLALchemy_ as storage backend, you have to specify the following two environment variables:
 

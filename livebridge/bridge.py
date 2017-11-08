@@ -16,6 +16,7 @@
 import asyncio
 import copy
 import logging
+from livebridge.config import RETRY_MULTIPLIER, MAX_RETRIES
 from livebridge.components import get_source, get_db_client, get_hash
 from livebridge.base import InvalidTargetResource
 
@@ -32,6 +33,8 @@ class LiveBridge(object):
         self.source_id = self.config.get("source_id")
         self.endpoint = self.config.get("endpoint")
         self.label = self.config.get("label", "-")
+        self.retry_multiplier = RETRY_MULTIPLIER
+        self.max_retries = MAX_RETRIES
         self.db = get_db_client()
         self.queue = asyncio.Queue()
         self.queue_task = None
@@ -97,9 +100,12 @@ class LiveBridge(object):
         elif exc:
             logger.error("TARGET ACTION FAILED, WILL RETRY: [{}] {} {} [{}]".format(
                 item["count"], item["post"], item["target"], exc))
-            item["count"] = item["count"] + 1
-            await self._sleep(5 * item["count"])
-            await self._put_to_queue(item)
+            if item["count"] >= self.max_retries:
+                logger.info("DISTRIBUTION ABORTED: {post.id} {target.target_id} [{count}]".format(**item))
+            else:
+                item["count"] = item["count"] + 1
+                await self._sleep(self.retry_multiplier * item["count"])
+                await self._put_to_queue(item)
         else:
             logger.info("POST {post.id} distributed to {target.target_id} [{count}]".format(**item))
 
@@ -117,10 +123,6 @@ class LiveBridge(object):
         try:
             while True:
                 task = await self.queue.get()
-                if task["count"] > 10:
-                    logger.debug("DISTRIBUTION ABORTED: {post.id} {target.target_id} [{count}]".format(**task))
-                    self.queue.task_done()
-                    continue
                 asyncio.ensure_future(self._process_action(task))
         except asyncio.CancelledError:
             pass
