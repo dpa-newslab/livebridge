@@ -112,5 +112,10 @@ class ControlData(object):
     def list_bridges(self):
         return self.control_data.get("bridges", [])
 
+    def is_auto_update(self):
+        if hasattr(self.control_client, "auto_update") and self.control_client.auto_update == False:
+            return False
+        return True
+
     async def check_control_change(self, control_path):
         return await self.control_client.check_control_change(control_path=control_path)

@@ -29,6 +29,7 @@ class Controller(object):
         self.control_file = control_file
         self.poll_interval = config.POLL_INTERVAL or 60
         self.check_control_interval = config.POLL_CONTROL_INTERVAL or 60
+        self.force_check_control_data = config.CONTROLFILE_WATCH
         self.tasked = []
         self.sleep_tasks = []
         self.bridges = {}
@@ -53,6 +54,10 @@ class Controller(object):
 
     async def check_control_change(self):
         # check for update events
+        if self.control_data.is_auto_update() is False and \
+            self.force_check_control_data != True:
+            logger.info("Watching for control data changes deactivated.")
+            return None
         logger.info("Starting watching for control data changes.")
         while True and self.shutdown is not True:
             is_changed = await self.control_data.check_control_change(self.control_file)

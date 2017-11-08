@@ -33,6 +33,7 @@ class ControlFile(BaseControl):
         self._s3_client = None
         self.config = AWS
         self._updated_local = None
+        self.auto_update = False
 
     def __del__(self):
         if self._sqs_client:

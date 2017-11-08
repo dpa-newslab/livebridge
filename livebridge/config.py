@@ -20,6 +20,7 @@ LOGLEVEL = os.environ.get("LB_LOGLEVEL", "INFO")
 LOGFILE = os.environ.get("LB_LOGFILE")
 
 CONTROLFILE = os.environ.get("LB_CONTROLFILE")
+CONTROLFILE_WATCH = bool(os.environ.get("LB_CONTROLFILE_WATCH"))
 
 POLL_INTERVAL = int(os.environ.get("LB_POLL_INTERVAL", 60))
 POLL_CONTROL_INTERVAL = int(os.environ.get("LB_POLL_CONTROL_INTERVAL", 60))
