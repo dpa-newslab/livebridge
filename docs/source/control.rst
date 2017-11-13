@@ -3,7 +3,7 @@
 Control bridges
 ===============
 
-The bridges will be specified by extra control data, which can be stored in an extra .yaml control file \
+The bridges will be specified by extra control-data, which can be stored in an extra .yaml control file \
 or as JSON in a database table.
 
 Control data in .yaml file
@@ -130,6 +130,25 @@ Authorization
 Credentials for service authorization are defined under **auth:**, in which the keys \
 like **dev** or **live** are later used for reference under **bridges:** and **targets:**. 
 
+Handling of changed control-data
+--------------------------------
+
+When using a SQL-based storage-backend, a running Livebridge process is constantly checking in the background \
+for changed control-data.
+
+If a change is detected (*means the control-data of a bridge was altered, removed or added*), the running process will start, \
+stop or restart the specific bridge(s).
+
+.. note::
+    You can define the interval (in seconds) for this check by setting **LB_POLL_CONTROL_INTERVAL**. Default is \
+    60 seconds.
+
+    Local control files aren't checked for changes automatically. By setting **LB_CONTROLFILE_WATCH** to **true**, this check \
+    can be forced.
+
+    When using DynamoDB as storage-backend, an *AWS SQS* queue has to be used for signalling changed control-data. This
+    queue can be configured via **LB_SQS_S3_QUEUE**.
+
 Bridges
 -------
 
@@ -146,7 +165,7 @@ If there's an **auth:** value for the source or target, the value will be matche
 and these values will be merged under **auth:** of the source/target. For example the last target from the example above will be \
 resolved from **Livebridge** to following Python dict structure:
 
-.. code-block:: python 
+.. code-block:: python
 
     { 
         'type': 'scribble',

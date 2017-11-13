@@ -72,9 +72,6 @@ class ControlData(object):
         return filtered
 
     async def _set_client(self, path):
-        if self.control_client:
-            return self.control_client
-
         # set client for control data
         if self.CONTROL_DATA_CLIENTS.get(path):
             self.control_client = self.CONTROL_DATA_CLIENTS.get(path)()
@@ -100,7 +97,8 @@ class ControlData(object):
         self.control_data = control_data
 
     async def save(self, path, data):
-        await self._set_client(path)
+        if self.control_client is None:
+            await self._set_client(path)
         return await self.control_client.save(path, data)
 
     def list_new_bridges(self):
@@ -113,9 +111,7 @@ class ControlData(object):
         return self.control_data.get("bridges", [])
 
     def is_auto_update(self):
-        if hasattr(self.control_client, "auto_update") and self.control_client.auto_update == False:
-            return False
-        return True
+        return self.control_client.auto_update
 
     async def check_control_change(self, control_path):
         return await self.control_client.check_control_change(control_path=control_path)

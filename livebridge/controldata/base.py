@@ -17,6 +17,9 @@
 
 class BaseControl(object):
 
+    # check for control data updates
+    auto_update = True
+
     async def check_control_change(self):
         raise NotImplementedError()
 

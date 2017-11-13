@@ -75,6 +75,19 @@ class ControllerTests(asynctest.TestCase):
         await self.controller.check_control_change()
         assert self.controller.control_data.check_control_change.call_count == 2
 
+    async def test_check_control_change_deactivated(self):
+        self.controller.force_check_control_data = False
+        self.controller.control_data = asynctest.MagicMock()
+        self.controller.control_data.is_auto_update = MagicMock(return_value=False)
+        res = await self.controller.check_control_change()
+        assert res is None
+
+        self.controller.force_check_control_data = True
+        self.controller.control_data.check_control_change = asynctest.CoroutineMock(side_effect=Exception("Test-Exception"))
+        with self.assertRaises(Exception):
+            await self.controller.check_control_change()
+        assert self.controller.control_data.check_control_change.call_count == 1
+
     async def test_run(self):
         self.controller.remove_old_bridges = asynctest.CoroutineMock(return_value=True)
         self.controller.add_new_bridges = asynctest.CoroutineMock(return_value=True)

@@ -58,6 +58,7 @@ class Controller(object):
             self.force_check_control_data != True:
             logger.info("Watching for control data changes deactivated.")
             return None
+
         logger.info("Starting watching for control data changes.")
         while True and self.shutdown is not True:
             is_changed = await self.control_data.check_control_change(self.control_file)

@@ -28,12 +28,13 @@ logger = logging.getLogger(__name__)
 
 class ControlFile(BaseControl):
 
+    auto_update = False
+
     def __init__(self):
         self._sqs_client = None
         self._s3_client = None
         self.config = AWS
         self._updated_local = None
-        self.auto_update = False
 
     def __del__(self):
         if self._sqs_client:

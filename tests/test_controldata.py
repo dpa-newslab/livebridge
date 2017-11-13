@@ -18,6 +18,7 @@ import os
 from livebridge.controldata import ControlData
 from livebridge.controldata.base import BaseControl
 from livebridge.controldata.controlfile import ControlFile
+from livebridge.controldata.storage import StorageControl
 
 
 class BaseControlTest(asynctest.TestCase):
@@ -46,12 +47,11 @@ class ControlDataTests(asynctest.TestCase):
         self.control = ControlData(self.config)
 
     async def test_set_client(self):
-        client = await self.control._set_client(path="file")
+        await self.control._set_client(path="file")
         assert type(self.control.control_client) == ControlFile
 
-        self.control.control_client = "Foo"
-        client = await self.control._set_client(path="file")
-        assert client == "Foo"
+        await self.control._set_client(path="sql")
+        assert type(self.control.control_client) == StorageControl
 
     async def test_check_control_change(self):
         control_client = asynctest.MagicMock()
@@ -199,3 +199,10 @@ class ControlDataTests(asynctest.TestCase):
     def test_list_removed_bridges(self):
         self.control.removed_bridges = ["foo", "baz"]
         assert self.control.list_removed_bridges() == ["foo", "baz"]
+
+    async def test_auto_update(self):
+        self.control.control_client = ControlFile()
+        assert self.control.is_auto_update() == False
+
+        await self.control._set_client(path="sql")
+        assert self.control.is_auto_update() == True
