@@ -28,13 +28,12 @@ logger = logging.getLogger(__name__)
 
 class ControlFile(BaseControl):
 
-    auto_update = False
-
     def __init__(self):
         self._sqs_client = None
         self._s3_client = None
         self.config = AWS
         self._updated_local = None
+        self.auto_update = True
 
     def __del__(self):
         if self._sqs_client:
@@ -123,6 +122,7 @@ class ControlFile(BaseControl):
 
     async def load(self, path, *, resolve_auth=False):
         if not path.startswith("s3://"):
+            self.auto_update = False
             body = self._load_from_file(path)
         else:
             body = await self._load_from_s3(path)

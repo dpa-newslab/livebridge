@@ -87,7 +87,9 @@ class ControlFileTest(asynctest.TestCase):
 
     async def test_load_from_file(self):
         file_path = os.path.join(os.path.dirname(__file__), "files", "control.yaml")
+        assert self.control.auto_update == True
         control_data = await self.control.load(file_path)
+        assert self.control.auto_update == False
         assert set(control_data.keys()) == set(["bridges", "auth"])
         assert control_data["auth"]["dev"]["api_key"] == "F00Baz"
         assert control_data["auth"]["live"]["api_key"] == "Foobar"

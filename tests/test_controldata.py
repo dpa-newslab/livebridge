@@ -202,6 +202,10 @@ class ControlDataTests(asynctest.TestCase):
 
     async def test_auto_update(self):
         self.control.control_client = ControlFile()
+        assert self.control.control_client.auto_update == True
+        file_path = os.path.join(os.path.dirname(__file__), "files", "control.yaml")
+        await self.control.control_client.load(file_path)
+        assert self.control.control_client.auto_update == False
         assert self.control.is_auto_update() == False
 
         await self.control._set_client(path="sql")
