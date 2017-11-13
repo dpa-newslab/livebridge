@@ -133,10 +133,10 @@ like **dev** or **live** are later used for reference under **bridges:** and **t
 Handling of changed control-data
 --------------------------------
 
-When using a SQL-based storage-backend, a running Livebridge process is constantly checking in the background \
+When using a SQL-based storage-backend, a running Livebridge process is constantly checking in the background
 for changed control-data.
 
-If a change is detected (*means the control-data of a bridge was altered, removed or added*), the running process will start, \
+If a change is detected (*means the control-data of a bridge was altered, removed or added*), the running process will start,
 stop or restart the specific bridge(s).
 
 .. note::
