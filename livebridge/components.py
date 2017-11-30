@@ -34,7 +34,7 @@ def get_source(conf):
         source_cls = SOURCE_MAP[conf.get("type")]
         client = source_cls(config=conf)
     else:
-        logger.warning("No source client found for {}.".format(conf))
+        logger.error("No source client found for {}.".format(conf))
     return client
 
 
@@ -46,7 +46,7 @@ def get_converter(source, target):
     try:
         return CONVERTER_MAP[source][target]()
     except KeyError:
-        logger.debug("no converter found for {} -> {}".format(source, target))
+        logger.error("No converter found for {} -> {}".format(source, target))
     return None
 
 
@@ -70,7 +70,7 @@ def get_target(conf):
         target_cls = TARGET_MAP[conf.get("type")]
         client = target_cls(config=conf)
     else:
-        logger.warning("No target client found for {}.".format(conf))
+        logger.error("No target client found for {}.".format(conf))
     return client
 
 
