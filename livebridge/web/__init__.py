@@ -15,6 +15,7 @@
 # limitations under the License.
 import logging
 import uuid
+import os.path
 from aiohttp import web
 
 logger = logging.getLogger(__name__)
@@ -26,7 +27,8 @@ async def auth_middleware(app, handler):
     async def middleware_handler(request):
         try:
             # check auth header
-            if not request.path == "/api/v1/session":
+            logger.info(request.path)
+            if not request.path in ["/", "/api/v1/session"]:
                 token = request.headers.get("X-Auth-Token")
                 if token not in _tokens.values():
                     return web.json_response({"error": "Invalid token."}, status=401)
@@ -81,6 +83,7 @@ class WebApi(object):
             return web.json_response({"error": "Auth credentials are missing."}, status=400)
 
         params = await request.post()
+        logger.debug(params)
         user = params.get('username', None)
         if (user == self.config["auth"]["user"] and
                 params.get('password', None) == self.config["auth"]["password"]):
@@ -93,7 +96,8 @@ class WebApi(object):
         return web.json_response({"error": "Method Not Allowed"}, status=405)
 
     async def index_handler(self, request):
-        return web.json_response({})
+        static_path = os.path.join(os.path.dirname(__file__), "static/index.html")
+        return web.FileResponse(static_path)
 
     async def control_get(self, request):
         control_data = await self.app["controller"].load_control_data(resolve_auth=False)

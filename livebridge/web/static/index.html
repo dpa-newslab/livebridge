@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+    <head>
+ <meta charset="UTF-8"> 
+        <title>Livebridge - Control Dashboard</title>
+		<script src="https://vuejs.org/js/vue.js"></script>
+        <!--script src="https://unpkg.com/vue"></script-->
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <!--script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4"></script-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    </head>
+	<style>
+#content {
+	margin-top:10px;
+}
+.bridge {
+  margin-bottom: 10px;
+  background-color: #DDD;
+}
+.source {
+  padding-left: 10px;
+}
+.targets {
+     margin-top: 10px;
+}
+.target-prop {
+}
+#footer-bar {
+	background-color: #DBDBDB;
+}
+
+	</style>
+    <body>
+	<header>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<a class="navbar-brand" href="#">Livebridge</a>
+		</nav>
+
+    <!--div class="container" id="login-form">
+      <form class="form-signin">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      </form>
+    </div--> <!-- /container -->
+</header>
+<div class="container-fluid" id="content">
+    <div v-for="(bridge, index) in control_data.bridges" class="bridge" :id="'bridge-'+index">
+        <div class="card source">
+            <h4 class="card-header">
+                        <span class="badge badge-primary">{{ bridge.type}}</span>
+                        {{ bridge.label }}
+            </h4>
+            <div class="card-body">
+                <!--h4 class="card-title"-->
+                <div class="card-text">
+                    <div v-for="(v, k) in displayProps(bridge)" v-if="k !== 'targets'">
+                        {{k }}: {{v}}
+                    </div>
+                </div>
+                <div>
+                <span v-for="target in bridge.targets" class="badge badge-success">
+                {{ target.type}}
+                </span>
+                </div>
+                <a href="#" class="btn-sm btn-primary" data-toggle="collapse" :data-target="'#targets-'+index" aria-expanded="false" :aria-controls="'#targets-'+index">Show targets</a>
+                <div class="targets collapse" :id="'targets-'+index">
+                    <ul v-for="target in bridge.targets" class="target list-group">
+                        <li class="list-group-item"><span class="badge badge-success">{{ target.type}}</span></li>
+                        <li v-for="(value, key) in displayProps(target)" class="target-prop list-group-item">
+                            {{ key }}: {{ value }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="invisible">
+		<nav class="navbar navbar-expand-lg navbar-light fixed-bottom hidden" id="footer-bar">
+			<div class="collapse navbar-collapse justify-content-end" id="form-controls">
+				<button type="button" class="btn btn-secondary">Cancel</button>&nbsp;
+				<button type="button" class="btn btn-danger">Save changes</button>
+			</div>
+			<!--form class="form-inline">
+				<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+			</form-->
+		</nav>
+</footer>
+    <script>
+
+var app = new Vue({
+	el: '#content',
+	data: {
+		token: null,
+		control_data: {},
+		username: "admin",
+		password: "admin"
+	},
+	mounted() {
+		this.checkToken()
+	},
+	methods: {
+		checkToken: function() {
+			console.debug(self)
+			if (!this.token) {
+				axios({
+				  method: 'post',
+				  url: '/api/v1/session',
+				  data: "username=admin&password=admin"
+				})
+				.then(function (response) {
+					this.token = response.data.token;
+					this.app.getControlData(this.token);
+				})
+				.catch(function (error) {
+					console.log(error);
+				});
+			}
+		},
+		printObject: function(key, obj, depth) {
+			var d = (key) ? (depth +1): depth
+			if((typeof obj) == "object") {
+				if (key)
+					console.log("\t".repeat(d)+key+":")
+				for(var prop in obj) {
+					var val = obj[prop]
+					this.printObject(prop, val, d)
+				}
+			} else {
+				console.log(("\t".repeat(d))+key+": "+obj)
+			}
+		},
+		getControlData: function(token) {
+			axios({
+				method: 'get',
+				url: '/api/v1/controldata',
+				data: "username=admin&password=admin",
+				headers: {
+				"X-Auth-Token": token
+				}
+			})
+			.then(response => {
+				this.control_data = response.data;
+				//this.printObject("", this.control_data, -1);
+			}).catch(function (error) {
+				if(error.reponse)
+					console.debug(error.response.status);
+				console.log(error.message);
+			});
+		},
+	    displayProps: function (data) {
+            var props = {};
+            for(var prop in data) {
+                if(["type", "label"].indexOf(prop) == -1 ) {
+                    props[prop] = data[prop]
+                }
+            }
+            return props;
+        }
+	},
+	computed: {
+   }
+})
+
+        </script>
+
+	<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    </body>
+</html>
+
+
