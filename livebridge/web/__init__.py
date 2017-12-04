@@ -28,7 +28,7 @@ async def auth_middleware(app, handler):
         try:
             # check auth header
             logger.info(request.path)
-            if not request.path in ["/", "/api/v1/session"]:
+            if not request.path in ["/", "/api/v1/session"] and not request.path.startswith("/dashboard"):
                 token = request.headers.get("X-Auth-Token")
                 if token not in _tokens.values():
                     return web.json_response({"error": "Invalid token."}, status=401)
@@ -59,6 +59,7 @@ class WebApi(object):
     def __init__(self, *, config, controller, loop):
         self.config = config
         self.loop = loop
+        self.static_path = os.path.join(os.path.dirname(__file__), "static")
 
         # start server
         logger.info("Starting API server ...")
@@ -66,6 +67,7 @@ class WebApi(object):
         self.app = web.Application(loop=loop, middlewares=middlewares)
         self.app["controller"] = controller
         self.app.router.add_get("/", self.index_handler)
+        self.app.router.add_static("/dashboard", self.static_path, show_index=True)
         self.app.router.add_get("/api/v1/controldata", self.control_get)
         self.app.router.add_put("/api/v1/controldata", self.control_put)
         self.app.router.add_post("/api/v1/session", self.login, expect_handler=web.Request.json)
@@ -96,7 +98,7 @@ class WebApi(object):
         return web.json_response({"error": "Method Not Allowed"}, status=405)
 
     async def index_handler(self, request):
-        static_path = os.path.join(os.path.dirname(__file__), "static/index.html")
+        static_path = os.path.join(self.static_path, "index.html")
         return web.FileResponse(static_path)
 
     async def control_get(self, request):
