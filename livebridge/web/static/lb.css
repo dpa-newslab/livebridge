@@ -1,0 +1,22 @@
+#content {
+	margin-top:10px;
+}
+.bridge {
+  margin-bottom: 10px;
+  background-color: #DDD;
+}
+.bridge.edited .card {
+    background-color: #ffd6cc;
+}
+.source {
+  padding-left: 10px;
+}
+.targets {
+     margin-top: 10px;
+}
+.target-prop {
+}
+#footer-bar {
+	background-color: #DBDBDB;
+}
+
