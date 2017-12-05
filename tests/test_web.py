@@ -64,13 +64,9 @@ class WebApiTestCase(AioHTTPTestCase):
         assert res.get("token") is not None
         return res["token"]
 
-    # the unittest_run_loop decorator can be used in tandem with
-    # the AioHTTPTestCase to simplify running
-    # tests that are asynchronous
     @unittest_run_loop
     async def test_unauthorized(self):
         urls = [
-            ("GET", "/"),
             ("GET", "/api/v1/controldata"),
             ("PUT", "/api/v1/controldata"),
         ]
@@ -79,6 +75,17 @@ class WebApiTestCase(AioHTTPTestCase):
             assert request.status == 401
             text = await request.text()
             assert '{"error": "Invalid token."}' in text
+
+    @unittest_run_loop
+    async def test_open(self):
+        urls = [
+            ("GET", "/"),
+            ("GET", "/dashboard"),
+            ("GET", "/dashboard/lb.js"),
+        ]
+        for u in urls:
+            request = await self.client.request(u[0], u[1])
+            assert request.status == 200
 
     @unittest_run_loop
     async def test_login_failing(self):
@@ -105,20 +112,9 @@ class WebApiTestCase(AioHTTPTestCase):
         self.assertRegexpMatches(token, r'^[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}$')
 
     @unittest_run_loop
-    async def test_index(self):
-        headers = {"X-Auth-Token": await self._get_token()}
-        request = await self.client.request("GET", "/", headers=headers)
-        assert request.status == 200
-
-        request = await self.client.request("GET", "/", headers=None)
-        assert request.status == 401
-
-    @unittest_run_loop
     async def test_get_controldata(self):
         doc = {"foo": "bla"}
-        mock_cd = asynctest.MagicMock(spec="livebridge.controldata.controlfile.ControlFile",
-                                      control_data=doc)
-        self.controller.load_control_data = asynctest.CoroutineMock(return_value=mock_cd)
+        self.controller.load_control_doc = asynctest.CoroutineMock(return_value=doc)
         headers = {"X-Auth-Token": await self._get_token()}
         res = await self.client.request("GET", "/api/v1/controldata", headers=headers)
         assert res.status == 200

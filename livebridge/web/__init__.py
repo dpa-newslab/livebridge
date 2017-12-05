@@ -102,8 +102,8 @@ class WebApi(object):
         return web.FileResponse(static_path)
 
     async def control_get(self, request):
-        control_data = await self.app["controller"].load_control_data(resolve_auth=False)
-        return web.json_response(control_data.control_data)
+        control_doc = await self.app["controller"].load_control_doc()
+        return web.json_response(control_doc)
 
     async def control_put(self, request):
         try:

@@ -78,6 +78,9 @@ class Controller(object):
         await self.control_data.load(self.control_file, resolve_auth=resolve_auth)
         return self.control_data
 
+    async def load_control_doc(self):
+        return await self.control_data.load_control_doc(self.control_file)
+
     async def retry_run(self):
         logger.info("Will retry loading control file in 30 seconds.")
         await asyncio.sleep(self.retry_run_interval)

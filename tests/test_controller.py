@@ -355,3 +355,11 @@ class ControllerTests(asynctest.TestCase):
         f.close()
 
         os.remove(self.controller.control_file)
+
+    async def test_load_control_doc(self):
+        doc = {"foo": "bla", "bar": True}
+        self.controller.control_data = asynctest.MagicMock()
+        self.controller.control_data.load_control_doc = asynctest.CoroutineMock(return_value=doc)
+        res = await self.controller.load_control_doc()
+        assert res == doc
+        assert self.controller.control_data.load_control_doc.call_count == 1

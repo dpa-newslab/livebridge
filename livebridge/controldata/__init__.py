@@ -78,13 +78,16 @@ class ControlData(object):
         else:
             self.control_client = self.CONTROL_DATA_CLIENTS.get("file")()
 
+    async def load_control_doc(self, path):
+        control_data = await self.control_client.load(path)
+        control_data = self._remove_doubles(control_data)
+        return control_data
+
     async def load(self, path, *, resolve_auth=False):
         control_data = {}
         await self._set_client(path)
-        control_data = await self.control_client.load(path)
 
-        # filter duplicates
-        control_data = self._remove_doubles(control_data)
+        control_data = await self.load_control_doc(path)
 
         if resolve_auth:
             control_data = self._resolve_auth(control_data)
