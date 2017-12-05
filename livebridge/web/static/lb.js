@@ -45,7 +45,7 @@ var targetTmpl = `
 </ul>`
 
 var bridgeTmpl = `
-<div>
+<div v-bind:class="{ edited: edited}">
     <div class="card source">
         <h4 class="card-header">
                     <span class="badge badge-primary">{{ bridge.type}}</span>
@@ -78,6 +78,7 @@ Vue.component('bridge-form', {
     props: ["bridge", "index"],
     methods: {
         updateBridge: function(bridge, index) {
+           this.$parent.edited = true;
            this.$parent.$parent.$options.methods.updateBridge(bridge, index)
         }
     }
@@ -94,6 +95,11 @@ Vue.component('target', {
 Vue.component('bridge', {
     template: bridgeTmpl,
     props: ["bridge", "index"],
+    data: function () {
+        return {
+            edited: false
+        }
+    },
     methods: {
 	    displayProps: displayProps,
         getDeepCopy: function(data) {
@@ -173,15 +179,20 @@ var app = new Vue({
         undoChanges: function() {
            this.control_data = JSON.parse(JSON.stringify(this.control_data_orig));
            app.edited = false
+           for(var x in app.$children) {
+                if(app.$children[x].edited != undefined) {
+                    app.$children[x].edited = false;
+                }
+           }
         },
         saveNewControlData: function() {
-            console.log("save")
+            app.edited = false
 			axios({
 				method: 'put',
 				url: '/api/v1/controldata',
 				data: this.control_data,
 				headers: {
-				"X-Auth-Token": app.token
+                    "X-Auth-Token": app.token
 				}
 			})
 			.then(response => {

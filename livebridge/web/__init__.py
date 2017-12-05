@@ -85,7 +85,6 @@ class WebApi(object):
             return web.json_response({"error": "Auth credentials are missing."}, status=400)
 
         params = await request.post()
-        logger.debug(params)
         user = params.get('username', None)
         if (user == self.config["auth"]["user"] and
                 params.get('password', None) == self.config["auth"]["password"]):
