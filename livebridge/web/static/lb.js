@@ -88,7 +88,7 @@ Vue.component('target', {
     template: targetTmpl,
     props: ["target"],
     methods: {
-	    displayProps: displayProps
+        displayProps: displayProps
     }
 })
 
@@ -101,7 +101,7 @@ Vue.component('bridge', {
         }
     },
     methods: {
-	    displayProps: displayProps,
+        displayProps: displayProps,
         getDeepCopy: function(data) {
             return JSON.parse(JSON.stringify(data))
         }
@@ -110,67 +110,67 @@ Vue.component('bridge', {
 
 
 var app = new Vue({
-	el: '#content',
-	data: {
-		token: null,
-		control_data: {},
-		control_data_orig: {},
-		username: "admin",
-		password: "admin",
+    el: '#content',
+    data: {
+        token: null,
+        control_data: {},
+        control_data_orig: {},
+        username: "admin",
+        password: "admin",
         edited: false
-	},
-	mounted() {
-		this.checkToken()
-	},
-	methods: {
-		checkToken: function() {
-			if (!this.token) {
-				axios({
-				  method: 'post',
-				  url: '/api/v1/session',
-				  data: "username=admin&password=admin"
-				})
-				.then(function (response) {
-					app.token = response.data.token;
-					this.app.getControlData(app.token);
-				})
-				.catch(function (error) {
-					console.log(error);
-				});
-			}
-		},
-		printObject: function(key, obj, depth) {
-			var d = (key) ? (depth +1): depth
-			if((typeof obj) == "object") {
-				if (key)
-					console.log("\t".repeat(d)+key+":")
-				for(var prop in obj) {
-					var val = obj[prop]
-					this.printObject(prop, val, d)
-				}
-			} else {
-				console.log(("\t".repeat(d))+key+": "+obj)
-			}
-		},
-		getControlData: function(token) {
-			axios({
-				method: 'get',
-				url: '/api/v1/controldata',
-				data: "username=admin&password=admin",
-				headers: {
-				"X-Auth-Token": token
-				}
-			})
-			.then(response => {
-				this.control_data = response.data;
-				this.control_data_orig = JSON.parse(JSON.stringify(response.data));
-				//this.printObject("", this.control_data, -1);
-			}).catch(function (error) {
-				if(error.reponse)
-					console.debug(error.response.status);
-				console.log(error.message);
-			});
-		},
+    },
+    mounted() {
+        this.checkToken()
+    },
+    methods: {
+        checkToken: function() {
+            if (!this.token) {
+                axios({
+                  method: 'post',
+                  url: '/api/v1/session',
+                  data: "username=admin&password=admin"
+                })
+                .then(function (response) {
+                    app.token = response.data.token;
+                    this.app.getControlData(app.token);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
+        },
+        printObject: function(key, obj, depth) {
+            var d = (key) ? (depth +1): depth
+            if((typeof obj) == "object") {
+                if (key)
+                    console.log("\t".repeat(d)+key+":")
+                for(var prop in obj) {
+                    var val = obj[prop]
+                    this.printObject(prop, val, d)
+                }
+            } else {
+                console.log(("\t".repeat(d))+key+": "+obj)
+            }
+        },
+        getControlData: function(token) {
+            axios({
+                method: 'get',
+                url: '/api/v1/controldata',
+                data: "username=admin&password=admin",
+                headers: {
+                "X-Auth-Token": token
+                }
+            })
+            .then(response => {
+                this.control_data = response.data;
+                this.control_data_orig = JSON.parse(JSON.stringify(response.data));
+                //this.printObject("", this.control_data, -1);
+            }).catch(function (error) {
+                if(error.reponse)
+                    console.debug(error.response.status);
+                console.log(error.message);
+            });
+        },
         cleanMarker: function() {
            for(var x in app.$children) {
                 if(app.$children[x].edited != undefined) {
@@ -189,26 +189,26 @@ var app = new Vue({
         },
         saveNewControlData: function() {
             app.edited = false
-			axios({
-				method: 'put',
-				url: '/api/v1/controldata',
-				data: this.control_data,
-				headers: {
+            axios({
+                method: 'put',
+                url: '/api/v1/controldata',
+                data: this.control_data,
+                headers: {
                     "X-Auth-Token": app.token
-				}
-			})
-			.then(response => {
+                }
+            })
+            .then(response => {
                 this.cleanMarker();
                 alert("Data was successfully saved!")
                 //this.printObject("", this.control_data, -1);
-			}).catch(function (error) {
-				if(error.reponse)
-					console.debug(error.response.status);
-				alert("Error: "+error.response.data.error);
-			});
+            }).catch(function (error) {
+                if(error.reponse)
+                    console.debug(error.response.status);
+                alert("Error: "+error.response.data.error);
+            });
         }
     },
-	computed: {
+    computed: {
    }
 })
 
