@@ -1,12 +1,12 @@
 var displayProps = function (data) {
-            var props = {};
-            for(var prop in data) {
-                if(["type", "label"].indexOf(prop) == -1 ) {
-                    props[prop] = data[prop]
-                }
-            }
-            return props;
+    var props = {};
+    for(var prop in data) {
+        if(["type", "label"].indexOf(prop) == -1 ) {
+            props[prop] = data[prop]
         }
+    }
+    return props;
+}
 
 var bridgeFormTmpl = `
 <div class="modal" tabindex="-1" role="dialog">
@@ -30,7 +30,7 @@ var bridgeFormTmpl = `
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" @click="updateBridge(bridge, index)"  data-dismiss="modal">Accept changes</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           </div>
         </div>
       </div>
@@ -124,7 +124,6 @@ var app = new Vue({
 	},
 	methods: {
 		checkToken: function() {
-			console.debug(self)
 			if (!this.token) {
 				axios({
 				  method: 'post',
@@ -172,18 +171,21 @@ var app = new Vue({
 				console.log(error.message);
 			});
 		},
-        updateBridge: function(bridge, index) {
-           app.control_data.bridges.splice(index, 1, bridge)
-           app.edited = true
-        },
-        undoChanges: function() {
-           this.control_data = JSON.parse(JSON.stringify(this.control_data_orig));
-           app.edited = false
+        cleanMarker: function() {
            for(var x in app.$children) {
                 if(app.$children[x].edited != undefined) {
                     app.$children[x].edited = false;
                 }
            }
+        },
+        updateBridge: function(bridge, index) {
+           app.control_data.bridges.splice(index, 1, bridge)
+           app.edited = true
+        },
+        undoChanges: function() {
+            this.control_data = JSON.parse(JSON.stringify(this.control_data_orig));
+            app.edited = false
+            this.cleanMarker();
         },
         saveNewControlData: function() {
             app.edited = false
@@ -196,12 +198,13 @@ var app = new Vue({
 				}
 			})
 			.then(response => {
-                console.log(response)
-				//this.printObject("", this.control_data, -1);
+                this.cleanMarker();
+                alert("Data was successfully saved!")
+                //this.printObject("", this.control_data, -1);
 			}).catch(function (error) {
 				if(error.reponse)
 					console.debug(error.response.status);
-				console.log(error.message);
+				alert("Error: "+error.response.data.error);
 			});
         }
     },

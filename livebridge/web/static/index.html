@@ -28,7 +28,9 @@
                 <nav class="navbar navbar-expand-lg navbar-light fixed-bottom hidden" id="footer-bar">
                     <div class="collapse navbar-collapse justify-content-end" id="form-controls">
                         <button type="button" class="btn btn-secondary" @click="undoChanges()">Cancel</button>&nbsp;
-                        <button type="button" class="btn btn-danger" @click="saveNewControlData()">Save changes</button>
+                        <button type="button" class="btn btn-danger" @click="saveNewControlData()"
+                            data-toggle="collapse" data-target="#saved-modal" aria-expanded="false" aria-controls="#saved-modal">
+                                Save changes</button>
                     </div>
                 </nav>
         </footer>
