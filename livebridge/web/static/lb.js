@@ -8,12 +8,62 @@ var displayProps = function (data) {
     return props;
 }
 
+var getDeepCopy = function(data) {
+    return JSON.parse(JSON.stringify(data))
+}
+
+var authFormTmpl = `
+<div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit {{ name }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <table class="table" style="with:100%;">
+                        <tr v-for="(v, k) in auth" class="form-group">
+                            <td>{{k}}</td>
+                            <td><input type="text" class="form-control" :id="'form-input-'+k" v-model="auth[k]"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @click="updateAuth(auth, name)"  data-dismiss="modal">Accept changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>`
+
+var authTmpl = `
+<div v-bind:class="{ edited: edited}">
+    <div class="card source">
+        <h4 class="card-header">
+                    {{ name }}
+                    <button type="button" class="btn btn-primary" data-toggle="modal" :data-target="'#auth-form-'+index">Edit</button>
+        </h4>
+        <div class="card-body">
+            <div class="card-text">
+                <div v-for="(v, k) in auth">
+                    {{k }}: {{v}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <auth-form v-bind:auth="getDeepCopy(auth)" v-bind:name="name" :id="'auth-form-'+index"></auth-form>
+</div>`
+
 var bridgeFormTmpl = `
 <div class="modal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Edit {{bridge.label}} {{index}}</h5>
+            <h5 class="modal-title">Edit {{bridge.label}}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -73,6 +123,31 @@ var bridgeTmpl = `
     <bridge-form v-bind:bridge="getDeepCopy(bridge)" v-bind:index="index" :id="'bridge-form-'+index"></bridge-form>
 </div>`
 
+Vue.component('auth-form', {
+    template: authFormTmpl,
+    props: ["auth", "name"],
+    methods: {
+        updateAuth: function(auth, name) {
+           this.$parent.edited = true;
+           this.$parent.$parent.$options.methods.updateAuth(auth, name)
+        }
+    }
+})
+
+
+Vue.component('auth', {
+    template: authTmpl,
+    props: ["name", "auth", "index"],
+    data: function () {
+        return {
+            edited: false
+        }
+    },
+    methods: {
+        getDeepCopy: getDeepCopy
+    }
+})
+
 Vue.component('bridge-form', {
     template: bridgeFormTmpl,
     props: ["bridge", "index"],
@@ -102,9 +177,7 @@ Vue.component('bridge', {
     },
     methods: {
         displayProps: displayProps,
-        getDeepCopy: function(data) {
-            return JSON.parse(JSON.stringify(data))
-        }
+        getDeepCopy: getDeepCopy
     }
 })
 
@@ -180,6 +253,10 @@ var app = new Vue({
         },
         updateBridge: function(bridge, index) {
            app.control_data.bridges.splice(index, 1, bridge)
+           app.edited = true
+        },
+        updateAuth: function(auth, name) {
+           app.$set(app.control_data.auth, name, auth)
            app.edited = true
         },
         undoChanges: function() {

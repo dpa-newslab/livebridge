@@ -1,18 +1,21 @@
 #content {
 	margin-top:10px;
 }
-.bridge {
-  margin-bottom: 10px;
-  background-color: #DDD;
+.bridge, .auth {
+	margin-bottom: 10px;
+	background-color: #DDD;
 }
 .bridge.edited .card {
-    background-color: #ffd6cc;
+	background-color: #ffd6cc;
+}
+.auth.edited .card {
+	background-color: #ffd6cc;
 }
 .source {
-  padding-left: 10px;
+	padding-left: 10px;
 }
 .targets {
-     margin-top: 10px;
+	margin-top: 10px;
 }
 .target-prop {
 }
