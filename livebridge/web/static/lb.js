@@ -185,7 +185,10 @@ Vue.component('bridge', {
 var app = new Vue({
     el: '#content',
     data: {
-        token: null,
+        cookie_name: "lb-db",
+        loginUser: null,
+        loginPassword: null,
+        loggedIn: true,
         control_data: {},
         control_data_orig: {},
         username: "admin",
@@ -193,25 +196,48 @@ var app = new Vue({
         edited: false
     },
     mounted() {
-        this.checkToken()
+        this.getControlData()
     },
     methods: {
-        checkToken: function() {
-            if (!this.token) {
+        getCookie: function() {
+            var name = this.cookie_name + "=";
+            var ca = document.cookie.split(';');
+            for(var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        },
+        login: function() {
+            if (this.loginUser && this.loginPassword) {
                 axios({
                   method: 'post',
                   url: '/api/v1/session',
-                  data: "username=admin&password=admin"
+                  data: "username="+encodeURI(this.loginUser)+"&password="+encodeURI(this.loginPassword)
                 })
-                .then(function (response) {
-                    app.token = response.data.token;
-                    this.app.getControlData(app.token);
+                .then(response => {
+                    this.loggedIn = true;
+                    this.getControlData();
+                    this.loginUser = "";
+                    this.loginPassword = "";
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
             }
+			return false;
         },
+		logout: function() {
+			this.loggedIn = false;
+			this.control_data = {}
+			this.control_data_orig = {}
+			document.cookie = this.cookie_name + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;';
+		},
         printObject: function(key, obj, depth) {
             var d = (key) ? (depth +1): depth
             if((typeof obj) == "object") {
@@ -225,23 +251,23 @@ var app = new Vue({
                 console.log(("\t".repeat(d))+key+": "+obj)
             }
         },
-        getControlData: function(token) {
+        getControlData: function() {
+            var cookie_token = this.getCookie();
             axios({
                 method: 'get',
-                url: '/api/v1/controldata',
-                data: "username=admin&password=admin",
-                headers: {
-                "X-Auth-Token": token
-                }
-            })
-            .then(response => {
+                url: '/api/v1/controldata'
+            }).then(response => {
                 this.control_data = response.data;
                 this.control_data_orig = JSON.parse(JSON.stringify(response.data));
                 //this.printObject("", this.control_data, -1);
-            }).catch(function (error) {
+            }).catch(error =>  {
                 if(error.reponse)
                     console.debug(error.response.status);
                 console.log(error.message);
+                if(error.response.status === 401) {
+                    this.loggedIn = false;
+                    this.login()
+                }
             });
         },
         cleanMarker: function() {

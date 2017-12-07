@@ -1,66 +1,85 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8"> 
-        <title>Livebridge - Control Dashboard</title>
-        <script src="https://vuejs.org/js/vue.js"></script>
-        <!--script src="https://unpkg.com/vue"></script-->
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-        <!--script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4"></script-->
+	<head>
+		<meta charset="UTF-8"> 
+		<title>Livebridge - Control Dashboard</title>
+		<script src="https://vuejs.org/js/vue.js"></script>
+		<!--script src="https://unpkg.com/vue"></script-->
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<!--script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4"></script-->
 
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-        <link rel="stylesheet" href="/dashboard/lb.css" />
-    </head>
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <a class="navbar-brand" href="#">Livebridge</a>
-                <ul class="nav navbar-nav" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="bridges-tab" data-toggle="tab" href="#bridges" role="tab" aria-controls="bridges" aria-selected="false">Bridges</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="auth-tab" data-toggle="tab" href="#auth" role="tab" aria-controls="auth" aria-selected="true">Auth</a>
-                    </li>
-                </ul>
-            </nav>
-        </header>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+		<link rel="stylesheet" href="/dashboard/lb.css" />
+	</head>
+	<body>
+		<div id="content">
+			<header>
+				<nav class="navbar navbar-expand-lg navbar-dark bg-dark  justify-content-between">
+					<div class="nav">
+						<a class="navbar-brand" href="./">Livebridge</a>
+						<ul class="nav navbar-nav justify-content-start" role="tablist" v-if="loggedIn === true">
+							<li class="nav-item">
+								<a class="nav-link active" id="bridges-tab" data-toggle="tab" href="#bridges" role="tab" aria-controls="bridges" aria-selected="false">Bridges</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" id="auth-tab" data-toggle="tab" href="#auth" role="tab" aria-controls="auth" aria-selected="true">Auth</a>
+							</li>
+						</ul>
+					</div>
+					<ul class="nav navbar-nav justify-content-end" v-if="loggedIn === true">
+						<li><a class="nav-link" href="#" v-on:click="logout()">Logout</a></li>
+					</ul>
+				</nav>
+			</header>
 
-        <div class="container-fluid" id="content">
-            <div class="tab-content">
-                <div class="tab-pane active" id="bridges" role="tabpanel" aria-labelledby="bridges-tab">
-                    <div is="bridge" v-for="(bridge, index) in control_data.bridges" v-bind:bridge="bridge"
-                                     v-bind:index="index" class="bridge" :id="'bridge-'+index">
-                    </div>
-                </div>
-                <div class="tab-pane" id="auth" role="tabpanel" aria-labelledby="auth-tab">
-                    <div is="auth" v-for="(auth, name, index) in control_data.auth" v-bind:name="name" v-bind:auth="auth"
-                        v-bind:index="index" class="auth" :id="'auth-'+index">
-                    </div>
-                </div>
-            </div>
-            <template v-if="edited">
-                <footer>
-                    <nav class="navbar navbar-expand-lg navbar-light fixed-bottom hidden" id="footer-bar">
-                        <div class="collapse navbar-collapse justify-content-end" id="form-controls">
-                            <button type="button" class="btn btn-secondary" @click="undoChanges()">Cancel</button>&nbsp;
-                            <button type="button" class="btn btn-danger" @click="saveNewControlData()"
-                                                  data-toggle="collapse" data-target="#saved-modal" aria-expanded="false" aria-controls="#saved-modal">
-                                Save changes</button>
-                        </div>
-                    </nav>
-                </footer>
-            </template>
-        </div>
+			<div id="control">
+				<div class="tab-content" v-if="loggedIn === true">
+					<div class="tab-pane active" id="bridges" role="tabpanel" aria-labelledby="bridges-tab">
+						<div is="bridge" v-for="(bridge, index) in control_data.bridges" v-bind:bridge="bridge"
+					   v-bind:index="index" class="bridge" :id="'bridge-'+index">
+						</div>
+					</div>
+					<div class="tab-pane" id="auth" role="tabpanel" aria-labelledby="auth-tab">
+						<div is="auth" v-for="(auth, name, index) in control_data.auth" v-bind:name="name" v-bind:auth="auth"
+					 v-bind:index="index" class="auth" :id="'auth-'+index">
+						</div>
+					</div>
+				</div>
+				<template v-if="edited">
+					<footer>
+						<nav class="navbar navbar-expand-lg navbar-light fixed-bottom hidden" id="footer-bar">
+							<div class="collapse navbar-collapse justify-content-end" id="form-controls">
+								<button type="button" class="btn btn-secondary" @click="undoChanges()">Cancel</button>&nbsp;
+								<button type="button" class="btn btn-danger" @click="saveNewControlData()"
+							  data-toggle="collapse" data-target="#saved-modal" aria-expanded="false" aria-controls="#saved-modal">
+									Save changes</button>
+							</div>
+						</nav>
+					</footer>
+				</template>
+				<form class="form-signin" v-on:submit.prevent v-if="loggedIn === false">
+					<h4 class="form-signin-heading">Please sign in</h4>
+					<label for="loginName" class="sr-only">Username</label>
+					<input v-model="loginUser" type="text" id="loginName" class="form-control" placeholder="Username" required>
+					<label for="loginPassword" class="sr-only">Password</label>
+					<input v-model="loginPassword" type="password" id="loginPassword" class="form-control" placeholder="Password" required>
+					<!--div class="checkbox">
+		 <label>
+		 <input type="checkbox" value="remember-me"> Remember me
+		 </label>
+		 </div-->
+		 <button class="btn btn-lg btn-primary btn-block" type="submit" v-on:click="login()">Sign in</button>
+				</form>
+		</div>
+		</div>
 
-
-        <script src="/dashboard/lb.js"></script>
-        <!-- Optional JavaScript -->
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
-    </body>
+		<script src="/dashboard/lb.js"></script>
+		<!-- Optional JavaScript -->
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+	</body>
 </html>
 
 
