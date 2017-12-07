@@ -27,9 +27,8 @@ async def auth_middleware(app, handler):
     async def middleware_handler(request):
         try:
             # check auth header
-            logger.info(request.path)
             if not request.path in ["/", "/api/v1/session"] and not request.path.startswith("/dashboard"):
-                token = request.headers.get("X-Auth-Token")
+                token = request.cookies.get("lb-db") or request.headers.get("X-Auth-Token")
                 if token not in _tokens.values():
                     return web.json_response({"error": "Invalid token."}, status=401)
             # return response
@@ -90,7 +89,9 @@ class WebApi(object):
                 params.get('password', None) == self.config["auth"]["password"]):
             # User is in our database, remember their login details
             _tokens[user] = str(uuid.uuid4())
-            return web.json_response({"token": _tokens[user]})
+            response = web.json_response({"token": _tokens[user]})
+            response.set_cookie("lb-db", _tokens[user])
+            return response
         return web.json_response({"error": "Unauthorized"}, status=401)
 
     async def handle_405(self, request, response):
