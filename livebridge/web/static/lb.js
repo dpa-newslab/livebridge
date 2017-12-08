@@ -87,41 +87,42 @@ var bridgeFormTmpl = `
     </div>`
 
 var targetTmpl = `
-<ul>
-    <li class="list-group-item"><span class="badge badge-success">{{ target.type}}</span></li>
-    <li v-for="(value, key) in displayProps(target)" class="target-prop list-group-item">
-        {{ key }}: {{ value }}
-    </li>
-</ul>`
+<tr class="target collapse">
+    <td></td>
+    <td><span class="badge badge-success">{{ target.type }}</span>  
+    	<strong>{{ target.label }}</strong></td>
+    <td>
+        <div v-for="(value, key) in displayProps(target)">
+            <strong>{{ key }}:</strong> {{ value }}
+        </div>
+    </td>
+    <td></td>
+    <td>
+        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#target-form'">Edit</button>
+    </td>
+</tr>`
 
 var bridgeTmpl = `
-<div v-bind:class="{ edited: edited}">
-    <div class="card source">
-        <h4 class="card-header">
-                    <span class="badge badge-primary">{{ bridge.type}}</span>
-                    {{ bridge.label }}
-                    <button type="button" class="btn btn-primary" data-toggle="modal" :data-target="'#bridge-form-'+index">Edit</button>
-        </h4>
-        <div class="card-body">
-            <!--h4 class="card-title"-->
-            <div class="card-text">
-                <div v-for="(v, k) in displayProps(bridge)" v-if="k !== 'targets'">
-                    {{k }}: {{v}}
-                </div>
-            </div>
-            <div>
-                <span v-for="target in bridge.targets" class="badge badge-success">
-                    {{ target.type}}
-                </span>
-            </div>
-            <a href="#" class="btn-sm btn-primary" data-toggle="collapse" :data-target="'#targets-'+index" aria-expanded="false" :aria-controls="'#targets-'+index">Show targets</a>
-            <div class="targets collapse" :id="'targets-'+index">
-                <ul is="target" v-for="target in bridge.targets" v-bind:target="target" class="target list-group" />
-            </div>
-        </div>
-    </div>
-    <bridge-form v-bind:bridge="getDeepCopy(bridge)" v-bind:index="index" :id="'bridge-form-'+index"></bridge-form>
-</div>`
+<tr class="bridge" v-bind:class="{ edited: edited}">
+	<td><span class="badge badge-primary">{{ bridge.type}}</span></td>
+	<td><strong>{{ bridge.label}}</strong></td>
+	<td>
+		<div v-for="(v, k) in displayProps(bridge)" v-if="k !== 'targets'">
+			<strong>{{k }}:</strong> {{v}}
+		</div>
+	</td>
+	<td>
+		<div v-for="target in bridge.targets">
+			<span class="badge badge-success">{{ target.type}}</span>
+		</div>
+	</td>
+	<td>
+		<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#bridge-form-'+index">Edit</button>
+		<button type="button" class="btn btn-sm btn-primary" data-toggle="collapse" :data-target="'.target-'+index">Targets</button>
+		<bridge-form v-bind:bridge="getDeepCopy(bridge)" v-bind:index="index" :id="'bridge-form-'+index"></bridge-form>
+	</td>
+</tr>
+`
 
 Vue.component('auth-form', {
     template: authFormTmpl,
@@ -199,6 +200,7 @@ var app = new Vue({
         this.getControlData()
     },
     methods: {
+        getDeepCopy: getDeepCopy,
         getCookie: function() {
             var name = this.cookie_name + "=";
             var ca = document.cookie.split(';');

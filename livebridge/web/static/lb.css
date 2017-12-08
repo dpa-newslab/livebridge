@@ -1,6 +1,9 @@
 body {
   background-color: #eee;
 }
+#control {
+    margin:10px;
+}
 .form-signin {
   max-width: 330px;
   padding: 15px;
@@ -42,6 +45,12 @@ body {
 }
 .bridge.edited .card {
 	background-color: #ffd6cc;
+}
+tr.edited {
+	background-color: #ffd6cc !important;
+}
+tr.target {
+	background-color: #EEE !important;
 }
 .auth.edited .card {
 	background-color: #ffd6cc;
