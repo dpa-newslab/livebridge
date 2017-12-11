@@ -58,6 +58,34 @@ var authTmpl = `
     <auth-form v-bind:auth="getDeepCopy(auth)" v-bind:name="name" :id="'auth-form-'+index"></auth-form>
 </div>`
 
+var targetFormTmpl = `
+<div class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit {{target.label}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+                <table class="table" style="with:100%;">
+                    <tr v-for="(v, k) in target" class="form-group">
+                        <td>{{k}}</td>
+                        <td><input type="text" class="form-control" :id="'form-input-'+k" v-model="target[k]"></td>
+                    </tr>
+                </table>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" @click="updateTarget(bridge_index, target, index)"  data-dismiss="modal">Accept changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>`
+
 var bridgeFormTmpl = `
 <div class="modal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg" role="document">
@@ -87,9 +115,9 @@ var bridgeFormTmpl = `
     </div>`
 
 var targetTmpl = `
-<tr class="target collapse">
-    <td></td>
-    <td><span class="badge badge-success">{{ target.type }}</span>  
+<tr class="target" v-bind:class="{edited: edited}">
+    <td>|_</td>
+    <td><span class="badge badge-success">{{ target.type }}</span>
     	<strong>{{ target.label }}</strong></td>
     <td>
         <div v-for="(value, key) in displayProps(target)">
@@ -98,7 +126,8 @@ var targetTmpl = `
     </td>
     <td></td>
     <td>
-        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#target-form'">Edit</button>
+        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#target-form-'+bridge_index+'-'+index">Edit</button>
+		<target-form v-bind:target="getDeepCopy(target)" v-bind:bridge_index="bridge_index" v-bind:index="index" :id="'target-form-'+bridge_index+'-'+index"></target-form>
     </td>
 </tr>`
 
@@ -118,7 +147,7 @@ var bridgeTmpl = `
 	</td>
 	<td>
 		<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#bridge-form-'+index">Edit</button>
-		<button type="button" class="btn btn-sm btn-primary" data-toggle="collapse" :data-target="'.target-'+index">Targets</button>
+		<!--button type="button" class="btn btn-sm btn-primary" data-toggle="collapse" :data-target="'.target-'+index">Targets</button-->
 		<bridge-form v-bind:bridge="getDeepCopy(bridge)" v-bind:index="index" :id="'bridge-form-'+index"></bridge-form>
 	</td>
 </tr>
@@ -149,6 +178,17 @@ Vue.component('auth', {
     }
 })
 
+Vue.component('target-form', {
+    template: targetFormTmpl,
+    props: ["bridge_index", "target", "index"],
+    methods: {
+        updateTarget: function(bridge_index, target, index) {
+           this.$parent.edited = true;
+           this.$parent.$parent.$options.methods.updateTarget(bridge_index, target, index)
+        }
+    }
+})
+
 Vue.component('bridge-form', {
     template: bridgeFormTmpl,
     props: ["bridge", "index"],
@@ -162,9 +202,15 @@ Vue.component('bridge-form', {
 
 Vue.component('target', {
     template: targetTmpl,
-    props: ["target"],
+    props: ["bridge_index", "target", "index"],
+    data: function () {
+        return {
+            edited: false
+        }
+    },
     methods: {
-        displayProps: displayProps
+        displayProps: displayProps,
+        getDeepCopy: getDeepCopy
     }
 })
 
@@ -282,6 +328,10 @@ var app = new Vue({
         updateBridge: function(bridge, index) {
            app.control_data.bridges.splice(index, 1, bridge)
            app.edited = true
+        },
+        updateTarget: function(bridge_index, target, index) {
+            app.control_data.bridges[bridge_index].targets.splice(index, 1, target)
+            app.edited = true
         },
         updateAuth: function(auth, name) {
            app.$set(app.control_data.auth, name, auth)

@@ -49,8 +49,8 @@
                             <tbody>
                                 <template v-for="(bridge, index) in control_data.bridges">
                                     <tr is="bridge" v-bind:bridge="bridge" v-bind:index="index" :id="'bridge-'+index"></tr>
-                                    <tr is="target" v-for="(target, x) in bridge.targets" v-bind:index="index+'-'+x"
-										v-bind:target="target"  :class="'target-'+index"></tr>
+                                    <tr is="target" v-for="(target, x) in bridge.targets" v-bind:bridge_index="index"
+                                        v-bind:target="target" v-bind:index="x" :class="'target-'+index"></tr>
                                 </template>
                             </tbody>
                         </table>
@@ -67,8 +67,8 @@
                         <div class="collapse navbar-collapse justify-content-end" id="form-controls">
                             <button type="button" class="btn btn-secondary" @click="undoChanges()">Cancel</button>&nbsp;
                             <button type="button" class="btn btn-danger" @click="saveNewControlData()"
-                                                  data-toggle="collapse" data-target="#saved-modal" aria-expanded="false" aria-controls="#saved-modal">
-                                Save changes</button>
+                                  data-toggle="collapse" data-target="#saved-modal" aria-expanded="false" aria-controls="#saved-modal">
+                                        Save changes</button>
                         </div>
                     </nav>
                 </footer>

@@ -46,11 +46,11 @@ body {
 .bridge.edited .card {
 	background-color: #ffd6cc;
 }
-tr.edited {
-	background-color: #ffd6cc !important;
-}
 tr.target {
 	background-color: #EEE !important;
+}
+tr.edited {
+	background-color: #ffd6cc !important;
 }
 .auth.edited .card {
 	background-color: #ffd6cc;
