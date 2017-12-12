@@ -127,7 +127,8 @@ var targetTmpl = `
     <td></td>
     <td>
         <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#target-form-'+bridge_index+'-'+index">Edit</button>
-		<target-form v-bind:target="getDeepCopy(target)" v-bind:bridge_index="bridge_index" v-bind:index="index" :id="'target-form-'+bridge_index+'-'+index"></target-form>
+        <button type="button" class="btn btn-sm btn-danger" @click="removeTarget(bridge_index, index)">X</button>
+        <target-form v-bind:target="getDeepCopy(target)" v-bind:bridge_index="bridge_index" v-bind:index="index" :id="'target-form-'+bridge_index+'-'+index"></target-form>
     </td>
 </tr>`
 
@@ -146,9 +147,10 @@ var bridgeTmpl = `
 		</div>
 	</td>
 	<td>
-		<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#bridge-form-'+index">Edit</button>
-		<!--button type="button" class="btn btn-sm btn-primary" data-toggle="collapse" :data-target="'.target-'+index">Targets</button-->
-		<bridge-form v-bind:bridge="getDeepCopy(bridge)" v-bind:index="index" :id="'bridge-form-'+index"></bridge-form>
+        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#bridge-form-'+index">Edit</button>
+        <button type="button" class="btn btn-sm btn-danger" @click="removeBridge(index)">X</button>
+        <!--button type="button" class="btn btn-sm btn-primary" data-toggle="collapse" :data-target="'.target-'+index">Targets</button-->
+        <bridge-form v-bind:bridge="getDeepCopy(bridge)" v-bind:index="index" :id="'bridge-form-'+index"></bridge-form>
 	</td>
 </tr>
 `
@@ -210,7 +212,11 @@ Vue.component('target', {
     },
     methods: {
         displayProps: displayProps,
-        getDeepCopy: getDeepCopy
+        getDeepCopy: getDeepCopy,
+        removeTarget: function(bridge_index, index) {
+           this.$parent.$options.methods.removeTarget(bridge_index, index)
+        }
+
     }
 })
 
@@ -224,7 +230,11 @@ Vue.component('bridge', {
     },
     methods: {
         displayProps: displayProps,
-        getDeepCopy: getDeepCopy
+        getDeepCopy: getDeepCopy,
+        removeBridge: function(index) {
+           this.$parent.$options.methods.removeBridge(index)
+        }
+
     }
 })
 
@@ -335,6 +345,14 @@ var app = new Vue({
         },
         updateAuth: function(auth, name) {
            app.$set(app.control_data.auth, name, auth)
+           app.edited = true
+        },
+        removeTarget: function(bridge_index, index) {
+            app.control_data.bridges[bridge_index].targets.splice(index, 1)
+           app.edited = true
+        },
+        removeBridge: function(index) {
+           app.control_data.bridges.splice(index, 1)
            app.edited = true
         },
         undoChanges: function() {
