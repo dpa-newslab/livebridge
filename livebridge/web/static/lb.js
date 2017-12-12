@@ -74,6 +74,10 @@ var targetFormTmpl = `
                     <tr v-for="(v, k) in target" class="form-group">
                         <td>{{k}}</td>
                         <td><input type="text" class="form-control" :id="'form-input-'+k" v-model="target[k]"></td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-danger" @click="removeTargetProp(bridge_index, index, k)">
+                                X</button>
+                        </td>
                     </tr>
                 </table>
             </form>
@@ -101,7 +105,13 @@ var bridgeFormTmpl = `
                 <table class="table" style="with:100%;">
                     <tr v-for="(v, k) in bridge" v-if="k !== 'targets'" class="form-group">
                         <td>{{k}}</td>
-                        <td><input type="text" class="form-control" :id="'form-input-'+k" v-model="bridge[k]"></td>
+                        <td>
+                            <input type="text" class="form-control" :id="'form-input-'+k" v-model="bridge[k]">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-danger" @click="removeBridgeProp(index, k)">
+                                X</button>
+                        </td>
                     </tr>
                 </table>
             </form>
@@ -187,6 +197,10 @@ Vue.component('target-form', {
         updateTarget: function(bridge_index, target, index) {
            this.$parent.edited = true;
            this.$parent.$parent.$options.methods.updateTarget(bridge_index, target, index)
+        },
+        removeTargetProp: function(bridge_index, index, key) {
+            this.$parent.edited = true;
+            this.$parent.$parent.$options.methods.removeTargetProp(bridge_index, index, key)
         }
     }
 })
@@ -196,8 +210,12 @@ Vue.component('bridge-form', {
     props: ["bridge", "index"],
     methods: {
         updateBridge: function(bridge, index) {
-           this.$parent.edited = true;
-           this.$parent.$parent.$options.methods.updateBridge(bridge, index)
+            this.$parent.edited = true;
+            this.$parent.$parent.$options.methods.updateBridge(bridge, index)
+        },
+        removeBridgeProp: function(index, key) {
+            this.$parent.edited = true;
+            this.$parent.$parent.$options.methods.removeBridgeProp(index, key)
         }
     }
 })
@@ -349,11 +367,19 @@ var app = new Vue({
         },
         removeTarget: function(bridge_index, index) {
             app.control_data.bridges[bridge_index].targets.splice(index, 1)
-           app.edited = true
+            app.edited = true
+        },
+        removeTargetProp: function(bridge_index, index, key) {
+            Vue.delete(app.control_data.bridges[bridge_index].targets[index], key)
+            app.edited = true
         },
         removeBridge: function(index) {
            app.control_data.bridges.splice(index, 1)
            app.edited = true
+        },
+        removeBridgeProp: function(index, key) {
+            Vue.delete(app.control_data.bridges[index], key)
+            app.edited = true
         },
         undoChanges: function() {
             this.control_data = JSON.parse(JSON.stringify(this.control_data_orig));
