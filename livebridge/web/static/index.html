@@ -36,6 +36,9 @@
             <div id="control">
                 <div class="tab-content" v-if="loggedIn === true">
                     <div class="tab-pane active" id="bridges" role="tabpanel" aria-labelledby="bridges-tab">
+                        <div id="add-btn"><button type="button" class="btn btn-sm btn-success" @click="addBridge()">
+                                Add new bridge</button>
+                        </div>
                         <table class="table table-striped" style="with:100%;">
                             <thead>
                                 <tr>
@@ -56,6 +59,11 @@
                         </table>
                 </div>
                 <div class="tab-pane" id="auth" role="tabpanel" aria-labelledby="auth-tab">
+                    <div id="add-btn">
+                        <input type="text" v-model="new_auth_key" />
+                        <button type="button" class="btn btn-sm btn-success" @click="addAuth()">
+                            Add new auth credentials</button>
+                    </div>
                     <div is="auth" v-for="(auth, name, index) in control_data.auth" v-bind:name="name" v-bind:auth="auth"
                                    v-bind:index="index" class="auth" :id="'auth-'+index">
                     </div>

@@ -183,7 +183,7 @@ var targetTmpl = `
 </tr>`
 
 var bridgeTmpl = `
-<tr class="bridge" v-bind:class="{ edited: edited}">
+<tr class="bridge" v-bind:class="{ edited: edited}" :key="'key-'+bridge.type+'-'+index">
 	<td><span class="badge badge-primary">{{ bridge.type}}</span></td>
 	<td><strong>{{ bridge.label}}</strong></td>
 	<td>
@@ -345,7 +345,8 @@ var app = new Vue({
         control_data_orig: {},
         username: "admin",
         password: "admin",
-        edited: false
+        edited: false,
+        new_auth_key: ''
     },
     mounted() {
         this.getControlData()
@@ -429,6 +430,15 @@ var app = new Vue({
                     app.$children[x].edited = false;
                 }
            }
+        },
+        addAuth: function() {
+            if(this.new_auth_key) {
+                this.$set(this.control_data.auth, this.new_auth_key, {})
+                this.new_auth_key = ""
+            }
+        },
+        addBridge: function() {
+           app.control_data.bridges.splice(0, 0, {label: "new bridge"})
         },
         updateBridge: function(bridge, index) {
            app.control_data.bridges.splice(index, 1, bridge)

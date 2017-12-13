@@ -55,6 +55,9 @@ tr.edited {
 .auth.edited .card {
 	background-color: #ffd6cc;
 }
+#add-btn {
+    margin-bottom:10px;
+}
 .source {
 	padding-left: 10px;
 }
