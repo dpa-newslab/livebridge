@@ -25,15 +25,31 @@ var authFormTmpl = `
             <div class="modal-body">
                 <form>
                     <table class="table" style="with:100%;">
-                        <tr v-for="(v, k) in auth" class="form-group">
+                        <tr v-for="(v, k) in local_auth" class="form-group">
                             <td>{{k}}</td>
-                            <td><input type="text" class="form-control" :id="'form-input-'+k" v-model="auth[k]"></td>
+                            <td><input type="text" class="form-control" :id="'form-input-'+k" v-model="local_auth[k]"></td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-danger" @click="removeAuthProp(k)">
+                                    X</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" v-model="add_key" class="form-control" placeholder="Property name">
+                            </td>
+                            <td>
+                                <input type="text" v-model="add_value" class="form-control" placeholder="Property value">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-success" @click="addAuthProp()">
+                                    +</button>
+                            </td>
                         </tr>
                     </table>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" @click="updateAuth(auth, name)"  data-dismiss="modal">Accept changes</button>
+                <button type="button" class="btn btn-primary" @click="updateAuth()"  data-dismiss="modal">Accept changes</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -193,10 +209,25 @@ var bridgeTmpl = `
 Vue.component('auth-form', {
     template: authFormTmpl,
     props: ["auth", "name"],
+    data: function () {
+        return {
+            local_auth: this.auth,
+            add_key: "",
+            add_value: ""
+        }
+    },
     methods: {
-        updateAuth: function(auth, name) {
+        updateAuth: function() {
            this.$parent.edited = true;
-           this.$parent.$parent.$options.methods.updateAuth(auth, name)
+           this.$parent.$parent.$options.methods.updateAuth(this.local_auth, this.name)
+        },
+        removeAuthProp: function(key) {
+            Vue.delete(this.local_auth, key)
+        },
+        addAuthProp: function() {
+            Vue.set(this.local_auth, this.add_key, this.add_value)
+            this.add_value = ""
+            this.add_key = ""
         }
     }
 })
