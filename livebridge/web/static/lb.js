@@ -63,7 +63,7 @@ var targetFormTmpl = `
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Edit {{target.label}}</h5>
+            <h5 class="modal-title">Edit {{ local_target.label }}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -71,19 +71,31 @@ var targetFormTmpl = `
           <div class="modal-body">
             <form>
                 <table class="table" style="with:100%;">
-                    <tr v-for="(v, k) in target" class="form-group">
+                    <tr v-for="(v, k) in local_target" class="form-group">
                         <td>{{k}}</td>
-                        <td><input type="text" class="form-control" :id="'form-input-'+k" v-model="target[k]"></td>
+                        <td><input type="text" class="form-control" :id="'form-input-'+k" v-model="local_target[k]"></td>
                         <td>
-                            <button type="button" class="btn btn-sm btn-danger" @click="removeTargetProp(bridge_index, index, k)">
+                            <button type="button" class="btn btn-sm btn-danger" @click="removeTargetProp(k)">
                                 X</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" v-model="add_key" class="form-control" placeholder="Property name">
+                        </td>
+                        <td>
+                            <input type="text" v-model="add_value" class="form-control" placeholder="Property value">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-success" @click="addTargetProp()">
+                                +</button>
                         </td>
                     </tr>
                 </table>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" @click="updateTarget(bridge_index, target, index)"  data-dismiss="modal">Accept changes</button>
+            <button type="button" class="btn btn-primary" @click="updateTarget()"  data-dismiss="modal">Accept changes</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           </div>
         </div>
@@ -95,7 +107,7 @@ var bridgeFormTmpl = `
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Edit {{bridge.label}}</h5>
+            <h5 class="modal-title">Edit {{local_bridge.label}}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -103,21 +115,33 @@ var bridgeFormTmpl = `
           <div class="modal-body">
             <form>
                 <table class="table" style="with:100%;">
-                    <tr v-for="(v, k) in bridge" v-if="k !== 'targets'" class="form-group">
+                    <tr v-for="(v, k) in local_bridge" v-if="k !== 'targets'" class="form-group">
                         <td>{{k}}</td>
                         <td>
-                            <input type="text" class="form-control" :id="'form-input-'+k" v-model="bridge[k]">
+                            <input type="text" class="form-control" :id="'form-input-'+k" v-model="local_bridge[k]">
                         </td>
                         <td>
-                            <button type="button" class="btn btn-sm btn-danger" @click="removeBridgeProp(index, k)">
+                            <button type="button" class="btn btn-sm btn-danger" @click="removeBridgeProp(k)">
                                 X</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" v-model="add_key" class="form-control" placeholder="Property name">
+                        </td>
+                        <td>
+                            <input type="text" v-model="add_value" class="form-control" placeholder="Property value">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-success" @click="addBridgeProp()">
+                                +</button>
                         </td>
                     </tr>
                 </table>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" @click="updateBridge(bridge, index)"  data-dismiss="modal">Accept changes</button>
+            <button type="button" class="btn btn-primary" @click="updateBridge()"  data-dismiss="modal">Accept changes</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           </div>
         </div>
@@ -158,7 +182,8 @@ var bridgeTmpl = `
 	</td>
 	<td>
         <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#bridge-form-'+index">Edit</button>
-        <button type="button" class="btn btn-sm btn-danger" @click="removeBridge(index)">X</button>
+        <button type="button" class="btn btn-sm btn-success" @click="addTarget(index)" title="Add target">+</button>
+        <button type="button" class="btn btn-sm btn-danger" @click="removeBridge(index)" title="Remove bridge">X</button>
         <!--button type="button" class="btn btn-sm btn-primary" data-toggle="collapse" :data-target="'.target-'+index">Targets</button-->
         <bridge-form v-bind:bridge="getDeepCopy(bridge)" v-bind:index="index" :id="'bridge-form-'+index"></bridge-form>
 	</td>
@@ -193,14 +218,25 @@ Vue.component('auth', {
 Vue.component('target-form', {
     template: targetFormTmpl,
     props: ["bridge_index", "target", "index"],
+    data: function () {
+        return {
+            local_target: this.target,
+            add_key: "",
+            add_value: ""
+        }
+    },
     methods: {
-        updateTarget: function(bridge_index, target, index) {
+        updateTarget: function() {
            this.$parent.edited = true;
-           this.$parent.$parent.$options.methods.updateTarget(bridge_index, target, index)
+           this.$parent.$parent.$options.methods.updateTarget(this.bridge_index, this.local_target, this.index)
         },
-        removeTargetProp: function(bridge_index, index, key) {
-            this.$parent.edited = true;
-            this.$parent.$parent.$options.methods.removeTargetProp(bridge_index, index, key)
+        removeTargetProp: function(key) {
+            Vue.delete(this.local_target, key)
+        },
+        addTargetProp: function() {
+            Vue.set(this.local_target, this.add_key, this.add_value)
+            this.add_value = ""
+            this.add_key = ""
         }
     }
 })
@@ -208,14 +244,25 @@ Vue.component('target-form', {
 Vue.component('bridge-form', {
     template: bridgeFormTmpl,
     props: ["bridge", "index"],
+    data: function () {
+        return {
+            local_bridge: this.bridge,
+            add_key: "",
+            add_value: ""
+        }
+    },
     methods: {
-        updateBridge: function(bridge, index) {
+        updateBridge: function() {
             this.$parent.edited = true;
-            this.$parent.$parent.$options.methods.updateBridge(bridge, index)
+            this.$parent.$parent.$options.methods.updateBridge(this.local_bridge, this.index)
         },
-        removeBridgeProp: function(index, key) {
-            this.$parent.edited = true;
-            this.$parent.$parent.$options.methods.removeBridgeProp(index, key)
+        removeBridgeProp: function(key) {
+            Vue.delete(this.local_bridge, key)
+        },
+        addBridgeProp: function() {
+            Vue.set(this.local_bridge, this.add_key, this.add_value)
+            this.add_value = ""
+            this.add_key = ""
         }
     }
 })
@@ -252,7 +299,6 @@ Vue.component('bridge', {
         removeBridge: function(index) {
            this.$parent.$options.methods.removeBridge(index)
         }
-
     }
 })
 
@@ -373,12 +419,20 @@ var app = new Vue({
             Vue.delete(app.control_data.bridges[bridge_index].targets[index], key)
             app.edited = true
         },
+        addTargetProp: function(bridge_index, index, key, value) {
+            app.control_data.bridges[bridge_index].targets[index][key] = value
+            app.edited = true
+        },
         removeBridge: function(index) {
            app.control_data.bridges.splice(index, 1)
            app.edited = true
         },
         removeBridgeProp: function(index, key) {
             Vue.delete(app.control_data.bridges[index], key)
+            app.edited = true
+        },
+        addBridgeProp: function(index, key, value) {
+            app.control_data.bridges[index][key] = value
             app.edited = true
         },
         undoChanges: function() {
