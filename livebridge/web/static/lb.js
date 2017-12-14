@@ -62,7 +62,8 @@ var authTmpl = `
     <div class="card source">
         <h4 class="card-header">
                     {{ name }}
-                    <button type="button" class="btn btn-primary" data-toggle="modal" :data-target="'#auth-form-'+index">Edit</button>
+                    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#auth-form-'+index">Edit</button>
+                    <button type="button" class="btn btn-sm btn-danger" @click="removeAuth(name)">X</button>
         </h4>
         <div class="card-body">
             <div class="card-text">
@@ -248,7 +249,10 @@ Vue.component('auth', {
         }
     },
     methods: {
-        getDeepCopy: getDeepCopy
+        getDeepCopy: getDeepCopy,
+        removeAuth: function(keyName) {
+           this.$parent.$options.methods.removeAuth(keyName)
+        }
     }
 })
 
@@ -321,7 +325,6 @@ Vue.component('target', {
         removeTarget: function(bridge_index, index) {
            this.$parent.$options.methods.removeTarget(bridge_index, index)
         }
-
     }
 })
 
@@ -460,6 +463,10 @@ var app = new Vue({
         },
         updateAuth: function(auth, name) {
            app.$set(app.control_data.auth, name, auth)
+           app.edited = true
+        },
+        removeAuth: function(name) {
+           Vue.delete(app.control_data.auth, name)
            app.edited = true
         },
         removeTarget: function(bridge_index, index) {
