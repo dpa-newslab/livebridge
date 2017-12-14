@@ -23,7 +23,7 @@
                                 <a class="nav-link active" id="bridges-tab" data-toggle="tab" href="#bridges" role="tab" aria-controls="bridges" aria-selected="false">Bridges</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="auth-tab" data-toggle="tab" href="#auth" role="tab" aria-controls="auth" aria-selected="true">Auth</a>
+                                <a class="nav-link" id="auth-tab" data-toggle="tab" href="#auth" role="tab" aria-controls="auth" aria-selected="true">Accounts</a>
                             </li>
                         </ul>
                     </div>
@@ -36,7 +36,8 @@
             <div id="control">
                 <div class="tab-content" v-if="loggedIn === true">
                     <div class="tab-pane active" id="bridges" role="tabpanel" aria-labelledby="bridges-tab">
-                        <div id="add-btn"><button type="button" class="btn btn-sm btn-success" @click="addBridge()">
+                        <div id="add-btn"><button type="button" class="btn btn-sm btn-success"
+                                                    data-toggle="modal" data-target="#bridge-add-form">
                                 Add new bridge</button>
                         </div>
                         <table class="table table-striped" style="with:100%;">
@@ -57,16 +58,18 @@
                                 </template>
                             </tbody>
                         </table>
+                        <bridge-form v-bind:bridge="new_bridge" v-bind:index="-1" id="bridge-add-form"></bridge-form>
                 </div>
                 <div class="tab-pane" id="auth" role="tabpanel" aria-labelledby="auth-tab">
                     <div id="add-btn">
-                        <input type="text" v-model="new_auth_key" />
-                        <button type="button" class="btn btn-sm btn-success" @click="addAuth()">
+                        <input type="text" v-model="new_auth_key" placeholder="service name"/>
+                        <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#auth-add-form">
                             Add new auth credentials</button>
                     </div>
                     <div is="auth" v-for="(auth, name, index) in control_data.auth" v-bind:name="name" v-bind:auth="auth"
                                    v-bind:index="index" class="auth" :id="'auth-'+index">
                     </div>
+                    <auth-form v-bind:auth="{}" v-bind:name="new_auth_key" v-bind:mode="'add'" id="auth-add-form"></auth-form>
                 </div>
             </div>
             <template v-if="edited">

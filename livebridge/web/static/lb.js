@@ -17,7 +17,7 @@ var authFormTmpl = `
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit {{ name }}</h5>
+                <h5 class="modal-title"><span v-if="mode==='add'">Add</span><span v-else>Edit</span> {{ name }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -49,7 +49,8 @@ var authFormTmpl = `
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" @click="updateAuth()"  data-dismiss="modal">Accept changes</button>
+                <button v-if="mode === 'add'" type="button" class="btn btn-primary" @click="addAuth()"  data-dismiss="modal">Add</button>
+                <button v-else type="button" class="btn btn-primary" @click="updateAuth()"  data-dismiss="modal">Accept changes</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -157,7 +158,8 @@ var bridgeFormTmpl = `
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" @click="updateBridge()"  data-dismiss="modal">Accept changes</button>
+            <button v-if="index < 0" type="button" class="btn btn-primary" @click="addBridge()" data-dismiss="modal">Create new bridge</button>
+            <button v-else type="button" class="btn btn-primary" @click="updateBridge()"  data-dismiss="modal">Accept changes</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           </div>
         </div>
@@ -208,7 +210,7 @@ var bridgeTmpl = `
 
 Vue.component('auth-form', {
     template: authFormTmpl,
-    props: ["auth", "name"],
+    props: ["auth", "name", "mode"],
     data: function () {
         return {
             local_auth: this.auth,
@@ -217,6 +219,10 @@ Vue.component('auth-form', {
         }
     },
     methods: {
+        addAuth: function() {
+           this.$parent.edited = true;
+           this.$parent.$options.methods.addAuth(this.name, this.local_auth)
+        },
         updateAuth: function() {
            this.$parent.edited = true;
            this.$parent.$parent.$options.methods.updateAuth(this.local_auth, this.name)
@@ -283,6 +289,9 @@ Vue.component('bridge-form', {
         }
     },
     methods: {
+        addBridge: function() {
+            this.$parent.$options.methods.addBridge(this.local_bridge)
+        },
         updateBridge: function() {
             this.$parent.edited = true;
             this.$parent.$parent.$options.methods.updateBridge(this.local_bridge, this.index)
@@ -346,7 +355,8 @@ var app = new Vue({
         username: "admin",
         password: "admin",
         edited: false,
-        new_auth_key: ''
+        new_auth_key: '',
+        new_bridge: {"type":"", "label": ""}
     },
     mounted() {
         this.getControlData()
@@ -431,14 +441,14 @@ var app = new Vue({
                 }
            }
         },
-        addAuth: function() {
-            if(this.new_auth_key) {
-                this.$set(this.control_data.auth, this.new_auth_key, {})
-                this.new_auth_key = ""
-            }
+        addAuth: function(new_key, new_auth) {
+            app.$set(app.control_data.auth, new_key, new_auth)
+            app.new_auth_key = ""
+            app.edited = true
         },
-        addBridge: function() {
-           app.control_data.bridges.splice(0, 0, {label: "new bridge"})
+        addBridge: function(new_bridge) {
+           app.control_data.bridges.splice(0, 0, new_bridge)
+           app.edited = true
         },
         updateBridge: function(bridge, index) {
            app.control_data.bridges.splice(index, 1, bridge)
@@ -501,8 +511,6 @@ var app = new Vue({
                 alert("Error: "+error.response.data.error);
             });
         }
-    },
-    computed: {
-   }
+    }
 })
 
