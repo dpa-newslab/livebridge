@@ -54,11 +54,11 @@
                                 <template v-for="(bridge, index) in control_data.bridges">
                                     <tr is="bridge" v-bind:bridge="bridge" v-bind:index="index" :id="'bridge-'+index"></tr>
                                     <tr is="target" v-for="(target, x) in bridge.targets" v-bind:bridge_index="index"
-                                        v-bind:target="target" v-bind:index="x" :class="'target-'+index"></tr>
+                                        v-bind:target="target" v-bind:index="x" :class="'target-'+index" :key="'key-'+index+'-'+x"></tr>
                                 </template>
                             </tbody>
                         </table>
-                        <bridge-form v-bind:bridge="new_bridge" v-bind:index="-1" id="bridge-add-form"></bridge-form>
+                        <bridge-form v-bind:bridge="new_obj" v-bind:index="-1" id="bridge-add-form"></bridge-form>
                 </div>
                 <div class="tab-pane" id="auth" role="tabpanel" aria-labelledby="auth-tab">
                     <div id="add-btn">

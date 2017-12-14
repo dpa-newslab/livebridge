@@ -81,7 +81,7 @@ var targetFormTmpl = `
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Edit {{ local_target.label }}</h5>
+            <h5 class="modal-title"><span v-if="index < 0">Add</span><span v-else>Edit</span> {{ local_target.label }}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -113,7 +113,8 @@ var targetFormTmpl = `
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" @click="updateTarget()"  data-dismiss="modal">Accept changes</button>
+            <button v-if="index < 0" type="button" class="btn btn-primary" @click="addTarget()" data-dismiss="modal">Add new target</button>
+            <button v-else type="button" class="btn btn-primary" @click="updateTarget()"  data-dismiss="modal">Accept changes</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           </div>
         </div>
@@ -125,7 +126,7 @@ var bridgeFormTmpl = `
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Edit {{local_bridge.label}}</h5>
+            <h5 class="modal-title"><span v-if="index < 0">Add</span><span v-else>Edit</span> {{ local_bridge.label }}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -201,10 +202,10 @@ var bridgeTmpl = `
 	</td>
 	<td>
         <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#bridge-form-'+index">Edit</button>
-        <button type="button" class="btn btn-sm btn-success" @click="addTarget(index)" title="Add target">+</button>
+        <button type="button" class="btn btn-sm btn-success" data-toggle="modal" :data-target="'#target-add-form-'+index" title="Add target">+</button>
         <button type="button" class="btn btn-sm btn-danger" @click="removeBridge(index)" title="Remove bridge">X</button>
-        <!--button type="button" class="btn btn-sm btn-primary" data-toggle="collapse" :data-target="'.target-'+index">Targets</button-->
         <bridge-form v-bind:bridge="getDeepCopy(bridge)" v-bind:index="index" :id="'bridge-form-'+index"></bridge-form>
+        <target-form v-bind:target="new_target" v-bind:bridge_index="index" v-bind:index="-1" :id="'target-add-form-'+index"></target-form>
 	</td>
 </tr>
 `
@@ -267,9 +268,12 @@ Vue.component('target-form', {
         }
     },
     methods: {
+        addTarget: function() {
+            this.$parent.$parent.$options.methods.addTarget(this.bridge_index, this.local_target)
+        },
         updateTarget: function() {
-           this.$parent.edited = true;
-           this.$parent.$parent.$options.methods.updateTarget(this.bridge_index, this.local_target, this.index)
+            this.$parent.edited = true;
+            this.$parent.$parent.$options.methods.updateTarget(this.bridge_index, this.local_target, this.index)
         },
         removeTargetProp: function(key) {
             Vue.delete(this.local_target, key)
@@ -333,7 +337,8 @@ Vue.component('bridge', {
     props: ["bridge", "index"],
     data: function () {
         return {
-            edited: false
+            edited: false,
+            new_target: {"type": "", "label": ""}
         }
     },
     methods: {
@@ -359,7 +364,7 @@ var app = new Vue({
         password: "admin",
         edited: false,
         new_auth_key: '',
-        new_bridge: {"type":"", "label": ""}
+        new_obj: {"type":"", "label": ""}
     },
     mounted() {
         this.getControlData()
@@ -450,12 +455,18 @@ var app = new Vue({
             app.edited = true
         },
         addBridge: function(new_bridge) {
+           new_bridge["targets"] = [];
            app.control_data.bridges.splice(0, 0, new_bridge)
            app.edited = true
         },
         updateBridge: function(bridge, index) {
            app.control_data.bridges.splice(index, 1, bridge)
            app.edited = true
+        },
+        addTarget: function(bridge_index, target) {
+            var pos = app.control_data.bridges[bridge_index].targets.length;
+            app.control_data.bridges[bridge_index].targets.splice(pos, 0, target)
+            app.edited = true
         },
         updateTarget: function(bridge_index, target, index) {
             app.control_data.bridges[bridge_index].targets.splice(index, 1, target)
