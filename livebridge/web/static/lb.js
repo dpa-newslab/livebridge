@@ -51,7 +51,7 @@ var authFormTmpl = `
             <div class="modal-footer">
                 <button v-if="mode === 'add'" type="button" class="btn btn-primary" @click="addAuth()"  data-dismiss="modal">Add</button>
                 <button v-else type="button" class="btn btn-primary" @click="updateAuth()"  data-dismiss="modal">Accept changes</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" @click="reset()" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
@@ -115,7 +115,7 @@ var targetFormTmpl = `
           <div class="modal-footer">
             <button v-if="index < 0" type="button" class="btn btn-primary" @click="addTarget()" data-dismiss="modal">Add new target</button>
             <button v-else type="button" class="btn btn-primary" @click="updateTarget()"  data-dismiss="modal">Accept changes</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-secondary" @click="reset()" data-dismiss="modal">Cancel</button>
           </div>
         </div>
       </div>
@@ -162,7 +162,7 @@ var bridgeFormTmpl = `
           <div class="modal-footer">
             <button v-if="index < 0" type="button" class="btn btn-primary" @click="addBridge()" data-dismiss="modal">Create new bridge</button>
             <button v-else type="button" class="btn btn-primary" @click="updateBridge()"  data-dismiss="modal">Accept changes</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-secondary" @click="reset()" data-dismiss="modal">Cancel</button>
           </div>
         </div>
       </div>
@@ -196,7 +196,7 @@ var bridgeTmpl = `
 		</div>
 	</td>
 	<td>
-		<div v-for="target in bridge.targets">
+		<div v-for="(target, x) in bridge.targets">
 			<span class="badge badge-success">{{ target.type}}</span>
 		</div>
 	</td>
@@ -205,7 +205,7 @@ var bridgeTmpl = `
         <button type="button" class="btn btn-sm btn-success" data-toggle="modal" :data-target="'#target-add-form-'+index" title="Add target">+</button>
         <button type="button" class="btn btn-sm btn-danger" @click="removeBridge(index)" title="Remove bridge">X</button>
         <bridge-form v-bind:bridge="getDeepCopy(bridge)" v-bind:index="index" :id="'bridge-form-'+index"></bridge-form>
-        <target-form v-bind:target="new_target" v-bind:bridge_index="index" v-bind:index="-1" :id="'target-add-form-'+index"></target-form>
+        <target-form v-bind:bridge_index="index" v-bind:index="-1" :id="'target-add-form-'+index"></target-form>
 	</td>
 </tr>
 `
@@ -215,7 +215,7 @@ Vue.component('auth-form', {
     props: ["auth", "name", "mode"],
     data: function () {
         return {
-            local_auth: this.auth,
+            local_auth: (this.mode === "add") ? {} : this.auth,
             add_key: "",
             add_value: ""
         }
@@ -224,6 +224,7 @@ Vue.component('auth-form', {
         addAuth: function() {
            this.$parent.edited = true;
            this.$parent.$options.methods.addAuth(this.name, this.local_auth)
+           this.reset()
         },
         updateAuth: function() {
            this.$parent.edited = true;
@@ -236,6 +237,12 @@ Vue.component('auth-form', {
             Vue.set(this.local_auth, this.add_key, this.add_value)
             this.add_value = ""
             this.add_key = ""
+        },
+        reset: function() {
+            if (this.mode === "add") {
+                // add form
+                this.local_auth = {}
+            }
         }
     }
 })
@@ -262,7 +269,7 @@ Vue.component('target-form', {
     props: ["bridge_index", "target", "index"],
     data: function () {
         return {
-            local_target: this.target,
+            local_target: (this.index < 0) ? {"type": "", "label": ""} : this.target,
             add_key: "",
             add_value: ""
         }
@@ -270,6 +277,7 @@ Vue.component('target-form', {
     methods: {
         addTarget: function() {
             this.$parent.$parent.$options.methods.addTarget(this.bridge_index, this.local_target)
+            this.reset()
         },
         updateTarget: function() {
             this.$parent.edited = true;
@@ -282,6 +290,12 @@ Vue.component('target-form', {
             Vue.set(this.local_target, this.add_key, this.add_value)
             this.add_value = ""
             this.add_key = ""
+        },
+        reset: function() {
+            if (this.index < 0) {
+                // add form
+                this.local_target = {"type": "", "label": ""}
+            }
         }
     }
 })
@@ -291,7 +305,7 @@ Vue.component('bridge-form', {
     props: ["bridge", "index"],
     data: function () {
         return {
-            local_bridge: this.bridge,
+            local_bridge: (this.index < 0) ? {"type": "", "label": ""} : this.bridge,
             add_key: "",
             add_value: ""
         }
@@ -299,6 +313,7 @@ Vue.component('bridge-form', {
     methods: {
         addBridge: function() {
             this.$parent.$options.methods.addBridge(this.local_bridge)
+            this.reset()
         },
         updateBridge: function() {
             this.$parent.edited = true;
@@ -311,6 +326,12 @@ Vue.component('bridge-form', {
             Vue.set(this.local_bridge, this.add_key, this.add_value)
             this.add_value = ""
             this.add_key = ""
+        },
+        reset: function() {
+            if (this.index < 0) {
+                // add form
+                this.local_bridge = {"type": "", "label": ""}
+            }
         }
     }
 })
@@ -363,8 +384,7 @@ var app = new Vue({
         username: "admin",
         password: "admin",
         edited: false,
-        new_auth_key: '',
-        new_obj: {"type":"", "label": ""}
+        new_auth_key: ''
     },
     mounted() {
         this.getControlData()
@@ -466,6 +486,7 @@ var app = new Vue({
         addTarget: function(bridge_index, target) {
             var pos = app.control_data.bridges[bridge_index].targets.length;
             app.control_data.bridges[bridge_index].targets.splice(pos, 0, target)
+            app.edited = false // force rerender
             app.edited = true
         },
         updateTarget: function(bridge_index, target, index) {
@@ -482,6 +503,7 @@ var app = new Vue({
         },
         removeTarget: function(bridge_index, index) {
             app.control_data.bridges[bridge_index].targets.splice(index, 1)
+            app.edited = false
             app.edited = true
         },
         removeTargetProp: function(bridge_index, index, key) {
