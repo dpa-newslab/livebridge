@@ -1,15 +1,25 @@
-var displayProps = function (data) {
-    var props = {};
-    for(var prop in data) {
-        if(["type", "label"].indexOf(prop) == -1 ) {
-            props[prop] = data[prop]
+var lbMixin = {
+    methods: {
+        linkify: function (value) {
+            if (!value) return ''
+            value = value.toString()
+            if(value.startsWith("http"))
+                return '<a href="'+value+'" target="_blank">'+value+'</a>'
+            return value;
+        },
+        displayProps: function (data) {
+            var props = {};
+            for(var prop in data) {
+                if(["type", "label"].indexOf(prop) == -1 ) {
+                    props[prop] = data[prop]
+                }
+            }
+            return props;
+        },
+        getDeepCopy: function(data) {
+            return JSON.parse(JSON.stringify(data))
         }
     }
-    return props;
-}
-
-var getDeepCopy = function(data) {
-    return JSON.parse(JSON.stringify(data))
 }
 
 var authFormTmpl = `
@@ -175,7 +185,7 @@ var targetTmpl = `
     	<strong>{{ target.label }}</strong></td>
     <td>
         <div v-for="(value, key) in displayProps(target)">
-            <strong>{{ key }}:</strong> {{ value }}
+            <strong>{{ key }}:</strong>  <span v-html="linkify(value)"></span>
         </div>
     </td>
     <td></td>
@@ -192,7 +202,7 @@ var bridgeTmpl = `
 	<td><strong>{{ bridge.label}}</strong></td>
 	<td>
 		<div v-for="(v, k) in displayProps(bridge)" v-if="k !== 'targets'">
-			<strong>{{k }}:</strong> {{v}}
+			<strong>{{k }}:</strong> <span v-html="linkify(v)"></span>
 		</div>
 	</td>
 	<td>
@@ -250,6 +260,7 @@ Vue.component('auth-form', {
 
 Vue.component('auth', {
     template: authTmpl,
+    mixins: [lbMixin],
     props: ["name", "auth", "index"],
     data: function () {
         return {
@@ -257,7 +268,6 @@ Vue.component('auth', {
         }
     },
     methods: {
-        getDeepCopy: getDeepCopy,
         removeAuth: function(keyName) {
            this.$parent.$options.methods.removeAuth(keyName)
         }
@@ -339,14 +349,13 @@ Vue.component('bridge-form', {
 Vue.component('target', {
     template: targetTmpl,
     props: ["bridge_index", "target", "index"],
+    mixins: [lbMixin],
     data: function () {
         return {
             edited: false
         }
     },
     methods: {
-        displayProps: displayProps,
-        getDeepCopy: getDeepCopy,
         removeTarget: function(bridge_index, index) {
            this.$parent.$options.methods.removeTarget(bridge_index, index)
         }
@@ -356,6 +365,7 @@ Vue.component('target', {
 Vue.component('bridge', {
     template: bridgeTmpl,
     props: ["bridge", "index"],
+    mixins: [lbMixin],
     data: function () {
         return {
             edited: false,
@@ -363,8 +373,6 @@ Vue.component('bridge', {
         }
     },
     methods: {
-        displayProps: displayProps,
-        getDeepCopy: getDeepCopy,
         removeBridge: function(index) {
            this.$parent.$options.methods.removeBridge(index)
         }
@@ -390,7 +398,6 @@ var app = new Vue({
         this.getControlData()
     },
     methods: {
-        getDeepCopy: getDeepCopy,
         getCookie: function() {
             var name = this.cookie_name + "=";
             var ca = document.cookie.split(';');
