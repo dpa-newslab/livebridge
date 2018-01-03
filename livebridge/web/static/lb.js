@@ -91,10 +91,13 @@ var targetFormTmpl = `
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title"><span v-if="index < 0">Add</span><span v-else>Edit</span> {{ local_target.label }}</h5>
+            <h5 class="modal-title"><strong>Source:</strong> {{ bridge.type }} / {{ bridge.label }}</h5><br/>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
+          </div>
+          <div class="modal-header">
+            <h3 class="modal-title"><span v-if="index < 0">Add</span><span v-else>Edit</span> {{ local_target.label }}</h3>
           </div>
           <div class="modal-body">
             <form>
@@ -192,7 +195,7 @@ var targetTmpl = `
     <td>
         <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#target-form-'+bridge_index+'-'+index">Edit</button>
         <button type="button" class="btn btn-sm btn-danger" @click="removeTarget(bridge_index, index)">X</button>
-        <target-form v-bind:target="getDeepCopy(target)" v-bind:bridge_index="bridge_index" v-bind:index="index" :id="'target-form-'+bridge_index+'-'+index"></target-form>
+        <target-form v-bind:target="getDeepCopy(target)" v-bind:bridge="bridge" v-bind:bridge_index="bridge_index" v-bind:index="index" :id="'target-form-'+bridge_index+'-'+index"></target-form>
     </td>
 </tr>`
 
@@ -215,7 +218,7 @@ var bridgeTmpl = `
         <button type="button" class="btn btn-sm btn-success" data-toggle="modal" :data-target="'#target-add-form-'+index" title="Add target">+</button>
         <button type="button" class="btn btn-sm btn-danger" @click="removeBridge(index)" title="Remove bridge">X</button>
         <bridge-form v-bind:bridge="getDeepCopy(bridge)" v-bind:index="index" :id="'bridge-form-'+index"></bridge-form>
-        <target-form v-bind:bridge_index="index" v-bind:index="-1" :id="'target-add-form-'+index"></target-form>
+        <target-form v-bind:bridge_index="index" v-bind:bridge="bridge" v-bind:index="-1" :id="'target-add-form-'+index"></target-form>
 	</td>
 </tr>
 `
@@ -276,7 +279,7 @@ Vue.component('auth', {
 
 Vue.component('target-form', {
     template: targetFormTmpl,
-    props: ["bridge_index", "target", "index"],
+    props: ["bridge_index", "target", "index", "bridge"],
     data: function () {
         return {
             local_target: (this.index < 0) ? {"type": "", "label": ""} : this.target,
@@ -348,7 +351,7 @@ Vue.component('bridge-form', {
 
 Vue.component('target', {
     template: targetTmpl,
-    props: ["bridge_index", "target", "index"],
+    props: ["bridge_index", "target", "index", "bridge"],
     mixins: [lbMixin],
     data: function () {
         return {

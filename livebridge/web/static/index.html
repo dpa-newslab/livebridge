@@ -53,7 +53,7 @@
                             <tbody>
                                 <template v-for="(bridge, index) in control_data.bridges">
                                     <tr is="bridge" v-bind:bridge="bridge" v-bind:index="index" :id="'bridge-'+index" :key="'bridge-'+index"></tr>
-                                    <tr is="target" v-for="(target, x) in bridge.targets" v-bind:bridge_index="index"
+                                    <tr is="target" v-for="(target, x) in bridge.targets" v-bind:bridge_index="index" v-bind:bridge="bridge"
                                         v-bind:target="target" v-bind:index="x" :class="'target-'+index" :key="'target-'+index+'-'+x"></tr>
                                 </template>
                             </tbody>
