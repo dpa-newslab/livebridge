@@ -40,71 +40,56 @@
                                                     data-toggle="modal" data-target="#bridge-add-form">
                                 Add new source</button>
                         </div>
-                        <table class="table table-striped" style="with:100%;">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Type</th>
-                                    <th scope="col">Label</th>
-                                    <th scope="col">Config</th>
-                                    <th scope="col">Targets</th>
-                                    <th scope="col">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <template v-for="(bridge, index) in control_data.bridges">
-                                    <tr is="bridge" v-bind:bridge="bridge" v-bind:index="index" :id="'bridge-'+index" :key="'bridge-'+index"></tr>
-                                    <tr is="target" v-for="(target, x) in bridge.targets" v-bind:bridge_index="index" v-bind:bridge="bridge"
-                                        v-bind:target="target" v-bind:index="x" :class="'target-'+index" :key="'target-'+index+'-'+x"></tr>
-                                </template>
-                            </tbody>
-                        </table>
-                        <bridge-form v-bind:index="-1" id="bridge-add-form"></bridge-form>
-                </div>
-                <div class="tab-pane" id="auth" role="tabpanel" aria-labelledby="auth-tab">
-                    <div id="add-btn">
-                        <input type="text" v-model="new_auth_key" placeholder="service name"/>
-                        <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#auth-add-form">
-                            Add new auth credentials</button>
-                    </div>
-                    <div is="auth" v-for="(auth, name, index) in control_data.auth" v-bind:name="name" v-bind:auth="auth"
-                                   v-bind:index="index" class="auth" :id="'auth-'+index">
-                    </div>
-                    <auth-form v-bind:name="new_auth_key" v-bind:mode="'add'" id="auth-add-form"></auth-form>
-                </div>
-            </div>
-            <template v-if="edited">
-                <footer>
-                    <nav class="navbar navbar-expand-lg navbar-light fixed-bottom hidden" id="footer-bar">
-                        <div class="collapse navbar-collapse justify-content-end" id="form-controls">
-                            <button type="button" class="btn btn-secondary" @click="undoChanges()">Cancel</button>&nbsp;
-                            <button type="button" class="btn btn-danger" @click="saveNewControlData()"
-                                  data-toggle="collapse" data-target="#saved-modal" aria-expanded="false" aria-controls="#saved-modal">
-                                        Save changes</button>
-                        </div>
-                    </nav>
-                </footer>
-            </template>
-            <form class="form-signin" v-on:submit.prevent v-if="loggedIn === false">
-                <h4 class="form-signin-heading">Please sign in</h4>
-                <label for="loginName" class="sr-only">Username</label>
-                <input v-model="loginUser" type="text" id="loginName" class="form-control" placeholder="Username" required>
-                <label for="loginPassword" class="sr-only">Password</label>
-                <input v-model="loginPassword" type="password" id="loginPassword" class="form-control" placeholder="Password" required>
-                <!--div class="checkbox">
-                    <label>
-                    <input type="checkbox" value="remember-me"> Remember me
-                    </label>
-                    </div-->
-                    <button class="btn btn-lg btn-primary btn-block" type="submit" v-on:click="login()">Sign in</button>
-            </form>
-            </div>
-            </div>
+                        <div is="bridge" v-for="(bridge, index) in control_data.bridges" v-bind:bridge="bridge"
+                               v-bind:index="index" class="bridge" :id="'bridge-'+index" :key="'bridge-'+index"></div>
 
-            <script src="/dashboard/lb.js"></script>
-            <!-- Optional JavaScript -->
-            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+                        <bridge-form v-bind:index="-1" id="bridge-add-form"></bridge-form>
+                    </div>
+                    <div class="tab-pane" id="auth" role="tabpanel" aria-labelledby="auth-tab">
+                        <div id="add-btn">
+                            <input type="text" v-model="new_auth_key" placeholder="service name"/>
+                            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#auth-add-form">
+                                Add new auth credentials</button>
+                        </div>
+                        <div is="auth" v-for="(auth, name, index) in control_data.auth" v-bind:name="name" v-bind:auth="auth"
+                                       v-bind:index="index" :id="'auth-'+index">
+                        </div>
+                        <auth-form v-bind:name="new_auth_key" v-bind:mode="'add'" id="auth-add-form"></auth-form>
+                    </div>
+                </div>
+                <template v-if="edited">
+                    <footer>
+                        <nav class="navbar navbar-expand-lg navbar-light fixed-bottom hidden" id="footer-bar">
+                            <div class="collapse navbar-collapse justify-content-end" id="form-controls">
+                                <button type="button" class="btn btn-secondary" @click="undoChanges()">Cancel</button>&nbsp;
+                                <button type="button" class="btn btn-danger" @click="saveNewControlData()"
+                                                      data-toggle="collapse" data-target="#saved-modal" aria-expanded="false" aria-controls="#saved-modal">
+                                    Save changes</button>
+                            </div>
+                        </nav>
+                    </footer>
+                </template>
+                <form class="form-signin" v-on:submit.prevent v-if="loggedIn === false">
+                    <h4 class="form-signin-heading">Please sign in</h4>
+                    <label for="loginName" class="sr-only">Username</label>
+                    <input v-model="loginUser" type="text" id="loginName" class="form-control" placeholder="Username" required>
+                    <label for="loginPassword" class="sr-only">Password</label>
+                    <input v-model="loginPassword" type="password" id="loginPassword" class="form-control" placeholder="Password" required>
+                    <!--div class="checkbox">
+                        <label>
+                        <input type="checkbox" value="remember-me"> Remember me
+                        </label>
+                        </div-->
+                        <button class="btn btn-lg btn-primary btn-block" type="submit" v-on:click="login()">Sign in</button>
+                </form>
+        </div>
+        </div>
+
+        <script src="/dashboard/lb.js"></script>
+        <!-- Optional JavaScript -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
     </body>
 </html>
 

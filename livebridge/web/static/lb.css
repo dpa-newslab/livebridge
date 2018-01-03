@@ -46,6 +46,9 @@ body {
 .bridge.edited .card {
 	background-color: #ffd6cc;
 }
+table.targets {
+     margin: 5px 0 5px 0;
+}
 tr.target {
 	background-color: #EEE !important;
 }
@@ -61,10 +64,21 @@ tr.edited {
 .source {
 	padding-left: 10px;
 }
+.source h4, .auth h4 {
+	display:inline;
+}
+.card-actions {
+	float:right;
+}
 .targets {
 	margin-top: 10px;
 }
-.target-prop {
+table.targets {
+    border-collapse: separate !important;
+}
+.target-prop{}
+.target-actions {
+	text-align: right;
 }
 #footer-bar {
 	background-color: #DBDBDB;

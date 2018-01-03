@@ -34,7 +34,7 @@ var authFormTmpl = `
             </div>
             <div class="modal-body">
                 <form>
-                    <table class="table" style="with:100%;">
+                    <table class="table">
                         <tr v-for="(v, k) in local_auth" class="form-group">
                             <td>{{k}}</td>
                             <td><input type="text" class="form-control" :id="'form-input-'+k" v-model="local_auth[k]"></td>
@@ -68,17 +68,19 @@ var authFormTmpl = `
 </div>`
 
 var authTmpl = `
-<div v-bind:class="{ edited: edited}">
-    <div class="card source">
-        <h4 class="card-header">
-                    {{ name }}
-                    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#auth-form-'+index">Edit</button>
-                    <button type="button" class="btn btn-sm btn-danger" @click="removeAuth(name)">X</button>
-        </h4>
+<div v-bind:class="{ edited: edited}" class="auth">
+    <div class="card">
+        <div class="card-header">
+            <h4>{{ name }}</h4>
+            <div class="card-actions">
+                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#auth-form-'+index">Edit</button>
+                <button type="button" class="btn btn-sm btn-danger" @click="removeAuth(name)">X</button>
+            </div>
+        </div>
         <div class="card-body">
             <div class="card-text">
                 <div v-for="(v, k) in auth">
-                    {{k }}: {{v}}
+                    <strong>{{ k }}:</strong>  <span v-html="linkify(v)"></span>
                 </div>
             </div>
         </div>
@@ -101,7 +103,7 @@ var targetFormTmpl = `
           </div>
           <div class="modal-body">
             <form>
-                <table class="table" style="with:100%;">
+                <table class="table">
                     <tr v-for="(v, k) in local_target" class="form-group">
                         <td>{{k}}</td>
                         <td><input type="text" class="form-control" :id="'form-input-'+k" v-model="local_target[k]"></td>
@@ -146,7 +148,7 @@ var bridgeFormTmpl = `
           </div>
           <div class="modal-body">
             <form>
-                <table class="table" style="with:100%;">
+                <table class="table">
                     <tr v-for="(v, k) in local_bridge" v-if="k !== 'targets'" class="form-group">
                         <td>{{k}}</td>
                         <td>
@@ -182,46 +184,54 @@ var bridgeFormTmpl = `
     </div>`
 
 var targetTmpl = `
-<tr class="target" v-bind:class="{edited: edited}">
-    <td>|_</td>
-    <td><span class="badge badge-success">{{ target.type }}</span>
+<tr class="target" v-bind:class="{edited: edited}"  :key="'key-'+target.type+'-'+index">
+    <td><span class="badge badge-success align-middle">{{ target.type }}</span></td>
+    <td>
     	<strong>{{ target.label }}</strong></td>
     <td>
         <div v-for="(value, key) in displayProps(target)">
             <strong>{{ key }}:</strong>  <span v-html="linkify(value)"></span>
         </div>
     </td>
-    <td></td>
-    <td>
-        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#target-form-'+bridge_index+'-'+index">Edit</button>
+    <td class="target-actions">
+        <button type="button" class="btn btn-sm btn-primary justify-content-end" data-toggle="modal" :data-target="'#target-form-'+bridge_index+'-'+index">Edit</button>
         <button type="button" class="btn btn-sm btn-danger" @click="removeTarget(bridge_index, index)">X</button>
         <target-form v-bind:target="getDeepCopy(target)" v-bind:bridge="bridge" v-bind:bridge_index="bridge_index" v-bind:index="index" :id="'target-form-'+bridge_index+'-'+index"></target-form>
     </td>
 </tr>`
 
+
 var bridgeTmpl = `
-<tr class="bridge" v-bind:class="{ edited: edited}" :key="'key-'+bridge.type+'-'+index">
-	<td><span class="badge badge-primary">{{ bridge.type}}</span></td>
-	<td><strong>{{ bridge.label}}</strong></td>
-	<td>
-		<div v-for="(v, k) in displayProps(bridge)" v-if="k !== 'targets'">
-			<strong>{{k }}:</strong> <span v-html="linkify(v)"></span>
-		</div>
-	</td>
-	<td>
-		<div v-for="(target, x) in bridge.targets">
-			<span class="badge badge-success">{{ target.type}}</span>
-		</div>
-	</td>
-	<td>
-        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#bridge-form-'+index">Edit</button>
-        <button type="button" class="btn btn-sm btn-success" data-toggle="modal" :data-target="'#target-add-form-'+index" title="Add target">+</button>
-        <button type="button" class="btn btn-sm btn-danger" @click="removeBridge(index)" title="Remove bridge">X</button>
-        <bridge-form v-bind:bridge="getDeepCopy(bridge)" v-bind:index="index" :id="'bridge-form-'+index"></bridge-form>
-        <target-form v-bind:bridge_index="index" v-bind:bridge="bridge" v-bind:index="-1" :id="'target-add-form-'+index"></target-form>
-	</td>
-</tr>
-`
+<div v-bind:class="{ edited: edited}" :key="'key-'+bridge.type+'-'+index" class="bridge">
+    <div class="card source">
+        <div class="card-header">
+            <h4>
+                <span class="badge badge-primary">{{ bridge.type}}</span>
+                {{ bridge.label }}
+            </h4>
+            <div class="card-actions">
+                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#bridge-form-'+index">Edit</button>
+                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" :data-target="'#target-add-form-'+index" title="Add target">+</button>
+                <button type="button" class="btn btn-sm btn-danger" @click="removeBridge(index)" title="Remove bridge">X</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <bridge-form v-bind:bridge="getDeepCopy(bridge)" v-bind:index="index" :id="'bridge-form-'+index"></bridge-form>
+            <target-form v-bind:bridge_index="index" v-bind:bridge="bridge" v-bind:index="-1" :id="'target-add-form-'+index"></target-form>
+            <!--h4 class="card-title"-->
+            <div class="card-text">
+                <div v-for="(v, k) in displayProps(bridge)" v-if="k !== 'targets'">
+                    <strong>{{k }}:</strong> <span v-html="linkify(v)"></span>
+                </div>
+            </div>
+            <table class="table table-bordered table-sm targets">
+                <tr is="target" v-for="(target, x) in bridge.targets" v-bind:bridge_index="index" v-bind:bridge="bridge"
+                        v-bind:target="target" v-bind:index="x" :id="'target-'+index" :key="'target-'+index+'-'+x">
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>`
 
 Vue.component('auth-form', {
     template: authFormTmpl,
@@ -290,11 +300,12 @@ Vue.component('target-form', {
     methods: {
         addTarget: function() {
             this.$parent.$parent.$options.methods.addTarget(this.bridge_index, this.local_target)
+            this.$parent.edited = true;
             this.reset()
         },
         updateTarget: function() {
             this.$parent.edited = true;
-            this.$parent.$parent.$options.methods.updateTarget(this.bridge_index, this.local_target, this.index)
+            this.$parent.$parent.$parent.$options.methods.updateTarget(this.bridge_index, this.local_target, this.index)
         },
         removeTargetProp: function(key) {
             Vue.delete(this.local_target, key)
@@ -360,7 +371,7 @@ Vue.component('target', {
     },
     methods: {
         removeTarget: function(bridge_index, index) {
-           this.$parent.$options.methods.removeTarget(bridge_index, index)
+           this.$parent.$parent.$options.methods.removeTarget(bridge_index, index)
         }
     }
 })
