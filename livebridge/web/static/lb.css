@@ -77,8 +77,12 @@ table.targets {
     border-collapse: separate !important;
 }
 .target-prop{}
-.target-actions {
+td.target-actions {
     text-align: right;
+}
+.modal-body td {
+    text-align: right;
+    vertical-align: middle;
 }
 #footer-bar {
     background-color: #DBDBDB;
