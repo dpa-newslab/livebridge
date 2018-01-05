@@ -7,10 +7,15 @@ var lbMixin = {
                 return '<a href="'+value+'" target="_blank">'+value+'</a>'
             return value;
         },
-        displayProps: function (data) {
+        displayProps: function (data, mode) {
             var props = {};
+            var filterProps = ["type", "label", "__edited"]
+
+            if(mode === "auth")
+                filterProps = ["__edited"]
+
             for(var prop in data) {
-                if(["type", "label"].indexOf(prop) == -1 ) {
+                if(filterProps.indexOf(prop) == -1 ) {
                     props[prop] = data[prop]
                 }
             }
@@ -68,7 +73,7 @@ var authFormTmpl = `
 </div>`
 
 var authTmpl = `
-<div v-bind:class="{ edited: edited}" class="auth">
+<div v-bind:class="{ edited: auth.__edited}" class="auth">
     <div class="card">
         <div class="card-header">
             <h4>{{ name }}</h4>
@@ -79,7 +84,7 @@ var authTmpl = `
         </div>
         <div class="card-body">
             <div class="card-text">
-                <div v-for="(v, k) in auth">
+                <div v-for="(v, k) in displayProps(auth, 'auth')">
                     <strong>{{ k }}:</strong>  <span v-html="linkify(v)"></span>
                 </div>
             </div>
@@ -184,7 +189,7 @@ var bridgeFormTmpl = `
     </div>`
 
 var targetTmpl = `
-<tr class="target" v-bind:class="{edited: edited}"  :key="'key-'+target.type+'-'+index">
+<tr class="target" v-bind:class="{edited: target.__edited}">
     <td><span class="badge badge-success align-middle">{{ target.type }}</span></td>
     <td>
     	<strong>{{ target.label }}</strong></td>
@@ -202,7 +207,7 @@ var targetTmpl = `
 
 
 var bridgeTmpl = `
-<div v-bind:class="{ edited: edited}" :key="'key-'+bridge.type+'-'+index" class="bridge">
+<div v-bind:class="{ edited: bridge.__edited}" class="bridge">
     <div class="card source">
         <div class="card-header">
             <h4>
@@ -226,7 +231,7 @@ var bridgeTmpl = `
             </div>
             <table class="table table-bordered table-sm targets">
                 <tr is="target" v-for="(target, x) in bridge.targets" v-bind:bridge_index="index" v-bind:bridge="bridge"
-                        v-bind:target="target" v-bind:index="x" :id="'target-'+index" :key="'target-'+index+'-'+x">
+                        v-bind:target="target" v-bind:index="x" :id="'target-'+index" :key="'target-'+index+'-'+x" >
                 </tr>
             </table>
         </div>
@@ -340,8 +345,8 @@ Vue.component('bridge-form', {
             this.reset()
         },
         updateBridge: function() {
-            this.$parent.edited = true;
             this.$parent.$parent.$options.methods.updateBridge(this.local_bridge, this.index)
+            this.$parent.edited = true;
         },
         removeBridgeProp: function(key) {
             Vue.delete(this.local_bridge, key)
@@ -464,6 +469,16 @@ var app = new Vue({
                 console.log(("\t".repeat(d))+key+": "+obj)
             }
         },
+        clearObject: function(key, obj, depth) {
+            var d = (key) ? (depth +1): depth
+            if((typeof obj) == "object") {
+                delete obj["__edited"]
+                for(var prop in obj) {
+                    var val = obj[prop]
+                    this.clearObject(prop, val, d)
+                }
+            }
+        },
         getControlData: function() {
             var cookie_token = this.getCookie();
             axios({
@@ -483,48 +498,74 @@ var app = new Vue({
                 }
             });
         },
-        cleanMarker: function() {
-           for(var x in app.$children) {
-                if(app.$children[x].edited != undefined) {
-                    app.$children[x].edited = false;
-                }
+        checkNewAuthName: function(name, e) {
+            var skip = false;
+            name = name.trim();
+            if(name === "") {
+                alert("Please specify an account name!");
+                skip = true;
+            } else if(this.control_data.auth[name] !== undefined) {
+                alert("Account name already exists!");
+                skip = true;
+            }
+            if(skip === true) {
+                e.preventDefault();
+                e.stopPropagation();
            }
         },
         addAuth: function(new_key, new_auth) {
+            new_auth["__edited"] = true;
             app.$set(app.control_data.auth, new_key, new_auth)
             app.new_auth_key = ""
             app.edited = true
         },
+        updateAuth: function(auth, name) {
+            auth["__edited"] = true;
+            app.$set(app.control_data.auth, name, auth)
+            app.edited = true
+        },
+        removeAuth: function(name) {
+            Vue.delete(app.control_data.auth, name)
+            app.edited = true
+        },
         addBridge: function(new_bridge) {
-           new_bridge["targets"] = [];
-           app.control_data.bridges.splice(0, 0, new_bridge)
-           app.edited = true
+            new_bridge["targets"] = [];
+            new_bridge.__edited = true;
+            app.control_data.bridges.unshift(new_bridge)
+            app.edited = true
         },
         updateBridge: function(bridge, index) {
-           app.control_data.bridges.splice(index, 1, bridge)
-           app.edited = true
+            bridge.__edited = true
+            app.control_data.bridges.splice(index, 1, bridge)
+            app.edited = true
+        },
+        removeBridge: function(index) {
+            app.control_data.bridges.splice(index, 1)
+            app.edited = true
+        },
+        removeBridgeProp: function(index, key) {
+            Vue.delete(app.control_data.bridges[index], key)
+            app.edited = true
+        },
+        addBridgeProp: function(index, key, value) {
+            app.control_data.bridges[index][key] = value
+            app.edited = true
         },
         addTarget: function(bridge_index, target) {
-            var pos = app.control_data.bridges[bridge_index].targets.length;
-            app.control_data.bridges[bridge_index].targets.splice(pos, 0, target)
-            app.edited = false // force rerender
+            target["__edited"] = true
+            var data = JSON.parse(JSON.stringify(app.control_data));
+            data.bridges[bridge_index].targets.push(target)
+            app.control_data = data
             app.edited = true
         },
         updateTarget: function(bridge_index, target, index) {
+            target["__edited"] = true
             app.control_data.bridges[bridge_index].targets.splice(index, 1, target)
             app.edited = true
         },
-        updateAuth: function(auth, name) {
-           app.$set(app.control_data.auth, name, auth)
-           app.edited = true
-        },
-        removeAuth: function(name) {
-           Vue.delete(app.control_data.auth, name)
-           app.edited = true
-        },
         removeTarget: function(bridge_index, index) {
             app.control_data.bridges[bridge_index].targets.splice(index, 1)
-            app.edited = false
+            app.control_data.bridges[bridge_index].__edited = true
             app.edited = true
         },
         removeTargetProp: function(bridge_index, index, key) {
@@ -535,18 +576,6 @@ var app = new Vue({
             app.control_data.bridges[bridge_index].targets[index][key] = value
             app.edited = true
         },
-        removeBridge: function(index) {
-           app.control_data.bridges.splice(index, 1)
-           app.edited = true
-        },
-        removeBridgeProp: function(index, key) {
-            Vue.delete(app.control_data.bridges[index], key)
-            app.edited = true
-        },
-        addBridgeProp: function(index, key, value) {
-            app.control_data.bridges[index][key] = value
-            app.edited = true
-        },
         undoChanges: function() {
             this.control_data = JSON.parse(JSON.stringify(this.control_data_orig));
             app.edited = false
@@ -554,18 +583,19 @@ var app = new Vue({
         },
         saveNewControlData: function() {
             app.edited = false
+            var payload = JSON.parse(JSON.stringify(this.control_data));
+            this.clearObject("", payload, -1)
             axios({
                 method: 'put',
                 url: '/api/v1/controldata',
-                data: this.control_data,
+                data: payload,
                 headers: {
                     "X-Auth-Token": app.token
                 }
             })
             .then(response => {
-                this.cleanMarker();
                 alert("Data was successfully saved!")
-                //this.printObject("", this.control_data, -1);
+                this.getControlData()
             }).catch(function (error) {
                 if(error.reponse)
                     console.debug(error.response.status);

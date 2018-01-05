@@ -41,15 +41,16 @@
                                 Add new source</button>
                         </div>
                         <div is="bridge" v-for="(bridge, index) in control_data.bridges" v-bind:bridge="bridge"
-                               v-bind:index="index" class="bridge" :id="'bridge-'+index" :key="'bridge-'+index"></div>
+                               v-bind:index="index" :key="'bridge-'+bridge.type+'-'+bridge.label" :id="'bridge-'+index"></div>
 
                         <bridge-form v-bind:index="-1" id="bridge-add-form"></bridge-form>
                     </div>
                     <div class="tab-pane" id="auth" role="tabpanel" aria-labelledby="auth-tab">
                         <div id="add-btn">
                             <input type="text" v-model="new_auth_key" placeholder="service name"/>
-                            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#auth-add-form">
-                                Add new auth credentials</button>
+                            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#auth-add-form"
+                                @click="checkNewAuthName(new_auth_key, $event)">
+                                    Add new auth credentials</button>
                         </div>
                         <div is="auth" v-for="(auth, name, index) in control_data.auth" v-bind:name="name" v-bind:auth="auth"
                                        v-bind:index="index" :id="'auth-'+index">
