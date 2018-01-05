@@ -63,7 +63,10 @@ var authFormTmpl = `
                                 </datalist>
                             </td>
                             <td>
-                                <input type="text" v-model="add_value" class="form-control" placeholder="Property value">
+                                <input type="text" v-model="add_value" class="form-control" placeholder="Property value" list="auth_vals">
+                                <datalist id="auth_vals" v-if="add_key !== ''">
+                                    <option v-for="val in valueChoices(add_key)" :value="val"/>
+                                </datalist>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-sm btn-success" @click="addAuthProp()">
@@ -140,7 +143,10 @@ var targetFormTmpl = `
                             </datalist>
                         </td>
                         <td>
-                            <input type="text" v-model="add_value" class="form-control" placeholder="Property value">
+                            <input type="text" v-model="add_value" class="form-control" placeholder="Property value" list="target_vals">
+                            <datalist id="target_vals" v-if="add_key !== ''">
+                                <option v-for="val in valueChoices(add_key)" :value="val"/>
+                            </datalist>
                         </td>
                         <td>
                             <button type="button" class="btn btn-sm btn-success" @click="addTargetProp()">
@@ -194,7 +200,7 @@ var bridgeFormTmpl = `
                         </td>
                         <td>
                             <input type="text" v-model="add_value" class="form-control" placeholder="Property value" list="vals">
-                            <datalist id="vals">
+                            <datalist id="vals" v-if="add_key !== ''">
                                 <option v-for="val in valueChoices(add_key)" :value="val"/>
                             </datalist>
                         </td>
