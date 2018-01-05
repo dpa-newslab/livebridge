@@ -23,6 +23,12 @@ var lbMixin = {
         },
         getDeepCopy: function(data) {
             return JSON.parse(JSON.stringify(data))
+        },
+        valueChoices: function(propName) {
+            return (app !== undefined) ? app.getValueChoices(propName) : [];
+        },
+        keyChoices: function(propName) {
+            return (app !== undefined) ? app.getKeyChoices() : [];
         }
     }
 }
@@ -42,7 +48,8 @@ var authFormTmpl = `
                     <table class="table">
                         <tr v-for="(v, k) in local_auth" class="form-group">
                             <td>{{k}}</td>
-                            <td><input type="text" class="form-control" :id="'form-input-'+k" v-model="local_auth[k]"></td>
+                            <td>
+                                <input type="text" class="form-control" :id="'form-input-'+k" v-model="local_auth[k]"></td>
                             <td>
                                 <button type="button" class="btn btn-sm btn-danger" @click="removeAuthProp(k)">
                                     X</button>
@@ -50,7 +57,10 @@ var authFormTmpl = `
                         </tr>
                         <tr>
                             <td>
-                                <input type="text" v-model="add_key" class="form-control" placeholder="Property name">
+                                <input type="text" v-model="add_key" class="form-control" placeholder="Property name" list="authlist">
+                                <datalist id="authlist">
+                                    <option v-for="val in keyChoices()" :value="val"/>
+                                </datalist>
                             </td>
                             <td>
                                 <input type="text" v-model="add_value" class="form-control" placeholder="Property value">
@@ -111,7 +121,12 @@ var targetFormTmpl = `
                 <table class="table">
                     <tr v-for="(v, k) in local_target" class="form-group">
                         <td>{{k}}</td>
-                        <td><input type="text" class="form-control" :id="'form-input-'+k" v-model="local_target[k]"></td>
+                        <td>
+                            <input type="text" class="form-control" :id="'form-input-'+k" v-model="local_target[k]" :list="k+'-'+index">
+                            <datalist :id="k+'-'+index">
+                                <option v-for="val in valueChoices(k)" :value="val"/>
+                            </datalist>
+                        </td>
                         <td>
                             <button type="button" class="btn btn-sm btn-danger" @click="removeTargetProp(k)">
                                 X</button>
@@ -119,7 +134,10 @@ var targetFormTmpl = `
                     </tr>
                     <tr>
                         <td>
-                            <input type="text" v-model="add_key" class="form-control" placeholder="Property name">
+                            <input type="text" v-model="add_key" class="form-control" placeholder="Property name" :list="'_keylist'+index">
+                            <datalist :id="'_keylist'+index">
+                                <option v-for="val in keyChoices()" :value="val"/>
+                            </datalist>
                         </td>
                         <td>
                             <input type="text" v-model="add_value" class="form-control" placeholder="Property value">
@@ -157,7 +175,10 @@ var bridgeFormTmpl = `
                     <tr v-for="(v, k) in local_bridge" v-if="k !== 'targets'" class="form-group">
                         <td>{{k}}</td>
                         <td>
-                            <input type="text" class="form-control" :id="'form-input-'+k" v-model="local_bridge[k]">
+                            <input type="text" class="form-control" :id="'form-input-'+k" v-model="local_bridge[k]" :list="k">
+                            <datalist :id="k">
+                                <option v-for="val in valueChoices(k)" :value="val"/>
+                            </datalist>
                         </td>
                         <td>
                             <button type="button" class="btn btn-sm btn-danger" @click="removeBridgeProp(k)">
@@ -166,10 +187,16 @@ var bridgeFormTmpl = `
                     </tr>
                     <tr>
                         <td>
-                            <input type="text" v-model="add_key" class="form-control" placeholder="Property name">
+                            <input type="text" v-model="add_key" class="form-control" placeholder="Property name" list="key">
+                            <datalist id="key">
+                                <option v-for="val in keyChoices()" :value="val"/>
+                            </datalist>
                         </td>
                         <td>
-                            <input type="text" v-model="add_value" class="form-control" placeholder="Property value">
+                            <input type="text" v-model="add_value" class="form-control" placeholder="Property value" list="vals">
+                            <datalist id="vals">
+                                <option v-for="val in valueChoices(add_key)" :value="val"/>
+                            </datalist>
                         </td>
                         <td>
                             <button type="button" class="btn btn-sm btn-success" @click="addBridgeProp()">
@@ -241,6 +268,7 @@ var bridgeTmpl = `
 Vue.component('auth-form', {
     template: authFormTmpl,
     props: ["auth", "name", "mode"],
+    mixins: [lbMixin],
     data: function () {
         return {
             local_auth: (this.mode === "add") ? {} : this.auth,
@@ -295,6 +323,7 @@ Vue.component('auth', {
 Vue.component('target-form', {
     template: targetFormTmpl,
     props: ["bridge_index", "target", "index", "bridge"],
+    mixins: [lbMixin],
     data: function () {
         return {
             local_target: (this.index < 0) ? {"type": "", "label": ""} : this.target,
@@ -332,6 +361,7 @@ Vue.component('target-form', {
 Vue.component('bridge-form', {
     template: bridgeFormTmpl,
     props: ["bridge", "index"],
+    mixins: [lbMixin],
     data: function () {
         return {
             local_bridge: (this.index < 0) ? {"type": "", "label": ""} : this.bridge,
@@ -411,7 +441,9 @@ var app = new Vue({
         username: "admin",
         password: "admin",
         edited: false,
-        new_auth_key: ''
+        new_auth_key: '',
+        keyChoices: [],
+        valueChoices: {}
     },
     mounted() {
         this.getControlData()
@@ -479,6 +511,25 @@ var app = new Vue({
                 }
             }
         },
+        collectChoices: function(key, obj, depth) {
+            var d = (key) ? (depth +1): depth
+            if((typeof obj) == "object") {
+                for(var prop in obj) {
+                    var val = obj[prop]
+                    if(typeof(val) === "string") {
+                        if(this.keyChoices.indexOf(prop) < 0) {
+                            this.keyChoices.push(prop);
+                        }
+                        if(this.valueChoices[prop] === undefined) {
+                            this.valueChoices[prop] = [val];
+                        } else {
+                            this.valueChoices[prop].push(val);
+                        }
+                    }
+                    this.collectChoices(prop, val, d)
+                }
+            }
+        },
         getControlData: function() {
             var cookie_token = this.getCookie();
             axios({
@@ -487,12 +538,12 @@ var app = new Vue({
             }).then(response => {
                 this.control_data = response.data;
                 this.control_data_orig = JSON.parse(JSON.stringify(response.data));
+                this.collectChoices("", this.control_data, -1)
                 //this.printObject("", this.control_data, -1);
             }).catch(error =>  {
-                if(error.reponse)
-                    console.debug(error.response.status);
-                console.log(error.message);
-                if(error.response.status === 401) {
+                if(error)
+                    console.debug(error);
+                if(error.response && error.response.status === 401) {
                     this.loggedIn = false;
                     this.login()
                 }
@@ -512,6 +563,12 @@ var app = new Vue({
                 e.preventDefault();
                 e.stopPropagation();
            }
+        },
+        getValueChoices: function(propName) {
+            return this.valueChoices[propName];
+        },
+        getKeyChoices: function(propName) {
+            return this.keyChoices;
         },
         addAuth: function(new_key, new_auth) {
             new_auth["__edited"] = true;
