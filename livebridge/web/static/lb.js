@@ -25,10 +25,10 @@ var lbMixin = {
             return JSON.parse(JSON.stringify(data))
         },
         valueChoices: function(propName) {
-            return (app !== undefined) ? app.getValueChoices(propName) : [];
+            return (app !== undefined) ? app.valueChoices[propName] : [];
         },
         keyChoices: function(propName) {
-            return (app !== undefined) ? app.getKeyChoices() : [];
+            return (app !== undefined) ? app.keyChoices : [];
         }
     }
 }
@@ -46,7 +46,7 @@ var authFormTmpl = `
             <div class="modal-body">
                 <form>
                     <table class="table">
-                        <tr v-for="(v, k) in local_auth" class="form-group">
+                        <tr v-for="(v, k) in local_auth" v-if="['__edited'].indexOf(k) < 0" class="form-group">
                             <td>{{k}}</td>
                             <td>
                                 <input type="text" class="form-control" :id="'form-input-'+k" v-model="local_auth[k]"></td>
@@ -122,7 +122,7 @@ var targetFormTmpl = `
           <div class="modal-body">
             <form>
                 <table class="table">
-                    <tr v-for="(v, k) in local_target" class="form-group">
+                    <tr v-for="(v, k) in local_target" v-if="['__edited'].indexOf(k) < 0" class="form-group">
                         <td>{{k}}</td>
                         <td>
                             <input type="text" class="form-control" :id="'form-input-'+k" v-model="local_target[k]" :list="k+'-'+index">
@@ -178,7 +178,7 @@ var bridgeFormTmpl = `
           <div class="modal-body">
             <form>
                 <table class="table">
-                    <tr v-for="(v, k) in local_bridge" v-if="k !== 'targets'" class="form-group">
+                    <tr v-for="(v, k) in local_bridge" v-if="['targets', '__edited'].indexOf(k) < 0" class="form-group">
                         <td>{{k}}</td>
                         <td>
                             <input type="text" class="form-control" :id="'form-input-'+k" v-model="local_bridge[k]" :list="k">
@@ -570,12 +570,6 @@ var app = new Vue({
                 e.stopPropagation();
            }
         },
-        getValueChoices: function(propName) {
-            return this.valueChoices[propName];
-        },
-        getKeyChoices: function(propName) {
-            return this.keyChoices;
-        },
         addAuth: function(new_key, new_auth) {
             new_auth["__edited"] = true;
             app.$set(app.control_data.auth, new_key, new_auth)
@@ -606,14 +600,6 @@ var app = new Vue({
             app.control_data.bridges.splice(index, 1)
             app.edited = true
         },
-        removeBridgeProp: function(index, key) {
-            Vue.delete(app.control_data.bridges[index], key)
-            app.edited = true
-        },
-        addBridgeProp: function(index, key, value) {
-            app.control_data.bridges[index][key] = value
-            app.edited = true
-        },
         addTarget: function(bridge_index, target) {
             target["__edited"] = true
             var data = JSON.parse(JSON.stringify(app.control_data));
@@ -631,18 +617,9 @@ var app = new Vue({
             app.control_data.bridges[bridge_index].__edited = true
             app.edited = true
         },
-        removeTargetProp: function(bridge_index, index, key) {
-            Vue.delete(app.control_data.bridges[bridge_index].targets[index], key)
-            app.edited = true
-        },
-        addTargetProp: function(bridge_index, index, key, value) {
-            app.control_data.bridges[bridge_index].targets[index][key] = value
-            app.edited = true
-        },
         undoChanges: function() {
             this.control_data = JSON.parse(JSON.stringify(this.control_data_orig));
             app.edited = false
-            this.cleanMarker();
         },
         saveNewControlData: function() {
             app.edited = false
