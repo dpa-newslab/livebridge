@@ -517,21 +517,21 @@ var app = new Vue({
                 }
             }
         },
+        addChoice: function(prop, value) {
+            if(this.keyChoices.indexOf(prop) < 0)
+                this.keyChoices.push(prop);
+
+            if(this.valueChoices[prop] === undefined)
+                this.valueChoices[prop] = [value];
+            else this.valueChoices[prop].push(value);
+        },
         collectChoices: function(key, obj, depth) {
             var d = (key) ? (depth +1): depth
             if((typeof obj) == "object") {
                 for(var prop in obj) {
                     var val = obj[prop]
-                    if(typeof(val) === "string") {
-                        if(this.keyChoices.indexOf(prop) < 0) {
-                            this.keyChoices.push(prop);
-                        }
-                        if(this.valueChoices[prop] === undefined) {
-                            this.valueChoices[prop] = [val];
-                        } else {
-                            this.valueChoices[prop].push(val);
-                        }
-                    }
+                    if(typeof(val) === "string")
+                        this.addChoice(prop, val)
                     this.collectChoices(prop, val, d)
                 }
             }
@@ -571,12 +571,14 @@ var app = new Vue({
            }
         },
         addAuth: function(new_key, new_auth) {
+            app.collectChoices("", {new_key: new_auth}, -1)
             new_auth["__edited"] = true;
             app.$set(app.control_data.auth, new_key, new_auth)
             app.new_auth_key = ""
             app.edited = true
         },
         updateAuth: function(auth, name) {
+            app.collectChoices("", {name: auth}, -1)
             auth["__edited"] = true;
             app.$set(app.control_data.auth, name, auth)
             app.edited = true
@@ -586,12 +588,14 @@ var app = new Vue({
             app.edited = true
         },
         addBridge: function(new_bridge) {
+            app.collectChoices("", new_bridge, -1)
             new_bridge["targets"] = [];
             new_bridge.__edited = true;
             app.control_data.bridges.unshift(new_bridge)
             app.edited = true
         },
         updateBridge: function(bridge, index) {
+            app.collectChoices("", bridge, -1)
             bridge.__edited = true
             app.control_data.bridges.splice(index, 1, bridge)
             app.edited = true
@@ -601,6 +605,7 @@ var app = new Vue({
             app.edited = true
         },
         addTarget: function(bridge_index, target) {
+            app.collectChoices("", target, -1)
             target["__edited"] = true
             var data = JSON.parse(JSON.stringify(app.control_data));
             data.bridges[bridge_index].targets.push(target)
@@ -608,6 +613,7 @@ var app = new Vue({
             app.edited = true
         },
         updateTarget: function(bridge_index, target, index) {
+            app.collectChoices("", target, -1)
             target["__edited"] = true
             app.control_data.bridges[bridge_index].targets.splice(index, 1, target)
             app.edited = true
