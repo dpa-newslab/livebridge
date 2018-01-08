@@ -86,11 +86,11 @@ var authFormTmpl = `
 </div>`
 
 var authTmpl = `
-<div v-bind:class="{ edited: auth.__edited}" class="auth">
+<div v-bind:class="{ edited: auth.__edited}" class="auth rounded">
     <div class="card">
         <div class="card-header">
             <h4>{{ name }}</h4>
-            <div class="card-actions">
+            <div class="float-right">
                 <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#auth-form-'+index">Edit</button>
                 <button type="button" class="btn btn-sm btn-danger" @click="removeAuth(name)">X</button>
             </div>
@@ -240,14 +240,14 @@ var targetTmpl = `
 
 
 var bridgeTmpl = `
-<div v-bind:class="{ edited: bridge.__edited}" class="bridge">
+<div v-bind:class="{ edited: bridge.__edited}" class="bridge rounded">
     <div class="card source">
         <div class="card-header">
             <h4>
                 <span class="badge badge-primary">{{ bridge.type}}</span>
                 {{ bridge.label }}
             </h4>
-            <div class="card-actions">
+            <div class="float-right">
                 <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#bridge-form-'+index">Edit</button>
                 <button type="button" class="btn btn-sm btn-success" data-toggle="modal" :data-target="'#target-add-form-'+index" title="Add target">+</button>
                 <button type="button" class="btn btn-sm btn-danger" @click="removeBridge(index)" title="Remove bridge">X</button>
@@ -262,7 +262,7 @@ var bridgeTmpl = `
                     <strong>{{k }}:</strong> <span v-html="linkify(v)"></span>
                 </div>
             </div>
-            <table class="table table-bordered table-sm targets">
+            <table class="table table-bordered table-sm targets rounded">
                 <tr is="target" v-for="(target, x) in bridge.targets" v-bind:bridge_index="index" v-bind:bridge="bridge"
                         v-bind:target="target" v-bind:index="x" :id="'target-'+index" :key="'target-'+index+'-'+x" >
                 </tr>
@@ -270,6 +270,18 @@ var bridgeTmpl = `
         </div>
     </div>
 </div>`
+
+var flashMessageTmpl = `
+<transition name="fade">
+    <div :class="'alert alert-'+message.mode" class="flash-msg text-center fixed-top" role="alert" v-if="message.flash">
+        <button type="button" class="close" aria-label="Close" @click="message.flash=false;">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h5 class="alert-heading">{{ message.txt }}</h5>
+    </div>
+</transition>
+`
+
 
 Vue.component('auth-form', {
     template: authFormTmpl,
@@ -308,7 +320,6 @@ Vue.component('auth-form', {
         }
     }
 })
-
 
 Vue.component('auth', {
     template: authTmpl,
@@ -434,6 +445,10 @@ Vue.component('bridge', {
     }
 })
 
+Vue.component('flash-message', {
+    template: flashMessageTmpl,
+    props: ["message"]
+})
 
 var app = new Vue({
     el: '#content',
@@ -449,12 +464,24 @@ var app = new Vue({
         edited: false,
         new_auth_key: '',
         keyChoices: [],
-        valueChoices: {}
+        valueChoices: {},
+        message: {
+            txt: "",
+            mode: "",
+            flash: false
+        }
     },
     mounted() {
         this.getControlData()
     },
     methods: {
+        showMessage: function(txt, mode) {
+            this.message.txt = txt
+            this.message.mode = mode
+            this.message.flash = true
+            if(mode === "success")
+                setTimeout(function(){ app.message.flash = false; }, 3000);
+        },
         getCookie: function() {
             var name = this.cookie_name + "=";
             var ca = document.cookie.split(';');
@@ -483,7 +510,8 @@ var app = new Vue({
                     this.loginPassword = "";
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    console.info(error);
+                    app.showMessage("Login failed, please check your credentials!", "danger");
                 });
             }
 			return false;
@@ -559,10 +587,10 @@ var app = new Vue({
             var skip = false;
             name = name.trim();
             if(name === "") {
-                alert("Please specify an account name!");
+                this.showMessage("Please specify an account name!", "danger");
                 skip = true;
             } else if(this.control_data.auth[name] !== undefined) {
-                alert("Account name already exists!");
+                this.showMessage("Account name already exists!", "danger");
                 skip = true;
             }
             if(skip === true) {
@@ -640,12 +668,12 @@ var app = new Vue({
                 }
             })
             .then(response => {
-                alert("Data was successfully saved!")
+                this.showMessage("Data was successfully saved!", "success");
                 this.getControlData()
             }).catch(function (error) {
                 if(error.reponse)
                     console.debug(error.response.status);
-                alert("Error: "+error.response.data.error);
+                this.showMessage(error.response.data.error, "danger");
             });
         }
     }

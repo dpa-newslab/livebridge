@@ -83,7 +83,8 @@
                         </div-->
                         <button class="btn btn-lg btn-primary btn-block" type="submit" v-on:click="login()">Sign in</button>
                 </form>
-        </div>
+                <flash-message v-bind:message="message">
+            </div>
         </div>
 
         <script src="/dashboard/lb.js"></script>

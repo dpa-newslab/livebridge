@@ -67,9 +67,6 @@ tr.edited {
 .source h4, .auth h4 {
     display:inline;
 }
-.card-actions {
-    float:right;
-}
 .targets {
     margin-top: 10px;
 }
@@ -87,4 +84,17 @@ td.target-actions {
 #footer-bar {
     background-color: #DBDBDB;
 }
-
+.flash-msg {
+    margin-top:30px;
+    margin-left:auto;
+    margin-right:auto;
+    width:65%;
+    padding: 30px;
+}
+/* vue */
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+}
