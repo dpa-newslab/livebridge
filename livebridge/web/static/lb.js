@@ -454,6 +454,7 @@ var app = new Vue({
     el: '#content',
     data: {
         cookie_name: "lb-db",
+        etag: "",
         loginUser: null,
         loginPassword: null,
         loggedIn: true,
@@ -570,6 +571,7 @@ var app = new Vue({
                 method: 'get',
                 url: '/api/v1/controldata'
             }).then(response => {
+                this.etag = response.headers.etag
                 this.control_data = response.data;
                 this.control_data_orig = JSON.parse(JSON.stringify(response.data));
                 this.collectChoices("", this.control_data, -1)
@@ -664,7 +666,8 @@ var app = new Vue({
                 url: '/api/v1/controldata',
                 data: payload,
                 headers: {
-                    "X-Auth-Token": app.token
+                    "X-Auth-Token": app.token,
+                    "If-Match": app.etag
                 }
             })
             .then(response => {
@@ -673,7 +676,7 @@ var app = new Vue({
             }).catch(function (error) {
                 if(error.reponse)
                     console.debug(error.response.status);
-                this.showMessage(error.response.data.error, "danger");
+                app.showMessage(error.response.data.error, "danger");
             });
         }
     }

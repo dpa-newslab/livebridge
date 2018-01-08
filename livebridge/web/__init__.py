@@ -13,6 +13,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import hashlib
+import json
 import logging
 import uuid
 import os.path
@@ -75,6 +77,11 @@ class WebApi(object):
         self.srv = loop.run_until_complete(f) if not loop.is_running() else None
         logger.info("... API server started up")
 
+    def _get_etag(self, data):
+        hash_md5 = hashlib.md5()
+        hash_md5.update(json.dumps(data).encode("utf-8"))
+        return hash_md5.hexdigest()
+
     async def login(self, request):
         try:
             assert self.config["auth"]["user"]
@@ -103,10 +110,15 @@ class WebApi(object):
 
     async def control_get(self, request):
         control_doc = await self.app["controller"].load_control_doc()
-        return web.json_response(control_doc)
+        return web.json_response(control_doc, headers={"Etag": self._get_etag(control_doc)})
 
     async def control_put(self, request):
         try:
+            # check etag first
+            required_etag = self._get_etag(await self.app["controller"].load_control_doc())
+            if required_etag != request.headers.get("If-Match"):
+                return web.json_response({"error": "Precondition Failed."}, status=412)
+            # handle data
             await request.post()
             if request.has_body:
                 uploaded_doc = await request.json()
