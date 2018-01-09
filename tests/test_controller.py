@@ -58,46 +58,68 @@ class ControllerTests(asynctest.TestCase):
         await asyncio.sleep(3)
         self.controller.shutdown = True
 
-    async def test_check_control_change(self):
+    async def test_do_control_data_check(self):
         self.controller.bridges = ["one", "two"]
         self.controller.run = asynctest.CoroutineMock(return_value=True)
         self.controller.control_data = asynctest.MagicMock()
         self.controller.control_data.check_control_change = asynctest.CoroutineMock(return_value=True)
-        res = await self.controller.check_control_change()
+        res = await self.controller.do_control_data_check()
         assert res is True
         assert self.controller.run.call_count == 1
 
-    async def test_check_control_change_with_exception(self):
+    async def test_do_control_data_check_with_no_change(self):
         self.controller.check_control_interval = 2
         self.controller.control_data = asynctest.MagicMock()
         self.controller.control_data.check_control_change = asynctest.CoroutineMock(return_value=False)
-        self.controller.sleep = asynctest.CoroutineMock(side_effect=[None, self.shutdown()])
-        await self.controller.check_control_change()
-        assert self.controller.control_data.check_control_change.call_count == 2
+        await self.controller.do_control_data_check()
+        await asyncio.sleep(3)
+        assert type(self.controller.watch_timer) == asyncio.events.TimerHandle
 
-    async def test_check_control_change_deactivated(self):
-        self.controller.force_check_control_data = False
-        self.controller.control_data = asynctest.MagicMock()
-        self.controller.control_data.is_auto_update = MagicMock(return_value=False)
-        res = await self.controller.check_control_change()
-        assert res is None
-
-        self.controller.force_check_control_data = True
-        self.controller.control_data.check_control_change = asynctest.CoroutineMock(side_effect=Exception("Test-Exception"))
-        with self.assertRaises(Exception):
-            await self.controller.check_control_change()
-        assert self.controller.control_data.check_control_change.call_count == 1
+    async def test_read_control_data(self):
+        self.controller.watch_timer = asynctest.MagicMock(cancel = MagicMock(return_value=True))
+        self.controller.run = asynctest.CoroutineMock(return_value=True)
+        await self.controller.read_control_data()
+        assert self.controller.watch_timer.cancel.call_count == 1
+        assert self.controller.run.call_count == 1
 
     async def test_run(self):
         self.controller.remove_old_bridges = asynctest.CoroutineMock(return_value=True)
         self.controller.add_new_bridges = asynctest.CoroutineMock(return_value=True)
-        self.controller.check_control_change = asynctest.CoroutineMock(return_value=True)
         assert self.controller.control_data is None
         await self.controller.run()
         assert self.controller.remove_old_bridges.call_count == 1
         assert self.controller.add_new_bridges.call_count == 1
-        assert self.controller.check_control_change.call_count == 1
-        assert len(self.controller.tasked) == 1
+
+    async def test_run_with_watcher(self):
+        self.controller.remove_old_bridges = asynctest.CoroutineMock(return_value=True)
+        self.controller.add_new_bridges = asynctest.CoroutineMock(return_value=True)
+        self.controller.retry_run = asynctest.CoroutineMock(return_value=True)
+        self.controller.do_control_data_check = asynctest.CoroutineMock(return_value=True)
+        control_data = asynctest.MagicMock(is_auto_update = MagicMock(return_value=True))
+        self.controller.control_data = control_data
+        self.controller.load_control_data = asynctest.CoroutineMock(return_value=control_data)
+
+        await self.controller.run()
+        assert self.controller.retry_run.call_count == 0
+        assert self.controller.remove_old_bridges.call_count == 1
+        assert self.controller.add_new_bridges.call_count == 1
+        assert self.controller.do_control_data_check.call_count == 1
+
+    async def test_run_with_file_watcher(self):
+        self.controller.remove_old_bridges = asynctest.CoroutineMock(return_value=True)
+        self.controller.add_new_bridges = asynctest.CoroutineMock(return_value=True)
+        self.controller.retry_run = asynctest.CoroutineMock(return_value=True)
+        self.controller.do_control_data_check = asynctest.CoroutineMock(return_value=True)
+        self.controller.force_check_control_data = True
+        control_data = asynctest.MagicMock(is_auto_update = MagicMock(return_value=True))
+        self.controller.control_data = control_data
+        self.controller.load_control_data = asynctest.CoroutineMock(return_value=control_data)
+
+        await self.controller.run()
+        assert self.controller.retry_run.call_count == 0
+        assert self.controller.remove_old_bridges.call_count == 1
+        assert self.controller.add_new_bridges.call_count == 1
+        assert self.controller.do_control_data_check.call_count == 1
 
     async def test_run_failing(self):
         self.controller.remove_old_bridges = asynctest.CoroutineMock(return_value=True)
@@ -117,7 +139,7 @@ class ControllerTests(asynctest.TestCase):
 
     async def test_run_failing_missing_module(self):
         self.controller.remove_old_bridges = asynctest.CoroutineMock(side_effect=Exception("Error in control-data"))
-        self.controller.check_control_change = asynctest.CoroutineMock(return_value=True)
+        self.controller.do_control_data_check = asynctest.CoroutineMock(return_value=True)
         self.controller.retry_run = asynctest.CoroutineMock(return_value=True)
         assert len(self.controller.tasked) == 0
         assert self.controller.control_data is None
@@ -125,7 +147,7 @@ class ControllerTests(asynctest.TestCase):
         assert len(self.controller.tasked) == 1
         assert type(self.controller.tasked[0]) == asyncio.Task
         assert self.controller.remove_old_bridges.called == 1
-        assert self.controller.check_control_change.call_count == 0
+        assert self.controller.do_control_data_check.call_count == 0
         assert self.controller.retry_run.called == 1
 
     async def test_run_failing_reuse_existing_control(self):
@@ -133,27 +155,26 @@ class ControllerTests(asynctest.TestCase):
         self.controller.remove_old_bridges = asynctest.CoroutineMock(return_value=True)
         self.controller.add_new_bridges = asynctest.CoroutineMock(return_value=True)
         self.controller.retry_run = asynctest.CoroutineMock(return_value=True)
-        self.controller.check_control_change = asynctest.CoroutineMock(return_value=True)
+        self.controller.do_control_data_check = asynctest.CoroutineMock(return_value=True)
         assert self.controller.control_data is None
-        await self.controller.run()
+        res = await self.controller.run()
+        assert res == True
         assert type(self.controller.control_data) == ControlData
         assert self.controller.remove_old_bridges.call_count == 1
         assert self.controller.add_new_bridges.call_count == 1
         assert self.controller.retry_run.call_count == 0
-        assert self.controller.check_control_change.call_count == 1
-        assert len(self.controller.tasked) == 1
+        assert self.controller.do_control_data_check.call_count == 0
 
         # run again with failing control file
         existing_control = self.controller.control_data
         self.controller.load_control_data = asynctest.CoroutineMock(
             side_effect=Exception("load_control_file exception"))
         await self.controller.run()
-        assert len(self.controller.tasked) == 2
         assert self.controller.remove_old_bridges.call_count == 1
         assert self.controller.add_new_bridges.call_count == 1
         assert self.controller.retry_run.call_count == 1
         assert self.controller.control_data == existing_control
-        assert self.controller.check_control_change.call_count == 1
+        assert self.controller.do_control_data_check.call_count == 0
 
     async def test_run_retry(self):
         self.controller.run = asynctest.CoroutineMock()

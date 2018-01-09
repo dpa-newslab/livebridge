@@ -35,6 +35,7 @@ class Controller(object):
         self.bridges = {}
         self.retry_run_interval = 30
         self.control_data = None  # access to data from control file
+        self.watch_timer = None
         self.shutdown = False
 
     async def clean_shutdown(self):
@@ -52,25 +53,30 @@ class Controller(object):
         for bridge in self.bridges:
             bridge.stop()
 
-    async def check_control_change(self):
-        # check for update events
-        if self.control_data.is_auto_update() is False and \
-            self.force_check_control_data != True:
-            logger.info("Watching for control data changes deactivated.")
-            return None
+    async def read_control_data(self):
+        if self.watch_timer:
+            logger.info("Stopping control data watcher...")
+            self.watch_timer.cancel()
+        await self.run()
 
-        logger.info("Starting watching for control data changes.")
-        while True and self.shutdown is not True:
-            is_changed = await self.control_data.check_control_change(self.control_file)
-            if is_changed is True:
-                asyncio.ensure_future(self.run())
-                logger.info("Stopped watching for control data changes.")
-                return True
-            await self.sleep(self.check_control_interval)
+    async def do_control_data_check(self):
+        is_changed = await self.control_data.check_control_change(self.control_file)
+        if is_changed is True:
+            logger.info("Change of control data detected, will try to adopt.")
+            asyncio.ensure_future(self.run())
+            return True
+
+        def callback():
+            asyncio.ensure_future(self.do_control_data_check())
+
+        loop = asyncio.get_event_loop()
+        self.watch_timer = loop.call_later(self.check_control_interval, callback)
 
     async def save_control_data(self, doc):
         control_data = ControlData(config=self.config)
-        return await control_data.save(self.control_file, doc)
+        result = await control_data.save(self.control_file, doc)
+        await self.read_control_data()
+        return result
 
     async def load_control_data(self, resolve_auth=True):
         if not self.control_data:
@@ -102,8 +108,10 @@ class Controller(object):
                 logger.info("Using fetched control data.")
                 await self.remove_old_bridges()
                 await self.add_new_bridges()
-                # listen to control changes
-                self.tasked.append(asyncio.Task(self.check_control_change()))
+                if self.control_data.is_auto_update() is True or \
+                    self.force_check_control_data is True:
+                    logger.info("Starting control data watcher...")
+                    await self.do_control_data_check()
                 return True
             except Exception as exp:
                 logger.error("Error when adding/removing bridges")

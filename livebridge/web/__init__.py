@@ -117,7 +117,7 @@ class WebApi(object):
     async def control_put(self, request):
         try:
             # check etag first
-            if self.control_etag != request.headers.get("If-Match"):
+            if not self.control_etag or self.control_etag != request.headers.get("If-Match"):
                 return web.json_response({"error": "Precondition Failed."}, status=412)
             # handle data
             await request.post()

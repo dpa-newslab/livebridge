@@ -37,6 +37,8 @@ class LiveBridge(UserDict):
         log.info("Finishing ...")
         for task in tasks:
             log.debug("... {}".format(task))
+            if not task.done():
+                task.set_exception(Exception())
             if not task.exception():
                 task.cancel()
         log.info("Bye!")

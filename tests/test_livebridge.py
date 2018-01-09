@@ -31,13 +31,18 @@ class LoaderTests(asynctest.TestCase):
     async def test_finish(self):
         tasks = [
             asynctest.MagicMock(cancel=asynctest.CoroutineMock(), exception=asynctest.MagicMock(return_value=False)),
-            asynctest.MagicMock(cancel=asynctest.CoroutineMock(), exception=asynctest.MagicMock(return_value=False)),
-            asynctest.MagicMock(cancel=asynctest.CoroutineMock(), exception=asynctest.MagicMock(return_value=True))
+            asynctest.MagicMock(cancel=asynctest.CoroutineMock(), done=lambda: False),
+            asynctest.MagicMock(cancel=asynctest.CoroutineMock())
         ]
         await self.lb.finish(tasks)
         assert tasks[0].cancel.call_count == 1
-        assert tasks[1].cancel.call_count == 1
+        assert tasks[0].done.call_count == 1
+        assert tasks[0].set_exception.call_count == 0
+        assert tasks[1].cancel.call_count == 0
+        assert tasks[1].set_exception.call_count == 1
         assert tasks[2].cancel.call_count == 0
+        assert tasks[2].done.call_count == 1
+        assert tasks[0].set_exception.call_count == 0
 
     @asynctest.ignore_loop
     def test_shutdown(self):
