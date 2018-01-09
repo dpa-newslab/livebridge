@@ -123,13 +123,20 @@ class WebApiTestCase(AioHTTPTestCase):
     @unittest_run_loop
     async def test_put_controldata(self):
         data = '{"foo": "bla"}'
-        headers = {"X-Auth-Token": await self._get_token()}
+        self.server.control_etag = "123456"
+        headers = {"X-Auth-Token": await self._get_token(), "If-Match": self.server.control_etag}
         self.controller.save_control_data = asynctest.CoroutineMock(return_value=True)
         res = await self.client.request("PUT", "/api/v1/controldata", data=data, headers=headers)
         assert res.status == 200
         assert (await res.json()) == {"ok": "true"}
         assert self.controller.save_control_data.call_count == 1
         assert self.controller.save_control_data.call_args == asynctest.call({"foo": "bla"})
+
+        # etag is not matched
+        self.server.control_etag = None
+        res = await self.client.request("PUT", "/api/v1/controldata", data=data, headers=headers)
+        assert res.status == 412
+        self.server.control_etag = "123456"
 
         # saving fails
         self.controller.save_control_data = asynctest.CoroutineMock(return_value=False)
