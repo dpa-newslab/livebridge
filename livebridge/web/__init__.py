@@ -61,6 +61,7 @@ class WebApi(object):
         self.config = config
         self.loop = loop
         self.static_path = os.path.join(os.path.dirname(__file__), "static")
+        self.control_etag = None
 
         # start server
         logger.info("Starting API server ...")
@@ -110,13 +111,13 @@ class WebApi(object):
 
     async def control_get(self, request):
         control_doc = await self.app["controller"].load_control_doc()
-        return web.json_response(control_doc, headers={"Etag": self._get_etag(control_doc)})
+        self.control_etag = self._get_etag(control_doc)
+        return web.json_response(control_doc, headers={"Etag": self.control_etag})
 
     async def control_put(self, request):
         try:
             # check etag first
-            required_etag = self._get_etag(await self.app["controller"].load_control_doc())
-            if required_etag != request.headers.get("If-Match"):
+            if self.control_etag != request.headers.get("If-Match"):
                 return web.json_response({"error": "Precondition Failed."}, status=412)
             # handle data
             await request.post()
