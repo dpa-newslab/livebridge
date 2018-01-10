@@ -508,6 +508,7 @@ var app = new Vue({
         password: "admin",
         edited: false,
         new_auth_key: '',
+        json_str: '',
         keyChoices: [],
         valueChoices: {},
         message: {
@@ -696,6 +697,28 @@ var app = new Vue({
             app.control_data.bridges[bridge_index].targets.splice(index, 1)
             app.control_data.bridges[bridge_index].__edited = true
             app.edited = true
+        },
+        fillJSONForm: function(ev) {
+            if(confirm("Your changes are going to be lost, you're entering expert mode. Ok?")) {
+                this.undoChanges();
+                this.json_str = JSON.stringify(this.control_data_orig, null, 4);
+                return true;
+            }
+            ev.preventDefault();
+            ev.stopPropagation();
+            return false;
+        },
+        saveJSON: function() {
+            var newData = null;
+            try {
+                newData = JSON.parse(this.json_str);
+                this.control_data = newData;
+                this.saveNewControlData();
+                return true;
+            } catch(err) {
+                app.showMessage(err.message, "danger")
+            }
+            return false;
         },
         undoChanges: function() {
             this.control_data = JSON.parse(JSON.stringify(this.control_data_orig));

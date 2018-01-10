@@ -1,4 +1,8 @@
+html, .container {
+    height: 100%;
+}
 body {
+    height: 100%;
     background-color: #eee;
 }
 #control {
@@ -92,6 +96,8 @@ td.target-actions {
     width:65%;
     padding: 30px;
 }
+textarea.form-control {}
+
 /* vue */
 .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;
