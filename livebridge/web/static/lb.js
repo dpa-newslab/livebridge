@@ -25,7 +25,7 @@ var lbMixin = {
             return JSON.parse(JSON.stringify(data))
         },
         valueChoices: function(propName) {
-            return (app !== undefined) ? app.valueChoices[propName] : [];
+            return (app !== undefined) ? Array.from(new Set(app.valueChoices[propName])) : [];
         },
         keyChoices: function(propName) {
             return (app !== undefined) ? app.keyChoices : [];
