@@ -1,4 +1,10 @@
 var lbMixin = {
+    data: function() {
+        return {
+            typeHint: false,
+            labelHint: false
+        }
+    },
     methods: {
         linkify: function (value) {
             if (!value) return ''
@@ -29,6 +35,24 @@ var lbMixin = {
         },
         keyChoices: function(propName) {
             return (app !== undefined) ? app.keyChoices : [];
+        },
+        validateNode: function(node) {
+            this.resetHints()
+            if(node.label === "")
+                this.labelHint = true
+
+            if(node.type === "")
+                this.typeHint = true
+
+            if (node.type === undefined) {
+                app.showMessage("A 'type' has to be specified!", "danger");
+            } else {
+                return (this.typeHint || this.labelHint) ?  false : true;
+            }
+        },
+        resetHints: function() {
+            this.typeHint = false;
+            this.labelHint = false;
         }
     }
 }
@@ -125,7 +149,7 @@ var targetFormTmpl = `
                     <tr v-for="(v, k) in local_target" v-if="['__edited'].indexOf(k) < 0" class="form-group">
                         <td>{{k}}</td>
                         <td>
-                            <input type="text" class="form-control" :id="'form-input-'+k" v-model="local_target[k]" :list="k+'-'+index">
+                            <input type="text" class="form-control" v-bind:class="{ 'is-invalid': ((k==='type' && typeHint) || (k==='label' && labelHint))}" :id="'form-input-'+k" v-model="local_target[k]" :list="k+'-'+index">
                             <datalist :id="k+'-'+index">
                                 <option v-for="val in valueChoices(k)" :value="val"/>
                             </datalist>
@@ -157,8 +181,8 @@ var targetFormTmpl = `
             </form>
           </div>
           <div class="modal-footer">
-            <button v-if="index < 0" type="button" class="btn btn-primary" @click="addTarget()" data-dismiss="modal">Add new target</button>
-            <button v-else type="button" class="btn btn-primary" @click="updateTarget()"  data-dismiss="modal">Accept changes</button>
+            <button v-if="index < 0" type="button" class="btn btn-primary" @click="addTarget($event)" data-dismiss="modal">Add new target</button>
+            <button v-else type="button" class="btn btn-primary" @click="updateTarget($event)"  data-dismiss="modal">Accept changes</button>
             <button type="button" class="btn btn-secondary" @click="reset()" data-dismiss="modal">Cancel</button>
           </div>
         </div>
@@ -181,7 +205,7 @@ var bridgeFormTmpl = `
                     <tr v-for="(v, k) in local_bridge" v-if="['targets', '__edited'].indexOf(k) < 0" class="form-group">
                         <td>{{k}}</td>
                         <td>
-                            <input type="text" class="form-control" :id="'form-input-'+k" v-model="local_bridge[k]" :list="k">
+                            <input type="text" class="form-control"  v-bind:class="{ 'is-invalid': ((k==='type' && typeHint) || (k==='label' && labelHint))}" :id="'form-input-'+k" v-model="local_bridge[k]" :list="k">
                             <datalist :id="k">
                                 <option v-for="val in valueChoices(k)" :value="val"/>
                             </datalist>
@@ -213,8 +237,8 @@ var bridgeFormTmpl = `
             </form>
           </div>
           <div class="modal-footer">
-            <button v-if="index < 0" type="button" class="btn btn-primary" @click="addBridge()" data-dismiss="modal">Create new bridge</button>
-            <button v-else type="button" class="btn btn-primary" @click="updateBridge()"  data-dismiss="modal">Accept changes</button>
+            <button v-if="index < 0" type="button" class="btn btn-primary" @click="addBridge($event)" data-dismiss="modal">Create new bridge</button>
+            <button v-else type="button" class="btn btn-primary" @click="updateBridge($event)"  data-dismiss="modal">Accept changes</button>
             <button type="button" class="btn btn-secondary" @click="reset()" data-dismiss="modal">Cancel</button>
           </div>
         </div>
@@ -349,14 +373,24 @@ Vue.component('target-form', {
         }
     },
     methods: {
-        addTarget: function() {
-            this.$parent.$parent.$options.methods.addTarget(this.bridge_index, this.local_target)
-            this.$parent.edited = true;
-            this.reset()
+        addTarget: function(ev) {
+            if(this.validateNode(this.local_target)) {
+                this.$parent.$parent.$options.methods.addTarget(this.bridge_index, this.local_target)
+                this.$parent.edited = true;
+                this.reset()
+            } else {
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
         },
-        updateTarget: function() {
-            this.$parent.edited = true;
-            this.$parent.$parent.$parent.$options.methods.updateTarget(this.bridge_index, this.local_target, this.index)
+        updateTarget: function(ev) {
+            if(this.validateNode(this.local_target)) {
+                this.$parent.edited = true;
+                this.$parent.$parent.$parent.$options.methods.updateTarget(this.bridge_index, this.local_target, this.index)
+            } else {
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
         },
         removeTargetProp: function(key) {
             Vue.delete(this.local_target, key)
@@ -387,13 +421,23 @@ Vue.component('bridge-form', {
         }
     },
     methods: {
-        addBridge: function() {
-            this.$parent.$options.methods.addBridge(this.local_bridge)
-            this.reset()
+        addBridge: function(ev) {
+            if(this.validateNode(this.local_bridge)) {
+                this.$parent.$options.methods.addBridge(this.local_bridge)
+                this.reset()
+            } else {
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
         },
-        updateBridge: function() {
-            this.$parent.$parent.$options.methods.updateBridge(this.local_bridge, this.index)
-            this.$parent.edited = true;
+        updateBridge: function(ev) {
+            if(this.validateNode(this.local_bridge)) {
+                this.$parent.$parent.$options.methods.updateBridge(this.local_bridge, this.index)
+                this.$parent.edited = true;
+            } else {
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
         },
         removeBridgeProp: function(key) {
             Vue.delete(this.local_bridge, key)
