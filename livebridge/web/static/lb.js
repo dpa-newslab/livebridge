@@ -115,8 +115,9 @@ var authTmpl = `
         <div class="card-header">
             <h4>{{ name }}</h4>
             <div class="float-right">
-                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#auth-form-'+index">Edit</button>
-                <button type="button" class="btn btn-sm btn-danger" @click="removeAuth(name)">X</button>
+                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#auth-form-'+index"
+                    title="Edit account">Edit</button>
+                <button type="button" class="btn btn-sm btn-danger" @click="removeAuth(name)" title="Remove account">&Chi;</button>
             </div>
         </div>
         <div class="card-body">
@@ -237,7 +238,8 @@ var bridgeFormTmpl = `
             </form>
           </div>
           <div class="modal-footer">
-            <button v-if="index < 0" type="button" class="btn btn-primary" @click="addBridge($event)" data-dismiss="modal">Create new bridge</button>
+            <button v-if="index < 0" type="button" class="btn btn-primary" @click="addBridge($event)" data-dismiss="modal">
+               Create new bridge</button>
             <button v-else type="button" class="btn btn-primary" @click="updateBridge($event)"  data-dismiss="modal">Accept changes</button>
             <button type="button" class="btn btn-secondary" @click="reset()" data-dismiss="modal">Cancel</button>
           </div>
@@ -256,8 +258,9 @@ var targetTmpl = `
         </div>
     </td>
     <td class="target-actions">
-        <button type="button" class="btn btn-sm btn-primary justify-content-end" data-toggle="modal" :data-target="'#target-form-'+bridge_index+'-'+index">Edit</button>
-        <button type="button" class="btn btn-sm btn-danger" @click="removeTarget(bridge_index, index)">X</button>
+        <button type="button" class="btn btn-sm btn-primary justify-content-end" title="Edit target" data-toggle="modal"
+            :data-target="'#target-form-'+bridge_index+'-'+index">Edit</button>
+        <button type="button" class="btn btn-sm btn-danger" @click="removeTarget(bridge_index, index)" title="Remove target">&Chi;</button>
         <target-form v-bind:target="getDeepCopy(target)" v-bind:bridge="bridge" v-bind:bridge_index="bridge_index" v-bind:index="index" :id="'target-form-'+bridge_index+'-'+index"></target-form>
     </td>
 </tr>`
@@ -272,9 +275,11 @@ var bridgeTmpl = `
                 {{ bridge.label }}
             </h4>
             <div class="float-right">
-                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#bridge-form-'+index">Edit</button>
-                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" :data-target="'#target-add-form-'+index" title="Add target">+</button>
-                <button type="button" class="btn btn-sm btn-danger" @click="removeBridge(index)" title="Remove bridge">X</button>
+                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#bridge-form-'+index"
+                    title="Edit source">Edit</button>
+                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" :data-target="'#target-add-form-'+index"
+                    title="Add target">&plus;</button>
+                <button type="button" class="btn btn-sm btn-danger" @click="removeBridge(index)" title="Remove bridge">&Chi;</button>
             </div>
         </div>
         <div class="card-body">
