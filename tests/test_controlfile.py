@@ -159,8 +159,7 @@ class ControlFileTest(asynctest.TestCase):
     async def test_check_control_empty_sqs_param(self):
         self.control._check_local_changes = asynctest.CoroutineMock(return_value="foo")
         self.control._check_s3_changes = asynctest.CoroutineMock(return_value="foo")
-        self.control.config["sqs_s3_queue"] = False
-        res = await self.control.check_control_change()
+        res = await self.control.check_control_change("/foo/bla")
         assert res is "foo"
         assert self.control._sqs_client.receive_message.call_count == 0
         assert self.control._check_local_changes.call_count == 1

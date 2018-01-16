@@ -80,9 +80,9 @@ class ControlFile(BaseControl):
             logger.warning("Purging SQS queue failed with: {}".format(exc))
 
     async def check_control_change(self, control_path=None):
-        if not self.config.get("sqs_s3_queue", False):
+        if control_path and not control_path.startswith("s3://"):
             return await self._check_local_changes(control_path)
-        else:
+        elif self.config.get("sqs_s3_queue", False):
             return await self._check_s3_changes()
 
     async def _check_local_changes(self, control_path):
