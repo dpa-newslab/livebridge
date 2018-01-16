@@ -15,12 +15,12 @@
                     <a class="navbar-brand" href="./">Livebridge</a>
                     <div class="col-10 mx-auto" v-if="loggedIn === true">
                         <ul class="nav navbar-nav" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="bridges-tab" data-toggle="tab" href="#bridges" role="tab"
+                            <li class="nav-item active">
+                                <a class="nav-link" id="bridges-tab" data-toggle="tab" href="#bridges" role="tab"
                                     aria-controls="bridges" aria-selected="false">Sources</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="auth-tab" data-toggle="tab" href="#auth" role="tab" aria-controls="auth"
+                                <a class="nav-link" id="accounts-tab" data-toggle="tab" href="#accounts" role="tab" aria-controls="accounts"
                                     aria-selected="true">Accounts</a>
                             </li>
                             <li class="nav-item ml-auto">
@@ -47,7 +47,7 @@
                         </div>
                         <bridge-form v-bind:index="-1" id="bridge-add-form"></bridge-form>
                     </div>
-                    <div class="tab-pane" id="auth" role="tabpanel" aria-labelledby="auth-tab">
+                    <div class="tab-pane" id="accounts" role="tabpanel" aria-labelledby="accounts-tab">
                         <div id="add-btn">
                             <input type="text" v-model="new_auth_key" placeholder="service name"/>
                             <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#auth-add-form"
@@ -89,7 +89,7 @@
                     <input v-model="loginPassword" type="password" id="loginPassword" class="form-control" placeholder="Password" required>
                     <button class="btn btn-lg btn-primary btn-block" type="submit" v-on:click="login()">Sign in</button>
                 </form>
-                <flash-message v-bind:message="message">
+                <flash-message v-bind:message="message"></flash-message>
             </div>
         </div>
 
