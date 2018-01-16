@@ -6,6 +6,29 @@ Control bridges
 The bridges will be specified by extra control-data, which can be stored in an extra .yaml control file \
 or as JSON in a database table.
 
+This control-data ca be edited directly or by a web-frontend.
+
+
+Control bridges via web-UI
+---------------------------
+
+.. figure::  lb-web-ui.png
+   :align:   center
+
+- Setup :ref:`Web-API <webapi>`
+- Open the adress **http://[LB_WEB_HOST]:[LB_WEB_PORT]**
+- You'll be asked for username and password, which have been declared via **LB_WEB_USER** and **LB_WEB_PWD**.
+- Fill in the authorization credentials for your sources and targets under the **Accounts** tab.
+- Specify the bridges and targets you want to connect under the **Sources** tab.
+- Existing sources and targets can be edited too.
+- Changes at existing data will be highlighted in red.
+- To store the modifications made, click the **Save changes** button in the bottom bar.
+- Alternatively convert your existing yaml-formatted controlfile to JSON and paste it under **JSON** in the textarea and save it.
+
+.. note::
+    Please use unsecured **http://** connections only while in development. Securing the connection to the web-UI
+    via **https://** is highly recommended!
+
 Control data in .yaml file
 --------------------------
 

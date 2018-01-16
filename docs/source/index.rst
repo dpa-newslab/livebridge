@@ -28,6 +28,7 @@ Features
 * syndicate one source to various targets in realtime.
 * CRUD - create, update, delete of resources over different services.
 * extensible for all kinds of services with plugins
+* Web-UI for controlling running bridges through a convenient web-frontend.
 * Web-API for controlling running bridges.
 * running bridges can be controlled without restarting the process.
 * supported storage backends: MongoDB, DynamoDB, MySQL, PostgreSQL, MSSQL, Oracle and others
