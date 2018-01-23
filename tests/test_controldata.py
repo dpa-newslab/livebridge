@@ -106,6 +106,21 @@ class ControlDataTests(asynctest.TestCase):
         with self.assertRaises(LookupError):
             await self.control.load(file_path, resolve_auth=True)
 
+    async def test_load_auth_env_auth_resolved(self):
+        os.environ["LB_FOO_USER"] = "foo-user"
+        #os.environ["LB_FOO_PWD"] = "foo-pwd"
+        os.environ["LB_BAR_TOKEN"] = "bar.token"
+        file_path = os.path.join(os.path.dirname(__file__), "files", "control-env-notation.yaml")
+        await self.control.load(file_path, resolve_auth=True)
+
+        control = self.control.control_data
+        assert control["auth"]["foo"]["user"] == os.environ["LB_FOO_USER"]
+        assert control["auth"]["foo"]["pwd"] == "env.LB_NOT_DEFINED"
+        assert control["auth"]["bar"]["token"] == os.environ["LB_BAR_TOKEN"]
+        assert control["auth"]["bar"]["key"] == "env.NO_VALID_NAME"
+        # check nested auth isn't resolved
+        assert control["auth"]["foo"]["nested"] == {"foo": "env.LB_FOO_USER"}
+
     @asynctest.ignore_loop
     def test_remove_doubles(self):
         control = {'bridges': [

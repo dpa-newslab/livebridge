@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import copy
+import os
 import logging
 from collections import OrderedDict
 from livebridge.controldata.controlfile import ControlFile
@@ -38,7 +39,20 @@ class ControlData(object):
         self.new_bridges = []
         self.removed_bridges = []
 
+    def _replace_envs(self, data):
+        for auth in data.get("auth", []):
+            for a in data["auth"][auth].items():
+                # only handle "flat" dicts
+                if len(a) == 2 and type(a[1]) == str and a[1].startswith("env.LB_"):
+                    var_name = a[1].replace("env.", "")
+                    if var_name in os.environ:
+                        data["auth"][auth][a[0]] = os.environ[var_name]
+                    else:
+                        logger.error("{} not found in environment!".format(var_name))
+        return data
+
     def _resolve_auth(self, data):
+        data = self._replace_envs(data)
         for x, bridge in enumerate(data.get("bridges", [])):
             if data.get("auth", {}).get(bridge.get("auth")):
                 # add user creds to bridge config
