@@ -1,0 +1,19 @@
+auth:
+    foo:
+        user: "env.LB_FOO_USER"
+        pwd: "env.LB_NOT_DEFINED"
+        nested:
+           foo: "env.LB_FOO_USER"
+    bar:
+        token: "env.LB_BAR_TOKEN"
+        key: "env.NO_VALID_NAME"
+bridges:
+    - type: "test"
+      label: "TEST"
+      source_id": "test-1"
+      auth: "foo"
+      targets:
+        - type: "test"
+          label: "TARGET"
+          target_id: "test-2"
+          auth: "bar"
