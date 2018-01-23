@@ -31,7 +31,7 @@ var lbMixin = {
             return JSON.parse(JSON.stringify(data))
         },
         valueChoices: function(propName) {
-            return (app !== undefined) ? Array.from(new Set(app.valueChoices[propName])) : [];
+            return (app !== undefined) ? Array.from(new Set(app.valueChoices[propName])).sort() : [];
         },
         keyChoices: function(propName) {
             return (app !== undefined) ? app.keyChoices : [];
@@ -625,6 +625,7 @@ var app = new Vue({
                 this.control_data = response.data;
                 this.control_data_orig = JSON.parse(JSON.stringify(response.data));
                 this.collectChoices("", this.control_data, -1)
+                this.keyChoices.sort()
                 //this.printObject("", this.control_data, -1);
             }).catch(error =>  {
                 if(error)
