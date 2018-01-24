@@ -153,6 +153,31 @@ Authorization
 Credentials for service authorization are defined under **auth:**, in which the keys \
 like **dev** or **live** are later used for reference under **bridges:** and **targets:**. 
 
+ENV-var notation for service credentials
+----------------------------------------
+It's possible to hide credentials from the control-data by using a special ENVIRONMENT variable notation to
+specify credential values.
+
+By using a notation like **env.LB_***, values in auth credentials can be imported from the environment the livebridge
+process is running in.
+
+.. code-block:: yaml
+
+    auth:
+        dev:
+            user: "env.LB_DEV_USER"
+            password: "env.LB_DEV_PWD"
+            api_key: "env.LB_DEV_API_KEY"
+        live:
+            user: "prod"
+            password: "pwd2"
+            api_key: "Foobar"
+    bridges:
+            ....
+
+.. note::
+    Only notations, following the mandatory form **env.LB_VARNAME**, are recognized.
+
 Handling of changed control-data
 --------------------------------
 

@@ -30,6 +30,7 @@ Features
 * extensible for all kinds of services with plugins
 * Web-UI for controlling running bridges through a convenient web-frontend.
 * Web-API for controlling running bridges.
+* service credentials as environment vars.
 * running bridges can be controlled without restarting the process.
 * supported storage backends: MongoDB, DynamoDB, MySQL, PostgreSQL, MSSQL, Oracle and others
 * no storage backend needed for simple forwarding distribution of posts.

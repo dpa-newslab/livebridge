@@ -16,6 +16,7 @@ We’re already using it in production, delivering content produced using [Sourc
 - extensible for all kinds of services with [plugins](http://livebridge.readthedocs.io/en/latest/ownplugins.html)
 - Web-UI for controlling running bridges through a convenient web-frontend.
 - Web-API for controlling bridges.
+- service credentials as environment vars.
 - supported storage backends: MongoDB, DynamoDB, MySQL, PostgreSQL, MSSQL, Oracle and others
 - [await/async](https://docs.python.org/3/library/asyncio.html) based, Python 3.5
 - (non-persistent) queues for retrying the distribution of a post.
