@@ -14,6 +14,8 @@ We’re already using it in production, delivering content produced using [Sourc
 - syndicate one source to various targets in realtime.
 - **CRUD** - create, update, delete of resources over different services.
 - extensible for all kinds of services with [plugins](http://livebridge.readthedocs.io/en/latest/ownplugins.html)
+- Web-UI for controlling running bridges through a convenient web-frontend.
+- Web-API for controlling bridges.
 - supported storage backends: MongoDB, DynamoDB, MySQL, PostgreSQL, MSSQL, Oracle and others
 - [await/async](https://docs.python.org/3/library/asyncio.html) based, Python 3.5
 - (non-persistent) queues for retrying the distribution of a post.
