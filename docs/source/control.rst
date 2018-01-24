@@ -6,7 +6,7 @@ Control bridges
 The bridges will be specified by extra control-data, which can be stored in an extra .yaml control file \
 or as JSON in a database table.
 
-This control-data ca be edited directly or by a web-frontend.
+This control-data ca be edited directly or via a web-frontend.
 
 
 Control bridges via web-UI
