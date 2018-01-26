@@ -30,8 +30,8 @@ class WebApiTestCase(AioHTTPTestCase):
             "port": 9990,
             "auth": {"user": "test", "password": "testpwd"}}
         self.controller = asynctest.MagicMock(spec="livebridge.controller.Controller")
-        self.server = WebApi(config=self.config, controller=self.controller, loop=self.loop)
-        return self.server.app
+        server = WebApi(config=self.config, controller=self.controller, loop=self.loop)
+        return server.app
 
     @unittest_run_loop
     async def test_init_with_loop(self):
@@ -47,13 +47,15 @@ class WebApiTestCase(AioHTTPTestCase):
         assert self.loop.create_server.call_args[0][2] == 9990
         self.client.session.close()
 
-    def test_shutdown(self):
-        self.server.loop = unittest.mock.MagicMock()
-        self.server.loop.run_until_complete = unittest.mock.MagicMock()
-        self.server.srv = unittest.mock.MagicMock()
-        self.server.srv.close = unittest.mock.MagicMock()
-        self.server.shutdown()
-        assert self.server.loop.run_until_complete.call_count == 4
+    @unittest_run_loop
+    async def test_shutdown(self):
+        server = WebApi(config=self.config, controller=self.controller, loop=self.loop)
+        server.loop = unittest.mock.MagicMock()
+        server.loop.run_until_complete = unittest.mock.MagicMock()
+        server.srv = unittest.mock.MagicMock()
+        server.srv.close = unittest.mock.MagicMock()
+        server.shutdown()
+        assert server.loop.run_until_complete.call_count == 4
 
     async def _get_token(self):
         data = {"username": self.config["auth"]["user"],
@@ -123,8 +125,7 @@ class WebApiTestCase(AioHTTPTestCase):
     @unittest_run_loop
     async def test_put_controldata(self):
         data = '{"foo": "bla"}'
-        self.server.control_etag = self.server._get_etag(data)
-        headers = {"X-Auth-Token": await self._get_token(), "If-Match": self.server.control_etag}
+        headers = {"X-Auth-Token": await self._get_token(), "If-Match": "51a47b5c06e23b9abfe95f84fea5e21e"}
         self.controller.load_control_doc = asynctest.CoroutineMock(return_value=data)
         self.controller.save_control_data = asynctest.CoroutineMock(return_value=True)
         res = await self.client.request("PUT", "/api/v1/controldata", data=data, headers=headers)
@@ -135,7 +136,8 @@ class WebApiTestCase(AioHTTPTestCase):
 
         # etag is not matched
         self.server.control_etag = None
-        res = await self.client.request("PUT", "/api/v1/controldata", data=data, headers=headers)
+        invalid_etag = {"X-Auth-Token": await self._get_token(), "If-Match": "foo"}
+        res = await self.client.request("PUT", "/api/v1/controldata", data=data, headers=invalid_etag)
         assert res.status == 412
         self.server.control_etag = "123456"
 

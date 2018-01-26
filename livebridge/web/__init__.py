@@ -111,14 +111,13 @@ class WebApi(object):
 
     async def control_get(self, request):
         control_doc = await self.app["controller"].load_control_doc()
-        self.control_etag = self._get_etag(control_doc)
-        return web.json_response(control_doc, headers={"Etag": self.control_etag})
+        return web.json_response(control_doc, headers={"Etag": self._get_etag(control_doc)})
 
     async def control_put(self, request):
         try:
             # check etag first
             control_doc = await self.app["controller"].load_control_doc()
-            if not self.control_etag or self._get_etag(control_doc) != request.headers.get("If-Match"):
+            if self._get_etag(control_doc) != request.headers.get("If-Match"):
                 return web.json_response({"error": "Precondition Failed."}, status=412)
             # handle data
             await request.post()

@@ -49,6 +49,7 @@ setup(
         "asynctest==0.11.1",
         "bleach==2.1.2",
         "dsnparse==0.1.11",
+        "pymongo>=3.6.0",
         "motor==1.2.1",
         "python-dateutil==2.6.1",
         "PyYAML==3.12",

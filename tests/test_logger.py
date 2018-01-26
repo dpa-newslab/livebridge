@@ -25,5 +25,4 @@ class LoggerTests(unittest.TestCase):
         from livebridge.logger import logger
         assert type(logger) is logging.RootLogger
         assert type(logger.handlers[0]) is logging.StreamHandler
-        assert type(logger.handlers[1]) is logging.FileHandler
         logger.handlers = []
