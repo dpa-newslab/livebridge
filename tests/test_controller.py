@@ -76,7 +76,7 @@ class ControllerTests(asynctest.TestCase):
         assert type(self.controller.watch_timer) == asyncio.events.TimerHandle
 
     async def test_read_control_data(self):
-        self.controller.watch_timer = asynctest.MagicMock(cancel = MagicMock(return_value=True))
+        self.controller.watch_timer = asynctest.MagicMock(cancel=MagicMock(return_value=True))
         self.controller.run = asynctest.CoroutineMock(return_value=True)
         await self.controller.read_control_data()
         assert self.controller.watch_timer.cancel.call_count == 1
@@ -95,7 +95,7 @@ class ControllerTests(asynctest.TestCase):
         self.controller.add_new_bridges = asynctest.CoroutineMock(return_value=True)
         self.controller.retry_run = asynctest.CoroutineMock(return_value=True)
         self.controller.do_control_data_check = asynctest.CoroutineMock(return_value=True)
-        control_data = asynctest.MagicMock(is_auto_update = MagicMock(return_value=True))
+        control_data = asynctest.MagicMock(is_auto_update=MagicMock(return_value=True))
         self.controller.control_data = control_data
         self.controller.load_control_data = asynctest.CoroutineMock(return_value=control_data)
 
@@ -111,7 +111,7 @@ class ControllerTests(asynctest.TestCase):
         self.controller.retry_run = asynctest.CoroutineMock(return_value=True)
         self.controller.do_control_data_check = asynctest.CoroutineMock(return_value=True)
         self.controller.force_check_control_data = True
-        control_data = asynctest.MagicMock(is_auto_update = MagicMock(return_value=True))
+        control_data = asynctest.MagicMock(is_auto_update=MagicMock(return_value=True))
         self.controller.control_data = control_data
         self.controller.load_control_data = asynctest.CoroutineMock(return_value=control_data)
 
@@ -158,7 +158,7 @@ class ControllerTests(asynctest.TestCase):
         self.controller.do_control_data_check = asynctest.CoroutineMock(return_value=True)
         assert self.controller.control_data is None
         res = await self.controller.run()
-        assert res == True
+        assert res is True
         assert type(self.controller.control_data) == ControlData
         assert self.controller.remove_old_bridges.call_count == 1
         assert self.controller.add_new_bridges.call_count == 1

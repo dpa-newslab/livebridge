@@ -29,7 +29,7 @@ async def auth_middleware(app, handler):
     async def middleware_handler(request):
         try:
             # check auth header
-            if not request.path in ["/", "/api/v1/session"] and not request.path.startswith("/dashboard"):
+            if request.path not in ["/", "/api/v1/session"] and not request.path.startswith("/dashboard"):
                 token = request.cookies.get("lb-db") or request.headers.get("X-Auth-Token")
                 if token not in _tokens.values():
                     return web.json_response({"error": "Invalid token."}, status=401)

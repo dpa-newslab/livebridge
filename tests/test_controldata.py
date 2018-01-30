@@ -108,7 +108,6 @@ class ControlDataTests(asynctest.TestCase):
 
     async def test_load_auth_env_auth_resolved(self):
         os.environ["LB_FOO_USER"] = "foo-user"
-        #os.environ["LB_FOO_PWD"] = "foo-pwd"
         os.environ["LB_BAR_TOKEN"] = "bar.token"
         file_path = os.path.join(os.path.dirname(__file__), "files", "control-env-notation.yaml")
         await self.control.load(file_path, resolve_auth=True)
@@ -217,11 +216,11 @@ class ControlDataTests(asynctest.TestCase):
 
     async def test_auto_update(self):
         self.control.control_client = ControlFile()
-        assert self.control.control_client.auto_update == True
+        assert self.control.control_client.auto_update is True
         file_path = os.path.join(os.path.dirname(__file__), "files", "control.yaml")
         await self.control.control_client.load(file_path)
-        assert self.control.control_client.auto_update == False
-        assert self.control.is_auto_update() == False
+        assert self.control.control_client.auto_update is False
+        assert self.control.is_auto_update() is False
 
         await self.control._set_client(path="sql")
-        assert self.control.is_auto_update() == True
+        assert self.control.is_auto_update() is True

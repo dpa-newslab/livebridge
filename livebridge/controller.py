@@ -109,7 +109,7 @@ class Controller(object):
                 await self.remove_old_bridges()
                 await self.add_new_bridges()
                 if self.control_data.is_auto_update() is True or \
-                    self.force_check_control_data is True:
+                        self.force_check_control_data is True:
                     logger.info("Starting control data watcher...")
                     await self.do_control_data_check()
                 return True
