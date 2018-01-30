@@ -3,6 +3,7 @@ aiohttp==2.3.9
 asynctest==0.11.1
 bleach==2.1.2
 dsnparse==0.1.11
+pymongo>=3.6.0
 motor==1.2.1
 pytest==3.3.2
 pytest-cov==2.5.1
