@@ -146,6 +146,7 @@ class LiveBridgeTest(asynctest.TestCase):
             "count": 0
         }
         task["target"].handle_post = asynctest.CoroutineMock(return_value=True)
+        self.bridge._action_done = asynctest.CoroutineMock(return_value=True)
         await self.bridge._process_action(task)
         assert task["target"].handle_post.call_count == 1
         assert task["target"].handle_post.call_args == asynctest.call(task["post"])
