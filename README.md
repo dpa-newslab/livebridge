@@ -13,7 +13,7 @@ We’re already using it in production, delivering content produced using [Sourc
 - Keep content in-sync over different services.
 - syndicate one source to various targets in realtime.
 - **CRUD** - create, update, delete of resources over different services.
-- extensible for all kinds of services with [plugins](http://livebridge.readthedocs.io/en/latest/ownplugins.html)
+- extensible for all kinds of services with [plugins](http://livebridge.readthedocs.io/en/stable/ownplugins.html)
 - Web-UI for controlling running bridges through a convenient web-frontend.
 - Web-API for controlling bridges.
 - service credentials as environment vars.
@@ -29,15 +29,15 @@ We’re already using it in production, delivering content produced using [Sourc
 pip3 install livebridge
 ```
 **Python >=3.5 is required**. <br>
-See http://livebridge.readthedocs.io/en/latest/quickstart.html#installation for details.
+See http://livebridge.readthedocs.io/en/stable/quickstart.html#installation for details.
 
 ## Settings
 Global settings are defined in [livebridge/config.py](livebridge/config.py). These values can be set through **environment variables**.  
 
-See http://livebridge.readthedocs.io/en/latest/quickstart.html#settings for available configuration variables.
+See http://livebridge.readthedocs.io/en/stable/quickstart.html#settings for available configuration variables.
 
 ## Running
-The **livebridge** command expects a **-control=** parameter, specifying the path to a control file with the configured bridges.  **--control** can be either a **local control file** or a **remote control file** on **s3**.
+The **livebridge** command expects a **-control=** parameter (alternatively the environment vars *LB_CONTROLFILE** or **LB_DB_CONTROL_TABLE**), to specify the place of the control data with the configured bridges.  **--control** can be either a **local control file** or a **remote control file** on **s3**.
 
 * with local control file
 ```sh
@@ -47,15 +47,19 @@ livebridge --control=/path/to/control.yaml
 ```sh
 livebridge --control=s3://bucketname/control.yaml
 ```
+* with control data stored in a database
+```sh
+... LB_DB_CONTROL_TABLE=lb_control livebridge
+```
 
-See http://livebridge.readthedocs.io/en/latest/control.html for more details.
+See http://livebridge.readthedocs.io/en/stable/control.html for more details.
 
 ## Documentation
 
-http://livebridge.readthedocs.io/en/latest/
+http://livebridge.readthedocs.io/en/stable/
 
 ## Plugins
-Several source and targets are available as **[plugins]( http://livebridge.readthedocs.io/en/latest/plugins.html)**. Following plugins are currently available:
+Several source and targets are available as **[plugins]( http://livebridge.readthedocs.io/en/stable/plugins.html)**. Following plugins are currently available:
 
 * **[Liveblog](https://github.com/dpa-newslab/livebridge-liveblog)**  - Provides a Liveblog liveticker as source.
 * **[Scribblelive](https://github.com/dpa-newslab/livebridge-scribblelive)**  - Provides a Scribblelive event stream as target.   Provides also a **converter** from **Liveblog** to **Scribblelive**.
@@ -66,11 +70,11 @@ Several source and targets are available as **[plugins]( http://livebridge.readt
 It's possbile to write own service plugins and to make them available to **livebridge** as a Python module via *[PyPI](https://pypi.python.org/pypi)*.
 See *https://github.com/dpa-newslab/livebridge-slack* as an example plugin.
 
-**[Tutorial: How to build a Livebridge plugin](http://livebridge.readthedocs.io/en/latest/tutorial.html)**
+**[Tutorial: How to build a Livebridge plugin](http://livebridge.readthedocs.io/en/stable/tutorial.html)**
 
 ## Developing
 
-See http://livebridge.readthedocs.io/en/latest/developing.html
+See http://livebridge.readthedocs.io/en/stable/developing.html
 
 
 ## Testing
@@ -92,7 +96,7 @@ Run tests with test coverage:
 
 
 ## License
-Copyright 2016 dpa-infocom GmbH
+Copyright 2016-2018 dpa-infocom GmbH
 
 Apache License, Version 2.0 - see LICENSE for details
 
