@@ -7,7 +7,9 @@ var lbMixin = {
     },
     methods: {
         linkify: function (value) {
-            if (!value) return ''
+            if(!value && typeof(value) !== "boolean") {
+                return '';
+            }
             value = value.toString()
             if(value.startsWith("http"))
                 return '<a href="'+value+'" target="_blank">'+value+'</a>'
@@ -73,7 +75,10 @@ var authFormTmpl = `
                         <tr v-for="(v, k) in local_auth" v-if="['__edited'].indexOf(k) < 0" class="form-group">
                             <td>{{k}}</td>
                             <td>
-                                <input type="text" class="form-control" :id="'form-input-'+k" v-model="local_auth[k]"></td>
+                                <input v-if="typeof(v) !== 'boolean'" v-else type="text" :id="'form-input-'+k" v-model="local_auth[k]">
+                                <input v-else :id="'form-input-'+k" type="checkbox" v-model="local_auth[k]"
+                                    class="form-control">
+                            </td>
                             <td>
                                 <button type="button" class="btn btn-sm btn-danger" @click="removeAuthProp(k)">
                                     X</button>
@@ -81,18 +86,29 @@ var authFormTmpl = `
                         </tr>
                         <tr>
                             <td>
-                                <input type="text" v-model="add_key" class="form-control" placeholder="Property name" list="authlist">
-                                <datalist id="authlist">
-                                    <option v-for="val in keyChoices()" :value="val"/>
-                                </datalist>
+                                <div>
+                                    <input type="text" v-model="add_key" class="form-control" placeholder="Property name" list="authlist">
+                                    <datalist id="authlist">
+                                        <option v-for="val in keyChoices()" :value="val"/>
+                                    </datalist>
+                                </div>
+                                <div>
+                                    Boolean: <input v-model="add_bool" type="checkbox"/>
+                                </div>
                             </td>
-                            <td>
-                                <input type="text" v-model="add_value" class="form-control" placeholder="Property value" list="auth_vals">
-                                <datalist id="auth_vals" v-if="add_key !== ''">
-                                    <option v-for="val in valueChoices(add_key)" :value="val"/>
-                                </datalist>
+                            <td class="align-top">
+                                <div v-if="add_bool !== true">
+                                    <input type="text" v-model="add_value" class="form-control" placeholder="Property value"
+                                        list="auth_vals">
+                                    <datalist id="auth_vals" v-if="add_key !== ''">
+                                        <option v-for="val in valueChoices(add_key)" :value="val"/>
+                                    </datalist>
+                                </div>
+                                <div v-else>
+                                    true / false: <input type="checkbox" v-model="add_value"/>
+                                </div>
                             </td>
-                            <td>
+                            <td class="align-top">
                                 <button type="button" class="btn btn-sm btn-success" @click="addAuthProp()">
                                     +</button>
                             </td>
@@ -150,10 +166,13 @@ var targetFormTmpl = `
                     <tr v-for="(v, k) in local_target" v-if="['__edited'].indexOf(k) < 0" class="form-group">
                         <td>{{k}}</td>
                         <td>
-                            <input type="text" class="form-control" v-bind:class="{ 'is-invalid': ((k==='type' && typeHint) || (k==='label' && labelHint))}" :id="'form-input-'+k" v-model="local_target[k]" :list="k+'-'+index">
-                            <datalist :id="k+'-'+index">
+                            <input v-if="typeof(v) !== 'boolean'" type="text" class="form-control"
+                                v-bind:class="{ 'is-invalid': ((k==='type' && typeHint) || (k==='label' && labelHint))}"
+                                    :id="'form-input-'+k" v-model="local_target[k]" :list="k+'-'+index">
+                            <datalist v-if="typeof(v) !== 'boolean'" :id="k+'-'+index">
                                 <option v-for="val in valueChoices(k)" :value="val"/>
                             </datalist>
+                            <input v-if="typeof(v) === 'boolean'" :id="'form-input-'+k" type="checkbox" v-model="local_target[k]"/>
                         </td>
                         <td>
                             <button type="button" class="btn btn-sm btn-danger" @click="removeTargetProp(k)">
@@ -162,18 +181,30 @@ var targetFormTmpl = `
                     </tr>
                     <tr>
                         <td>
-                            <input type="text" v-model="add_key" class="form-control" placeholder="Property name" :list="'_keylist'+index">
-                            <datalist :id="'_keylist'+index">
-                                <option v-for="val in keyChoices()" :value="val"/>
-                            </datalist>
+                            <div>
+                                <input type="text" v-model="add_key" class="form-control" placeholder="Property name"
+                                    :list="'_keylist'+index">
+                                <datalist :id="'_keylist'+index">
+                                    <option v-for="val in keyChoices()" :value="val"/>
+                                </datalist>
+                            </div>
+                            <div>
+                                Boolean: <input v-model="add_bool" type="checkbox"/>
+                            </div>
                         </td>
-                        <td>
-                            <input type="text" v-model="add_value" class="form-control" placeholder="Property value" list="target_vals">
-                            <datalist id="target_vals" v-if="add_key !== ''">
-                                <option v-for="val in valueChoices(add_key)" :value="val"/>
-                            </datalist>
+                        <td class="align-top">
+                            <div v-if="add_bool !== true">
+                                <input type="text" v-model="add_value" class="form-control"
+                                    placeholder="Property value" list="target_vals">
+                                <datalist id="target_vals" v-if="add_key !== ''">
+                                    <option v-for="val in valueChoices(add_key)" :value="val"/>
+                                </datalist>
+                            </div>
+                            <div v-else>
+                                true / false: <input type="checkbox" v-model="add_value"/>
+                            </div>
                         </td>
-                        <td>
+                        <td class="align-top">
                             <button type="button" class="btn btn-sm btn-success" @click="addTargetProp()">
                                 +</button>
                         </td>
@@ -206,10 +237,13 @@ var bridgeFormTmpl = `
                     <tr v-for="(v, k) in local_bridge" v-if="['targets', '__edited'].indexOf(k) < 0" class="form-group">
                         <td>{{k}}</td>
                         <td>
-                            <input type="text" class="form-control"  v-bind:class="{ 'is-invalid': ((k==='type' && typeHint) || (k==='label' && labelHint))}" :id="'form-input-'+k" v-model="local_bridge[k]" :list="k">
-                            <datalist :id="k">
+                            <input v-if="typeof(v) !== 'boolean'" type="text" class="form-control"
+                                v-bind:class="{ 'is-invalid': ((k==='type' && typeHint) || (k==='label' && labelHint))}"
+                                    :id="'form-input-'+k" v-model="local_bridge[k]" :list="k">
+                            <datalist  v-if="typeof(v) !== 'boolean'" :id="k">
                                 <option v-for="val in valueChoices(k)" :value="val"/>
                             </datalist>
+                            <input v-if="typeof(v) === 'boolean'" :id="'form-input-'+k" type="checkbox" v-model="local_bridge[k]"/>
                         </td>
                         <td>
                             <button type="button" class="btn btn-sm btn-danger" @click="removeBridgeProp(k)">
@@ -218,18 +252,29 @@ var bridgeFormTmpl = `
                     </tr>
                     <tr>
                         <td>
-                            <input type="text" v-model="add_key" class="form-control" placeholder="Property name" list="key">
-                            <datalist id="key">
-                                <option v-for="val in keyChoices()" :value="val"/>
-                            </datalist>
+                            <div>
+                                <input type="text" v-model="add_key" class="form-control" placeholder="Property name" list="key">
+                                <datalist id="key">
+                                    <option v-for="val in keyChoices()" :value="val"/>
+                                </datalist>
+                            </div>
+                            <div>
+                                Boolean: <input v-model="add_bool" type="checkbox"/>
+                            </div>
                         </td>
-                        <td>
-                            <input type="text" v-model="add_value" class="form-control" placeholder="Property value" list="vals">
-                            <datalist id="vals" v-if="add_key !== ''">
-                                <option v-for="val in valueChoices(add_key)" :value="val"/>
-                            </datalist>
+                        <td class="align-top">
+                            <div v-if="add_bool !== true">
+                                <input type="text" v-model="add_value" class="form-control"
+                                    placeholder="Property value" list="vals">
+                                <datalist id="vals" v-if="add_key !== ''">
+                                    <option v-for="val in valueChoices(add_key)" :value="val"/>
+                                </datalist>
+                            </div>
+                            <div v-else>
+                                true / false: <input type="checkbox" v-model="add_value"/>
+                            </div>
                         </td>
-                        <td>
+                        <td class="align-top">
                             <button type="button" class="btn btn-sm btn-success" @click="addBridgeProp()">
                                 +</button>
                         </td>
@@ -320,7 +365,8 @@ Vue.component('auth-form', {
         return {
             local_auth: (this.mode === "add") ? {} : this.auth,
             add_key: "",
-            add_value: ""
+            add_value: "",
+            add_bool: false
         }
     },
     methods: {
@@ -337,9 +383,13 @@ Vue.component('auth-form', {
             Vue.delete(this.local_auth, key)
         },
         addAuthProp: function() {
+            if(this.add_bool) {
+                this.add_value = (this.add_value) ? true : false;
+            }
             Vue.set(this.local_auth, this.add_key, this.add_value)
             this.add_value = ""
             this.add_key = ""
+            this.add_bool= false
         },
         reset: function() {
             if (this.mode === "add") {
@@ -374,7 +424,8 @@ Vue.component('target-form', {
         return {
             local_target: (this.index < 0) ? {"type": "", "label": ""} : this.target,
             add_key: "",
-            add_value: ""
+            add_value: "",
+            add_bool: false
         }
     },
     methods: {
@@ -401,9 +452,13 @@ Vue.component('target-form', {
             Vue.delete(this.local_target, key)
         },
         addTargetProp: function() {
+            if(this.add_bool) {
+                this.add_value = (this.add_value) ? true : false;
+            }
             Vue.set(this.local_target, this.add_key, this.add_value)
             this.add_value = ""
             this.add_key = ""
+            this.add_bool= false
         },
         reset: function() {
             if (this.index < 0) {
@@ -422,7 +477,8 @@ Vue.component('bridge-form', {
         return {
             local_bridge: (this.index < 0) ? {"type": "", "label": ""} : this.bridge,
             add_key: "",
-            add_value: ""
+            add_value: "",
+            add_bool: false
         }
     },
     methods: {
@@ -448,9 +504,13 @@ Vue.component('bridge-form', {
             Vue.delete(this.local_bridge, key)
         },
         addBridgeProp: function() {
+            if(this.add_bool) {
+                this.add_value = (this.add_value) ? true : false;
+            }
             Vue.set(this.local_bridge, this.add_key, this.add_value)
             this.add_value = ""
             this.add_key = ""
+            this.add_bool= false
         },
         reset: function() {
             if (this.index < 0) {
