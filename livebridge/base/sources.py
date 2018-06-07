@@ -88,6 +88,11 @@ class PollingSource(BaseSource):
         :return: list of new posts"""
         raise NotImplementedError("Method 'poll' not implemented.")
 
+    async def stop(self):
+        """Method can be implemented by the concrete inherited source class.
+
+           By implementing this method, the source class is able to handle the shutdown event explicitly."""
+        pass
 
 class StreamingSource(BaseSource):
     """Base class for streaming sources. Any custom adapter source, which is using a websocket, SSE or\
