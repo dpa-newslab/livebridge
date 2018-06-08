@@ -15,7 +15,7 @@
 # limitations under the License.
 from setuptools import setup, find_packages
 
-version = '0.24.0'
+version = '0.25.0'
 
 setup(
     name='livebridge',
@@ -34,7 +34,7 @@ setup(
         "Operating System :: POSIX :: Linux",
         "Environment :: Console",
     ],  # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
-    keywords=['liveticker', 'liveblog', 'syndication', "async", "asyncio"],
+    keywords=["liveticker", "liveblog", "syndication", "async", "asyncio", "realtime"],
     author='dpa-infocom GmbH',
     maintainer='Martin Borho',
     maintainer_email='martin@borho.net',
