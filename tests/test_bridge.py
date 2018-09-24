@@ -45,7 +45,7 @@ class LiveBridgeTest(asynctest.TestCase):
         assert self.bridge.max_retries == 10
 
     async def test_client_init(self):
-        assert repr(self.bridge) == "<LiveBridge [Testlabel] https://example.com/api 12345>"
+        assert repr(self.bridge) == "<LiveBridge [Testlabel] https://example.com/api 12345 MD5:4b6218668c601c29f48c17028473b55f>"
 
     async def test_add_target(self):
         assert len(self.bridge.targets) == 0
