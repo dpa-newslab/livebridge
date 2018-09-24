@@ -85,6 +85,13 @@ class ControlData(object):
                     logger.info("Filtering double target [{}] from source [{}]".format(target, source))
         return filtered
 
+    def _remove_inactives(self, control_data):
+        actives = {"auth": control_data.get("auth", {}), "bridges": []}
+        for x, bridge in enumerate(control_data.get("bridges",[])):
+            if bridge.get("active") != False:
+                actives["bridges"].append(copy.deepcopy(bridge))
+        return actives
+
     async def _set_client(self, path):
         # set client for control data
         if self.CONTROL_DATA_CLIENTS.get(path):
@@ -102,6 +109,7 @@ class ControlData(object):
         await self._set_client(path)
 
         control_data = await self.load_control_doc(path)
+        control_data = self._remove_inactives(control_data)
 
         if resolve_auth:
             control_data = self._resolve_auth(control_data)

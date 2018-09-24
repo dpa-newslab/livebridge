@@ -218,6 +218,23 @@ class ControlDataTests(asynctest.TestCase):
         assert self.control.control_client.save.call_count == 1
 
     @asynctest.ignore_loop
+    def test_remove_inactives(self):
+        doc1 = {
+            "auth":{"foo":{"user":"foo", "pwd": "baz"}},
+            "bridges": [
+                {"label": "One", "active": False},
+                {"label": "Two", "active": True},
+                {"label": "Three"},
+            ]}
+        res = self.control._remove_inactives(doc1)
+        assert res == {
+            "auth":{"foo":{"user":"foo", "pwd": "baz"}},
+            "bridges": [
+                {"label": "Two", "active": True},
+                {"label": "Three"},
+            ]}
+
+    @asynctest.ignore_loop
     def test_list_new_bridges(self):
         self.control.new_bridges = ["foo", "bar"]
         assert self.control.list_new_bridges() == ["foo", "bar"]
