@@ -47,6 +47,8 @@ class BaseSourcesTest(asynctest.TestCase):
         with self.assertRaises(NotImplementedError):
             await source.poll()
 
+        assert await source.stop() == None
+
     @asynctest.ignore_loop
     def test_get_source(self):
         source = MockSource
