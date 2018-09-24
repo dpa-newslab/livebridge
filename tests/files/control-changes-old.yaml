@@ -1,0 +1,15 @@
+auth:
+   admin:
+        user: "foo"
+        password: "bla"
+bridges:
+   - source_id: "5ad5b591fcfd630a7c5034a5"
+     endpoint: "https://api.liveblog.org/api/"
+     label: "Ad-hoc Liveblog C"
+     ed_note: "Dieser Liveblog ist für unvorhergesehene Ereignisse reserviert. Wenn Sie auf den Mailverteiler für aktuelle Liveblogs aufgenommen werden wollen, kontaktieren Sie bitte kundeninformation - at - dpa-info.com"
+     type: "liveblog"
+     startdate: "2018-01-01T00:00:00+0100"
+     targets:
+       - type: "scribble"
+         event_id: "1234567890"
+         auth: "admin"

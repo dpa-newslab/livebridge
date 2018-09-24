@@ -1,0 +1,15 @@
+auth:
+   admin:
+        user: "foo"
+        password: "bla"
+bridges:
+   - source_id: "5ad5b591fcfd630a7c5034a5"
+     endpoint: "https://api.liveblog.org/api/"
+     label: "Proteste in Chemnitz"
+     ed_note: ""
+     type: "liveblog"
+     startdate: "2018-08-30T16:00:00+0200"
+     targets:
+       - type: "scribble"
+         event_id: "1234567890"
+         auth: "admin"

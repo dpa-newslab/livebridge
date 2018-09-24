@@ -123,52 +123,52 @@ class ControlDataTests(asynctest.TestCase):
     @asynctest.ignore_loop
     def test_remove_doubles(self):
         control = {'bridges': [
-            {
-                'endpoint': 'https://example.com/api/',
-                'type': 'liveblog',
-                'targets': [
+                {
+                    'endpoint': 'https://example.com/api/',
+                    'type': 'liveblog',
+                    'targets': [
+                            {'event_id': '123456', 'type': 'scribble', 'auth': 'dev'},
+                            {'event_id': '654321', 'type': 'another', 'auth': 'live'},
+                    ],
+                    'source_id': 'abcdefg'
+                }, {
+                    'source_id': "abcdef",
+                    'endpoint': 'https://another.org/api/',
+                    'type': 'foo',
+                    'targets': [
+                        {'target_id': '123456', 'type': 'baz', 'auth': 'dev'},
+                    ],
+                }, {
+                    'source_id': 54321,
+                    'endpoint': 'https://foo.org/api/',
+                    'type': 'liveblog',
+                    'targets': [
+                        {'event_id': '123456', 'type': 'scribble', 'auth': 'dev'}],
+                    'auth': 'slack'
+                }, {
+                    'endpoint': 'https://example.com/api/',
+                    'type': 'liveblog',
+                    'targets': [
+                        {'event_id': '1122233', 'type': 'scribble', 'auth': 'dev'},
                         {'event_id': '123456', 'type': 'scribble', 'auth': 'dev'},
                         {'event_id': '654321', 'type': 'another', 'auth': 'live'},
-                ],
-                'source_id': 'abcdefg'
-            }, {
-                'source_id': "abcdef",
-                'endpoint': 'https://another.org/api/',
-                'type': 'foo',
-                'targets': [
-                    {'target_id': '123456', 'type': 'baz', 'auth': 'dev'},
-                ],
-            }, {
-                'source_id': 54321,
-                'endpoint': 'https://foo.org/api/',
-                'type': 'liveblog',
-                'targets': [
-                    {'event_id': '123456', 'type': 'scribble', 'auth': 'dev'}],
-                'auth': 'slack'
-            }, {
-                'endpoint': 'https://example.com/api/',
-                'type': 'liveblog',
-                'targets': [
-                    {'event_id': '1122233', 'type': 'scribble', 'auth': 'dev'},
-                    {'event_id': '123456', 'type': 'scribble', 'auth': 'dev'},
-                    {'event_id': '654321', 'type': 'another', 'auth': 'live'},
-                ],
-                'source_id': 'abcdefg'
-            }, {
-                'source_id': 54321,
-                'endpoint': 'https://foo.org/api/',
-                'type': 'liveblog',
-                'targets': [
-                    {'event_id': '123456', 'type': 'scribble', 'auth': 'dev'},
-                ],
-                'auth': 'slack'
-            }
-        ],
+                    ],
+                    'source_id': 'abcdefg'
+                }, {
+                    'source_id': 54321,
+                    'endpoint': 'https://foo.org/api/',
+                    'type': 'liveblog',
+                    'targets': [
+                        {'event_id': '123456', 'type': 'scribble', 'auth': 'dev'},
+                    ],
+                    'auth': 'slack'
+                }
+            ],
             'auth': {
                 'dev': {'api_key': 'F00Baz', 'user': 'dev', 'password': 'pwd'},
                 'slack': {'token': 'token-str'},
                 'live': {'api_key': 'Foobar', 'user': 'prod', 'password': 'pwd2'}
-        }
+            }
         }
         cleared = self.control._remove_doubles(control)
         assert len(cleared["bridges"]) == 3
@@ -194,6 +194,19 @@ class ControlDataTests(asynctest.TestCase):
         assert len(cleared["bridges"][0]["targets"]) == 3
         assert len(cleared["bridges"][1]["targets"]) == 1
         assert len(cleared["bridges"][2]["targets"]) == 0
+
+    async def test_load_detect_changes(self):
+        file_path = os.path.join(os.path.dirname(__file__), "files", "control-changes-old.yaml")
+        await self.control.load(file_path, resolve_auth=True)
+
+        assert len(self.control.new_bridges) > 0
+        assert len(self.control.removed_bridges) == 0
+
+        file_path = os.path.join(os.path.dirname(__file__), "files", "control-changes-new.yaml")
+        await self.control.load(file_path, resolve_auth=True)
+        assert len(self.control.new_bridges) == 1
+        assert len(self.control.removed_bridges) == 1
+        assert self.control.removed_bridges == self.control.list_removed_bridges()
 
     async def test_save(self):
         self.control.control_client = asynctest.MagicMock(spec=ControlFile)
