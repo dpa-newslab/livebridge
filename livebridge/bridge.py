@@ -41,7 +41,7 @@ class LiveBridge(object):
         self.sleep_tasks = []
 
     def __repr__(self):
-        return "<LiveBridge [{}] {} {}>".format(self.label, self.endpoint, self.source_id)
+        return "<LiveBridge [{}] {} {} MD5:{}>".format(self.label, self.endpoint, self.source_id, self.hash)
 
     @property
     def source(self):
