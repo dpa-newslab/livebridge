@@ -134,7 +134,8 @@ The data is stored as **JSON** and looks correspondent to the example above the 
             },{
                 "source_id": 54321,
                 "endpoint": "https://foo.org/api/",
-                "label": "Example 2",
+                "label": "Example 2 - deactivated",
+                "active": false,
                 "targets": [
                     {
                         "type": "scribble",
@@ -150,8 +151,8 @@ The data is stored as **JSON** and looks correspondent to the example above the 
 Authorization
 -------------
 
-Credentials for service authorization are defined under **auth:**, in which the keys \
-like **dev** or **live** are later used for reference under **bridges:** and **targets:**. 
+Credentials for service authorization are defined under **auth**, in which the keys \
+like **dev** or **live** are later used for reference under **bridges** and **targets**. 
 
 ENV-var notation for service credentials
 ----------------------------------------
@@ -202,21 +203,26 @@ Bridges
 
 One or more bridges can be controlled under **bridges:**.
 
-Mandatory for every source or target is **type:**, which is a string and has to match the values \
+Mandatory for every source or target is **type**, which is a string and has to match the values \
 of :py:attr:`livebridge.base.BaseSource.type` or :py:attr:`livebridge.base.BaseTarget.type` of the \
 described concrete source or target plugin.
 
-All configuration values besides **type:** will be turned over to the concrete target and source classes as \
+Two optional, but recommended properties are **label** and **active**. **label** should contain a descriptive string, \
+with **active** you can deactivate single bridges by making **active: false**.
+
+All configuration values besides **type** will be turned over to the concrete target and source classes as \
 **__init__** parameter **config**.
 
-If there's an **auth:** value for the source or target, the value will be matched to a block under **auth:** \
-and these values will be merged under **auth:** of the source/target. For example the last target from the example above will be \
+If there's an **auth** value for the source or target, the value will be matched to a block under **auth** \
+and these values will be merged under **auth** of the source/target. For example the last target from the example above will be \
 resolved from **Livebridge** to following Python dict structure:
 
 .. code-block:: python
 
-    { 
+    {
         'type': 'scribble',
+        'label': 'An example.',
+        'active': true,
         'event_id': '123456',
         'auth': {
             'user': 'dev',
@@ -228,7 +234,7 @@ resolved from **Livebridge** to following Python dict structure:
 Sources
 -------
 
-A block for a source consists of parameter for the source and one or multiple **targets:** blocks.
+A block for a source consists of parameter for the source and one or multiple **targets** blocks.
 
 Targets
 -------
