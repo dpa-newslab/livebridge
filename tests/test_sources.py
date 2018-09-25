@@ -49,7 +49,7 @@ class BaseSourcesTest(asynctest.TestCase):
 
         assert await source.stop() == None
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_get_source(self):
         source = MockSource
         add_source(source)
@@ -58,7 +58,7 @@ class BaseSourcesTest(asynctest.TestCase):
         assert new_source.type == conf["type"]
         assert new_source.foo == conf["foo"]
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_get_source_unkown(self):
         source = get_source({"type": "foo"})
         assert source is None

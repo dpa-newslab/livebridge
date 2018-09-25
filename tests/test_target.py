@@ -49,7 +49,7 @@ class BaseTargetTests(asynctest.TestCase):
         self.post.target_id = "post-target"
         self.post.content = ""
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_get_target(self):
         target = MockTarget
         add_target(target)
@@ -58,17 +58,17 @@ class BaseTargetTests(asynctest.TestCase):
         assert new_target.type == target.type
         assert new_target.foo == conf["foo"]
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_get_target_unkown(self):
         target = get_target({"type": "foo"})
         assert target is None
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_init(self):
         assert isinstance(self.target._db, DynamoClient) is True
         assert isinstance(self.target, BaseTarget) is True
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_db(self):
         self.target._db_client = "foo"
         assert self.target._db == "foo"
@@ -77,7 +77,7 @@ class BaseTargetTests(asynctest.TestCase):
         del self.target._db_client
         assert isinstance(self.target._db, DynamoClient) is True
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_parent_methods(self):
         with self.assertRaises(NotImplementedError):
             self.target.post_item(self.post)
@@ -91,7 +91,7 @@ class BaseTargetTests(asynctest.TestCase):
         with self.assertRaises(NotImplementedError):
             self.target.handle_extras(self.post)
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_get_converter(self):
         target = BaseTarget()
         self.post.source = "liveblog"

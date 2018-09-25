@@ -42,7 +42,7 @@ class DummyStorageTests(asynctest.TestCase):
         params = {"dsn": self.dsn}
         self.client = DummyStorage(**params)
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_init(self):
         assert issubclass(DummyStorage, BaseStorage) is True
 

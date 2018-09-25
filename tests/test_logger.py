@@ -23,6 +23,6 @@ class LoggerTests(unittest.TestCase):
         import livebridge.config
         livebridge.config.LOGFILE = "/dev/null"
         from livebridge.logger import logger
-        assert type(logger) is logging.RootLogger
-        assert type(logger.handlers[0]) is logging.StreamHandler
+        self.assertIsInstance(logger, logging.RootLogger)
+        self.assertIsInstance(logger.handlers[0], logging.StreamHandler)
         logger.handlers = []

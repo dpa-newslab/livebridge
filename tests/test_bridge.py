@@ -239,7 +239,7 @@ class LiveBridgeTest(asynctest.TestCase):
         assert type(res) == asyncio.Task
         self.bridge.source.listen.assert_called_once_with(self.bridge.new_posts)
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_get_hash(self):
         assert get_hash({"foo": "bar"}) == "dd63dafcbd4d5b28badfcaf86fb6fcdb"
         assert get_hash([1, 2, 3, 4, 5, 6]) == "199ff5b613f5dc25dff99df513516bf9"

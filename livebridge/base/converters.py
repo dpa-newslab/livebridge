@@ -50,7 +50,7 @@ class BaseConverter(object):
             FILE_EXT[data["mimetype"]] if not file_ext else ""
         )
         filepath = os.path.join("/tmp/", filename)
-        with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession() as session:
             async with session.get(data["href"]) as resp:
                 test = await resp.read()
                 with open(filepath, "wb") as file:

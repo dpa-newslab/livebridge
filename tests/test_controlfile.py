@@ -75,7 +75,7 @@ class ControlFileTest(asynctest.TestCase):
         assert self.control._sqs_client.purge_queue.call_args == \
             asynctest.call(QueueUrl='http://foo-queue')
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_del(self):
         self.control._sqs_client.close = asynctest.CoroutineMock()
         self.control.__del__()

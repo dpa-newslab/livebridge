@@ -30,7 +30,7 @@ class ConverterTest(asynctest.TestCase):
         self.converter = MockConverter()
         add_converter(MockConverter)
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_get_converter(self):
         converter = get_converter("foo", "baz")
         assert type(converter) == MockConverter

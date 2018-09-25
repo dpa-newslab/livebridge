@@ -23,7 +23,7 @@ class LoaderTests(asynctest.TestCase):
         self.controller = asynctest.MagicMock()
         self.lb = LiveBridge(loop=self.loop, controller=self.controller)
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_init(self):
         assert self.lb.controller == self.controller
         assert self.lb.loop == self.loop
@@ -44,7 +44,7 @@ class LoaderTests(asynctest.TestCase):
         assert tasks[2].done.call_count == 1
         assert tasks[0].set_exception.call_count == 0
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_shutdown(self):
         self.lb.controller.clean_shutdown = asynctest.CoroutineMock(return_value=True)
         self.lb.controller.tasked = [1, 2]

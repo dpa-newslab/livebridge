@@ -85,13 +85,13 @@ class ArgsTests(asynctest.TestCase):
         assert args.control == self.control_file
         config.CONTROLFILE = None
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_read_args_kwargs(self):
         from livebridge.run import read_args
         args = read_args(**{"control": "foobaz"})
         assert args.control == "foobaz"
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_read_args_sql(self):
         from livebridge.run import read_args
         config.DB["control_table_name"] = "foobaz"
@@ -101,7 +101,7 @@ class ArgsTests(asynctest.TestCase):
         config.DB["control_table_name"] = None
         config.AWS["control_table_name"] = None
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_read_args_dynamo(self):
         from livebridge.run import read_args
         config.AWS["control_table_name"] = "foobaz"

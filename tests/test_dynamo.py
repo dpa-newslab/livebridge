@@ -44,7 +44,7 @@ class DynamoClientTests(asynctest.TestCase):
     def tearDown(self):
         self.client.__del__()
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_init(self):
         assert self.client.access_key == self.access_key
         assert self.client.secret_key == self.secret_key
@@ -62,6 +62,7 @@ class DynamoClientTests(asynctest.TestCase):
         self.client.db_client = asynctest.MagicMock()
         create_resp = {"ResponseMetadata": {"HTTPStatusCode": 200}}
         self.client.db_client.create_table = asynctest.CoroutineMock(return_value=create_resp)
+        self.client.db_client.close = asynctest.CoroutineMock(return_value=None)
 
         # table exists already
         table_resp = {"TableNames": [self.table_name, self.control_table_name]}
@@ -100,7 +101,7 @@ class DynamoClientTests(asynctest.TestCase):
         res = await self.client.setup()
         assert res is False
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_singleton_db(self):
         db1 = get_db_client()
         db2 = get_db_client()

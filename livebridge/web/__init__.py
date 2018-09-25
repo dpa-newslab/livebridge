@@ -24,35 +24,32 @@ logger = logging.getLogger(__name__)
 
 _tokens = {}
 
-
-async def auth_middleware(app, handler):
-    async def middleware_handler(request):
-        try:
-            # check auth header
-            if request.path not in ["/", "/api/v1/session"] and not request.path.startswith("/dashboard"):
-                token = request.cookies.get("lb-db") or request.headers.get("X-Auth-Token")
-                if token not in _tokens.values():
-                    return web.json_response({"error": "Invalid token."}, status=401)
-            # return response
-            response = await handler(request)
-            return response
-        except web.HTTPException as ex:
-            raise
-    return middleware_handler
+@web.middleware
+async def auth_middleware(request, handler):
+    try:
+        # check auth header
+        if request.path not in ["/", "/api/v1/session"] and not request.path.startswith("/dashboard"):
+            token = request.cookies.get("lb-db") or request.headers.get("X-Auth-Token")
+            if token not in _tokens.values():
+                return web.json_response({"error": "Invalid token."}, status=401)
+        # return response
+        response = await handler(request)
+        return response
+    except web.HTTPException as ex:
+        raise
 
 
 def error_overrides(overrides):
-    async def middleware(app, handler):
-        async def middleware_handler(request):
-            try:
-                response = await handler(request)
-                return response
-            except web.HTTPException as ex:
-                override = overrides.get(ex.status)
-                if override:
-                    return await override(request, ex)
-        return middleware_handler
-    return middleware
+    @web.middleware
+    async def middleware_handler(request, handler):
+        try:
+            response = await handler(request)
+            return response
+        except web.HTTPException as ex:
+            override = overrides.get(ex.status)
+            if override:
+                return await override(request, ex)
+    return middleware_handler
 
 
 class WebApi(object):
@@ -66,14 +63,14 @@ class WebApi(object):
         # start server
         logger.info("Starting API server ...")
         middlewares = [error_overrides({405: self.handle_405}), auth_middleware]
-        self.app = web.Application(loop=loop, middlewares=middlewares)
+        self.app = web.Application(middlewares=middlewares)
         self.app["controller"] = controller
         self.app.router.add_get("/", self.index_handler)
         self.app.router.add_static("/dashboard", self.static_path, show_index=True)
         self.app.router.add_get("/api/v1/controldata", self.control_get)
         self.app.router.add_put("/api/v1/controldata", self.control_put)
         self.app.router.add_post("/api/v1/session", self.login, expect_handler=web.Request.json)
-        self.handler = self.app.make_handler()
+        self.handler = self.app._make_handler()
         f = self.loop.create_server(self.handler, self.config["host"], self.config["port"])
         self.srv = loop.run_until_complete(f) if not loop.is_running() else None
         logger.info("... API server started up")
@@ -121,7 +118,7 @@ class WebApi(object):
                 return web.json_response({"error": "Precondition Failed."}, status=412)
             # handle data
             await request.post()
-            if request.has_body:
+            if request.can_read_body:
                 uploaded_doc = await request.json()
                 res = await self.app["controller"].save_control_data(uploaded_doc)
                 if res:

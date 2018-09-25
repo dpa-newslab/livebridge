@@ -27,12 +27,15 @@ class MockGenerator:
     def __init__(self, data):
         self.data = data
 
-    async def __aiter__(self):
+    async def next_data(self):
+        return self.data.pop()
+
+    def __aiter__(self):
         return self
 
     async def __anext__(self):
         try:
-            return self.data.pop()
+            return await self.next_data()
         except IndexError:
             raise StopAsyncIteration
 
@@ -47,7 +50,7 @@ class MongoStorageTests(asynctest.TestCase):
         self.client = MongoStorage(**params)
         self.target_id = "scribble-max.mustermann@dpa-info.com-1234567890"
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_init(self):
         assert self.client.dsn == self.dsn
         assert self.client.table_name == self.table_name
@@ -78,7 +81,7 @@ class MongoStorageTests(asynctest.TestCase):
 
     async def test_setup(self):
         self.client._db = asynctest.MagicMock()
-        self.client._db.collection_names = asynctest.CoroutineMock(
+        self.client._db.list_collection_names = asynctest.CoroutineMock(
             return_value=[self.table_name, self.control_table_name])
         self.client._db.create_collection = asynctest.CoroutineMock(return_value=True)
         self.client._db[self.table_name].create_index = asynctest.CoroutineMock(return_value=True)
@@ -87,19 +90,19 @@ class MongoStorageTests(asynctest.TestCase):
         assert self.client._db.create_collection.call_count == 0
         assert self.client._db[self.table_name].create_index.call_count == 0
 
-        self.client._db.collection_names = asynctest.CoroutineMock(return_value=[self.control_table_name])
+        self.client._db.list_collection_names = asynctest.CoroutineMock(return_value=[self.control_table_name])
         res = await self.client.setup()
         assert res is True
         assert self.client._db.create_collection.call_count == 1
         assert self.client._db[self.table_name].create_index.call_count == 1
 
-        self.client._db.collection_names = asynctest.CoroutineMock(return_value=[self.table_name])
+        self.client._db.list_collection_names = asynctest.CoroutineMock(return_value=[self.table_name])
         res = await self.client.setup()
         assert res is True
         assert self.client._db.create_collection.call_count == 2
         assert self.client._db[self.table_name].create_index.call_count == 1
 
-        self.client._db.collection_names = asynctest.CoroutineMock(return_value=[])
+        self.client._db.list_collection_names = asynctest.CoroutineMock(return_value=[])
         res = await self.client.setup()
         assert res is True
         assert self.client._db.create_collection.call_count == 4
@@ -107,7 +110,7 @@ class MongoStorageTests(asynctest.TestCase):
 
     async def test_setup_failing(self):
         self.client._db = asynctest.MagicMock()
-        self.client._db.collection_names = asynctest.CoroutineMock(side_effect=Exception("Test-Error"))
+        self.client._db.list_collection_names = asynctest.CoroutineMock(side_effect=Exception("Test-Error"))
         res = await self.client.setup()
         assert res is False
 
@@ -234,21 +237,21 @@ class MongoStorageTests(asynctest.TestCase):
 
     async def test_delete_post(self):
         coll = asynctest.MagicMock(spec=AsyncIOMotorCollection)
-        coll.remove = asynctest.CoroutineMock(return_value=True)
+        coll.delete_one = asynctest.CoroutineMock(return_value=True)
         self.client._db = {self.table_name: coll}
         res = await self.client.delete_post("target", "post")
         assert res is True
-        assert coll.remove.call_count == 1
-        assert coll.remove.call_args[0][0]["target_id"] == "target"
-        assert coll.remove.call_args[0][0]["post_id"] == "post"
+        assert coll.delete_one.call_count == 1
+        assert coll.delete_one.call_args[0][0]["target_id"] == "target"
+        assert coll.delete_one.call_args[0][0]["post_id"] == "post"
 
     async def test_delete_post_failing(self):
         coll = asynctest.MagicMock(spec=AsyncIOMotorCollection)
-        coll.remove.side_effect = Exception("Test-Error")
+        coll.delete_one.side_effect = Exception("Test-Error")
         self.client._db = {self.table_name: coll}
         res = await self.client.delete_post("target", "post")
         assert res is False
-        assert coll.remove.call_count == 1
+        assert coll.delete_one.call_count == 1
 
     async def test_get_control(self):
         updated = datetime(2017, 6, 1, 11, 3, 2)

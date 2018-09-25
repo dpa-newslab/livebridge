@@ -15,8 +15,9 @@
 # limitations under the License.
 import asynctest
 import os
+import sqlalchemy_aio
+from sqlalchemy_aio.engine import AsyncioResultProxy, AsyncioConnection
 from datetime import datetime
-from sqlalchemy_aio.engine import AsyncioEngine, AsyncioResultProxy, AsyncioConnection
 from livebridge.storages.base import BaseStorage
 from livebridge.storages import SQLStorage
 from livebridge.components import get_db_client
@@ -36,7 +37,7 @@ class SQLStorageTests(asynctest.TestCase):
         if os.path.exists("./tests/tests.db"):
             os.remove("./tests/tests.db")
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_init(self):
         assert self.client.dsn == self.dsn
         assert self.client.table_name == self.table_name
@@ -44,7 +45,7 @@ class SQLStorageTests(asynctest.TestCase):
 
     async def test_db(self):
         db = await self.client.db
-        assert type(db) == AsyncioEngine
+        self.assertIsInstance(db, sqlalchemy_aio.asyncio.AsyncioEngine)
 
     async def test_get_db_client(self):
         params = {

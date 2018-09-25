@@ -46,7 +46,7 @@ class ControllerTests(asynctest.TestCase):
         bridge.source.stop = asynctest.CoroutineMock()
         return bridge
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_init(self):
         assert self.controller.config == self.config
         assert self.controller.poll_interval == self.config.POLL_INTERVAL
@@ -305,7 +305,7 @@ class ControllerTests(asynctest.TestCase):
             assert type(bridge) == LiveBridge
             assert bridge.source.mode == "streaming"
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_append_poller_bridge(self):
 
         class Source:

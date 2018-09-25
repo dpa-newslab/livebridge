@@ -120,7 +120,7 @@ class ControlDataTests(asynctest.TestCase):
         # check nested auth isn't resolved
         assert control["auth"]["foo"]["nested"] == {"foo": "env.LB_FOO_USER"}
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_remove_doubles(self):
         control = {'bridges': [
                 {
@@ -217,7 +217,7 @@ class ControlDataTests(asynctest.TestCase):
         assert res is True
         assert self.control.control_client.save.call_count == 1
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_remove_inactives(self):
         doc1 = {
             "auth":{"foo":{"user":"foo", "pwd": "baz"}},
@@ -234,12 +234,12 @@ class ControlDataTests(asynctest.TestCase):
                 {"label": "Three"},
             ]}
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_list_new_bridges(self):
         self.control.new_bridges = ["foo", "bar"]
         assert self.control.list_new_bridges() == ["foo", "bar"]
 
-    @asynctest.ignore_loop
+    @asynctest.fail_on(unused_loop=False)
     def test_list_removed_bridges(self):
         self.control.removed_bridges = ["foo", "baz"]
         assert self.control.list_removed_bridges() == ["foo", "baz"]

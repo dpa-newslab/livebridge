@@ -58,7 +58,7 @@ class MongoStorage(BaseStorage):
         """Setting up MongoDB collections, if they not exist."""
         try:
             db = await self.db
-            collections = await db.collection_names()
+            collections = await db.list_collection_names()
             created = False
             if self.table_name not in collections:
                 # create table
@@ -67,7 +67,7 @@ class MongoStorage(BaseStorage):
                 await db[self.table_name].create_index([("target_id", DESCENDING), ("post_id", DESCENDING)])
                 created = True
             # create control collection if not already created.
-            if self.control_table_name not in collections:
+            if self.control_table_name and self.control_table_name not in collections:
                 # create table
                 logger.info("Creating MongoDB control data collection [{}]".format(self.control_table_name))
                 await db.create_collection(self.control_table_name)
@@ -165,7 +165,7 @@ class MongoStorage(BaseStorage):
     async def delete_post(self, target_id, post_id):
         try:
             coll = (await self.db)[self.table_name]
-            await coll.remove({"target_id": target_id, "post_id": post_id}, {"justOne": True})
+            await coll.delete_one({"target_id": target_id, "post_id": post_id}) #, {"justOne": True})
             logger.info("[DB] Post {} {} was deleted!".format(target_id, post_id))
             return True
         except Exception as exc:

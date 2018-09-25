@@ -45,7 +45,7 @@ class WebApiTestCase(AioHTTPTestCase):
         assert self.loop.create_server.call_args[0][0] == server.handler
         assert self.loop.create_server.call_args[0][1] == "localhost"
         assert self.loop.create_server.call_args[0][2] == 9990
-        self.client.session.close()
+        await self.client.session.close()
 
     @unittest_run_loop
     async def test_shutdown(self):
@@ -111,7 +111,7 @@ class WebApiTestCase(AioHTTPTestCase):
     @unittest_run_loop
     async def test_login_token(self):
         token = await self._get_token()
-        self.assertRegexpMatches(token, r'^[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}$')
+        self.assertRegex(token, r'^[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}$')
 
     @unittest_run_loop
     async def test_get_controldata(self):

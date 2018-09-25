@@ -83,7 +83,8 @@ class DynamoClient(BaseStorage):
 
     def __del__(self):
         if hasattr(self, "db_client") and self.db_client:
-            self.db_client.close()
+            if not asyncio.get_event_loop().is_closed():
+                asyncio.ensure_future(self.db_client.close())
 
     @property
     async def db(self):
