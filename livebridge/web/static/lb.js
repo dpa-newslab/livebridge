@@ -323,7 +323,7 @@ var bridgeTmpl = `
                 <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" :data-target="'#bridge-form-'+index"
                     title="Edit source">Edit</button>
                 <button type="button" class="btn btn-sm btn-success" data-toggle="modal" :data-target="'#target-add-form-'+index"
-                    title="Add target">&plus;</button>
+                    title="Add target" :id="'bridge-add-target-'+index">&plus;</button>
                 <button type="button" class="btn btn-sm btn-danger" @click="removeBridge(index)" title="Remove bridge">&Chi;</button>
                 <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#bridge-add-form" @click="copyBridge(getDeepCopy(bridge))" title="Copy bridge">&#x2398;</button>
             </div>
@@ -494,6 +494,7 @@ Vue.component('bridge-form', {
             if(this.validateNode(this.local_bridge)) {
                 this.$parent.$options.methods.addBridge(this.local_bridge)
                 this.reset()
+                document.getElementById("bridge-add-target-1").click();
             } else {
                 ev.preventDefault();
                 ev.stopPropagation();
