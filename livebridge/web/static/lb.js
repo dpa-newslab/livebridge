@@ -227,7 +227,7 @@ var bridgeFormTmpl = `
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title"><span v-if="index < 0">Add</span><span v-else>Edit</span> {{ local_bridge.label }}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="modal" @click="reset()" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -325,6 +325,7 @@ var bridgeTmpl = `
                 <button type="button" class="btn btn-sm btn-success" data-toggle="modal" :data-target="'#target-add-form-'+index"
                     title="Add target">&plus;</button>
                 <button type="button" class="btn btn-sm btn-danger" @click="removeBridge(index)" title="Remove bridge">&Chi;</button>
+                <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#bridge-add-form" @click="copyBridge(getDeepCopy(bridge))" title="Copy bridge">&#x2398;</button>
             </div>
         </div>
         <div class="card-body">
@@ -482,7 +483,7 @@ Vue.component('bridge-form', {
     mixins: [lbMixin],
     data: function () {
         return {
-            local_bridge: (this.index < 0) ? {"type": "", "label": ""} : this.bridge,
+            local_bridge: (this.index < 0) ? {"type": "", "label": "", "active": true} : this.bridge,
             add_key: "",
             add_value: "",
             add_bool: false
@@ -522,7 +523,7 @@ Vue.component('bridge-form', {
         reset: function() {
             if (this.index < 0) {
                 // add form
-                this.local_bridge = {"type": "", "label": ""}
+                this.local_bridge = {"type": "", "label": "", "active": true}
             }
         }
     }
@@ -555,6 +556,12 @@ Vue.component('bridge', {
         }
     },
     methods: {
+        copyBridge: function(bridge) {
+            if (typeof(bridge.active) === 'undefined') {
+                bridge.active = true;
+            }
+            document.getElementById("bridge-add-form").__vue__.local_bridge = bridge;
+        },
         removeBridge: function(index) {
            this.$parent.$options.methods.removeBridge(index)
         }
