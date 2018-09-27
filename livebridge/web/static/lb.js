@@ -153,7 +153,7 @@ var targetFormTmpl = `
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title"><strong>Source:</strong> {{ bridge.type }} / {{ bridge.label }}</h5><br/>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="reset()">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
