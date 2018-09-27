@@ -91,6 +91,7 @@
                 </form>
                 <flash-message v-bind:message="message"></flash-message>
             </div>
+            <loader v-bind:loading="loading" v-if="loading === true"></loader>
         </div>
 
         <script src="/dashboard/vendor/vue-v2.5.13.min.js"></script>

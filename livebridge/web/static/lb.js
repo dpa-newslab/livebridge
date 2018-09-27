@@ -356,6 +356,13 @@ var flashMessageTmpl = `
 </transition>
 `
 
+var loaderTmpl = `
+<div id="loader-overlay">
+    <div class="loader-box">
+        <div class="loader"></div> 
+    </div>
+</div>
+`
 
 Vue.component('auth-form', {
     template: authFormTmpl,
@@ -559,6 +566,11 @@ Vue.component('flash-message', {
     props: ["message"]
 })
 
+Vue.component('loader', {
+    template: loaderTmpl,
+    props: ["loading"]
+})
+
 var app = new Vue({
     el: '#content',
     data: {
@@ -576,6 +588,7 @@ var app = new Vue({
         json_str: '',
         keyChoices: [],
         valueChoices: {},
+        loading: false,
         message: {
             txt: "",
             mode: "",
@@ -676,6 +689,7 @@ var app = new Vue({
             }
         },
         getControlData: function() {
+            this.loading = true;
             var cookie_token = this.getCookie();
             axios({
                 method: 'get',
@@ -686,6 +700,7 @@ var app = new Vue({
                 this.control_data_orig = JSON.parse(JSON.stringify(response.data));
                 this.collectChoices("", this.control_data, -1)
                 this.keyChoices.sort()
+                app.loading = false;
                 //this.printObject("", this.control_data, -1);
             }).catch(error =>  {
                 if(error)
@@ -694,6 +709,7 @@ var app = new Vue({
                     this.loggedIn = false;
                     this.login()
                 }
+                this.loading = false;
             });
         },
         checkNewAuthName: function(name, e) {
@@ -792,6 +808,7 @@ var app = new Vue({
         },
         saveNewControlData: function() {
             app.edited = false
+            app.loading = true;
             var payload = JSON.parse(JSON.stringify(this.control_data));
             this.clearObject("", payload, -1)
             axios({
@@ -804,12 +821,13 @@ var app = new Vue({
                 }
             })
             .then(response => {
-                this.showMessage("Data was successfully saved!", "success");
+                //this.showMessage("Data was successfully saved!", "success");
                 this.getControlData()
             }).catch(function (error) {
                 if(error.reponse)
                     console.debug(error.response.status);
                 app.showMessage(error.response.data.error, "danger");
+                app.loading = false;
             });
         }
     }
