@@ -491,10 +491,19 @@ Vue.component('bridge-form', {
     },
     methods: {
         addBridge: function(ev) {
+            app.loading = true;
             if(this.validateNode(this.local_bridge)) {
                 this.$parent.$options.methods.addBridge(this.local_bridge)
                 this.reset()
-                document.getElementById("bridge-add-target-1").click();
+
+                // open add target form when new bridges list is reflected.
+                let lenBridges = this.$parent.$children.length;
+                setTimeout(function() {
+                    if (lenBridges < app.$children.length) {
+                        document.getElementById("bridge-add-target-0").click();
+                        app.loading = false;
+                    }
+                }, 100);
             } else {
                 ev.preventDefault();
                 ev.stopPropagation();
@@ -615,10 +624,10 @@ var app = new Vue({
                 setTimeout(function(){ app.message.flash = false; }, 3000);
         },
         getCookie: function() {
-            var name = this.cookie_name + "=";
-            var ca = document.cookie.split(';');
-            for(var i = 0; i < ca.length; i++) {
-                var c = ca[i];
+            const name = this.cookie_name + "=";
+            const ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
                 while (c.charAt(0) == ' ') {
                     c = c.substring(1);
                 }
@@ -655,12 +664,12 @@ var app = new Vue({
 			document.cookie = this.cookie_name + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;';
 		},
         printObject: function(key, obj, depth) {
-            var d = (key) ? (depth +1): depth
+            const d = (key) ? (depth +1): depth
             if((typeof obj) == "object") {
                 if (key)
                     console.log("\t".repeat(d)+key+":")
-                for(var prop in obj) {
-                    var val = obj[prop]
+                for(let prop in obj) {
+                    let val = obj[prop]
                     this.printObject(prop, val, d)
                 }
             } else {
@@ -668,11 +677,11 @@ var app = new Vue({
             }
         },
         clearObject: function(key, obj, depth) {
-            var d = (key) ? (depth +1): depth
+            const d = (key) ? (depth +1): depth
             if((typeof obj) == "object") {
                 delete obj["__edited"]
-                for(var prop in obj) {
-                    var val = obj[prop]
+                for(let prop in obj) {
+                    let val = obj[prop]
                     this.clearObject(prop, val, d)
                 }
             }
@@ -686,10 +695,10 @@ var app = new Vue({
             else this.valueChoices[prop].push(value);
         },
         collectChoices: function(key, obj, depth) {
-            var d = (key) ? (depth +1): depth
+            const d = (key) ? (depth +1): depth
             if((typeof obj) == "object") {
-                for(var prop in obj) {
-                    var val = obj[prop]
+                for(let prop in obj) {
+                    let val = obj[prop]
                     if(typeof(val) === "string")
                         this.addChoice(prop, val)
                     this.collectChoices(prop, val, d)
@@ -698,7 +707,7 @@ var app = new Vue({
         },
         getControlData: function() {
             this.loading = true;
-            var cookie_token = this.getCookie();
+            const cookie_token = this.getCookie();
             axios({
                 method: 'get',
                 url: '/api/v1/controldata'
@@ -721,7 +730,7 @@ var app = new Vue({
             });
         },
         checkNewAuthName: function(name, e) {
-            var skip = false;
+            let skip = false;
             name = name.trim();
             if(name === "") {
                 this.showMessage("Please specify an account name!", "danger");
@@ -772,7 +781,7 @@ var app = new Vue({
         addTarget: function(bridge_index, target) {
             app.collectChoices("", target, -1)
             target["__edited"] = true
-            var data = JSON.parse(JSON.stringify(app.control_data));
+            let data = JSON.parse(JSON.stringify(app.control_data));
             data.bridges[bridge_index].targets.push(target)
             app.control_data = data
             app.edited = true
@@ -799,7 +808,7 @@ var app = new Vue({
             return false;
         },
         saveJSON: function() {
-            var newData = null;
+            let newData = null;
             try {
                 newData = JSON.parse(this.json_str);
                 this.control_data = newData;
@@ -817,7 +826,7 @@ var app = new Vue({
         saveNewControlData: function() {
             app.edited = false
             app.loading = true;
-            var payload = JSON.parse(JSON.stringify(this.control_data));
+            const payload = JSON.parse(JSON.stringify(this.control_data));
             this.clearObject("", payload, -1)
             axios({
                 method: 'put',
