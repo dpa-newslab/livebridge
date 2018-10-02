@@ -600,6 +600,7 @@ var app = new Vue({
         control_data_orig: {},
         username: null,
         password: null,
+        hideInactives: true,
         edited: false,
         new_auth_key: '',
         json_str: '',

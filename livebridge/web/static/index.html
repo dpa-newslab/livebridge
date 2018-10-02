@@ -40,10 +40,20 @@
                     <div class="tab-pane active" id="bridges" role="tabpanel" aria-labelledby="bridges-tab">
                         <div id="add-btn">
                             <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#bridge-add-form">
-                                Add new source</button>
+                                Add new source
+                            </button>
+                            <button type="button"  @click="hideInactives = true" class="btn btn-sm btn-outline-info float-right"
+                                v-if="hideInactives !== true">
+                                    Hide inactives
+                            </button>
+                            <button type="button" @click="hideInactives = false" class="btn btn-sm btn-outline-info float-right"
+                                v-else="hideInactives === true">
+                                    Show inactives
+                            </button>
                         </div>
                         <div is="bridge" v-for="(bridge, index) in control_data.bridges" v-bind:bridge="bridge"
-                               v-bind:index="index" :key="'bridge-'+bridge.type+'-'+bridge.label" :id="'bridge-'+index">
+                               v-if="hideInactives==false || bridge.active === true" v-bind:index="index"
+                                    :key="'bridge-'+bridge.type+'-'+bridge.label" :id="'bridge-'+index">
                         </div>
                         <bridge-form v-bind:index="-1" id="bridge-add-form"></bridge-form>
                     </div>
