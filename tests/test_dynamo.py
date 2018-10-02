@@ -41,8 +41,8 @@ class DynamoClientTests(asynctest.TestCase):
         self.client = DynamoClient(**params)
         self.target_id = "scribble-max.mustermann@dpa-info.com-1234567890"
 
-    def tearDown(self):
-        self.client.__del__()
+    async def tearDown(self):
+        await self.client.shutdown()
 
     @asynctest.fail_on(unused_loop=False)
     def test_init(self):

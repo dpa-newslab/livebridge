@@ -23,6 +23,8 @@ class StoragesTest(asynctest.TestCase):
         self.storage = BaseStorage()
 
     async def test_parent_methods(self):
+        assert await self.storage.shutdown() == None
+
         with self.assertRaises(NotImplementedError):
             await self.storage.db
 

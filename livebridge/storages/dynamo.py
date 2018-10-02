@@ -81,10 +81,10 @@ class DynamoClient(BaseStorage):
             "ProvisionedThroughput": {"ReadCapacityUnits": 3, "WriteCapacityUnits": 3},
         }
 
-    def __del__(self):
+    async def shutdown(self):
         if hasattr(self, "db_client") and self.db_client:
-            if not asyncio.get_event_loop().is_closed():
-                asyncio.ensure_future(self.db_client.close())
+            await self.db_client.close()
+
 
     @property
     async def db(self):

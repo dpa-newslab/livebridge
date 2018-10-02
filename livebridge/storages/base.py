@@ -38,6 +38,11 @@ class BaseStorage(object):
         """Method for setting up storage, creating table pp."""
         raise NotImplementedError()
 
+    async def shutdown(self):
+        """Method for closing db client, gets called right before closing the event loop.
+           Needed by DynamoDB client"""
+        pass
+
     async def insert_post(self, **kwargs):
         """Insert single post into storage."""
         raise NotImplementedError()

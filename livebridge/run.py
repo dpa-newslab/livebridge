@@ -87,5 +87,6 @@ def main(**kwargs):
         if config.WEB.get("host") and config.WEB.get("port"):
             server.shutdown()
         lb.shutdown()
+        loop.run_until_complete(db_connector.shutdown())
         loop.stop()
         loop.close()
