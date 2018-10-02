@@ -15,16 +15,18 @@
 # limitations under the License.
 from setuptools import setup, find_packages
 
-version = '0.25.0'
+with open('./README.md') as f:
+    long_description = f.read()
+
+version = '0.26rc0'
 
 setup(
     name='livebridge',
     version=version,
     description="Keep content in-sync across services. Or simply syndicate content to multiple services. " +
                 "Based on asyncio.",
-    long_description="""\
-        See https://github.com/dpa-newslab/livebridge for more infos.
-    """,
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     classifiers=[
         "Programming Language :: Python :: 3.5",
         "Topic :: Communications :: Chat",
