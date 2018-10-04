@@ -48,12 +48,10 @@ setup(
     install_requires=[
         "aiobotocore==0.9.4",
         "aiohttp==3.4.4",
-        "asynctest==0.12.2",
         "bleach==2.1.4",
         "dsnparse==0.1.12",
         "pymongo>=3.6.0",
         "motor==2.0.0",
-        "pytest==3.8.1",
         "python-dateutil==2.7.3",
         "PyYAML==3.13",
         "sqlalchemy-aio==0.13.0",
