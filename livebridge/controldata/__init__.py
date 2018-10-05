@@ -39,6 +39,10 @@ class ControlData(object):
         self.new_bridges = []
         self.removed_bridges = []
 
+    async def close(self):
+        if self.control_client:
+            await self.control_client.close()
+
     def _replace_envs(self, data):
         for auth in data.get("auth", []):
             for a in data["auth"][auth].items():

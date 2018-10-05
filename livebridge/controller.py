@@ -41,6 +41,7 @@ class Controller(object):
     async def clean_shutdown(self):
         logger.info("Requesting proper shutdown of tasks.")
         self.shutdown = True
+        await self.close_control_data()
         await self.stop_bridges()
         while len(self.bridges) > 0:
             logger.debug("Running bridges left: {}".format(len(self.bridges)))
@@ -72,6 +73,11 @@ class Controller(object):
         loop = asyncio.get_event_loop()
         self.watch_timer = loop.call_later(self.check_control_interval, callback)
 
+    async def close_control_data(self):
+        if self.control_data:
+            # close control_data client
+            await self.control_data.close()
+
     async def save_control_data(self, doc):
         control_data = ControlData(config=self.config)
         result = await control_data.save(self.control_file, doc)
@@ -95,6 +101,7 @@ class Controller(object):
     async def run(self):
         loaded = False
         try:
+            await self.close_control_data()
             await self.load_control_data()
             loaded = True
         except Exception as exc:

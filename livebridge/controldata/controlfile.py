@@ -35,12 +35,12 @@ class ControlFile(BaseControl):
         self._updated_local = None
         self.auto_update = True
 
-    def __del__(self):
+    async def close(self):
         if self._sqs_client:
-            self._sqs_client.close()
+            await self._sqs_client.close()
 
         if self._s3_client:
-            self._s3_client.close()
+            await self._s3_client.close()
 
     @property
     async def sqs_client(self):

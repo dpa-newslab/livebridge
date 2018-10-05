@@ -95,6 +95,7 @@ class ControllerTests(asynctest.TestCase):
         self.controller.add_new_bridges = asynctest.CoroutineMock(return_value=True)
         self.controller.retry_run = asynctest.CoroutineMock(return_value=True)
         self.controller.do_control_data_check = asynctest.CoroutineMock(return_value=True)
+        self.controller.close_control_data = asynctest.CoroutineMock(return_value=True)
         control_data = asynctest.MagicMock(is_auto_update=MagicMock(return_value=True))
         self.controller.control_data = control_data
         self.controller.load_control_data = asynctest.CoroutineMock(return_value=control_data)
@@ -104,12 +105,14 @@ class ControllerTests(asynctest.TestCase):
         assert self.controller.remove_old_bridges.call_count == 1
         assert self.controller.add_new_bridges.call_count == 1
         assert self.controller.do_control_data_check.call_count == 1
+        assert self.controller.close_control_data.call_count == 1
 
     async def test_run_with_file_watcher(self):
         self.controller.remove_old_bridges = asynctest.CoroutineMock(return_value=True)
         self.controller.add_new_bridges = asynctest.CoroutineMock(return_value=True)
         self.controller.retry_run = asynctest.CoroutineMock(return_value=True)
         self.controller.do_control_data_check = asynctest.CoroutineMock(return_value=True)
+        self.controller.close_control_data = asynctest.CoroutineMock(return_value=True)
         self.controller.force_check_control_data = True
         control_data = asynctest.MagicMock(is_auto_update=MagicMock(return_value=True))
         self.controller.control_data = control_data
@@ -120,6 +123,7 @@ class ControllerTests(asynctest.TestCase):
         assert self.controller.remove_old_bridges.call_count == 1
         assert self.controller.add_new_bridges.call_count == 1
         assert self.controller.do_control_data_check.call_count == 1
+        assert self.controller.close_control_data.call_count == 1
 
     async def test_run_failing(self):
         self.controller.remove_old_bridges = asynctest.CoroutineMock(return_value=True)
@@ -191,6 +195,7 @@ class ControllerTests(asynctest.TestCase):
 
         # run mock bridges
         self.controller.run = asynctest.CoroutineMock()
+        self.controller.close_control_data = asynctest.CoroutineMock(return_value=True)
         self.controller.bridges = {bridge1: bridge1.check_posts(), bridge2: bridge2.check_posts()}
         asyncio.Task(self.controller.run_poller(bridge=bridge1, interval=2))
         asyncio.Task(self.controller.run_poller(bridge=bridge2, interval=2))
@@ -201,6 +206,7 @@ class ControllerTests(asynctest.TestCase):
         await self.controller.clean_shutdown()
         assert self.controller.shutdown is True
         assert len(self.controller.bridges) == 0
+        assert self.controller.close_control_data.call_count == 1
 
     async def test_add_new_bridge(self):
         bridge = asynctest.MagicMock()

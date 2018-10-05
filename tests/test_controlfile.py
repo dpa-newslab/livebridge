@@ -75,11 +75,13 @@ class ControlFileTest(asynctest.TestCase):
         assert self.control._sqs_client.purge_queue.call_args == \
             asynctest.call(QueueUrl='http://foo-queue')
 
-    @asynctest.fail_on(unused_loop=False)
-    def test_del(self):
+    async def test_close(self):
+        self.control._s3_client = asynctest.MagicMock()
+        self.control._s3_client.close = asynctest.CoroutineMock(return_value=True)
         self.control._sqs_client.close = asynctest.CoroutineMock()
-        self.control.__del__()
+        await self.control.close()
         assert self.control._sqs_client.close.call_count == 1
+        assert self.control._s3_client.close.call_count == 1
 
     async def test_load_from_file_no_exists(self):
         with self.assertRaises(IOError):

@@ -25,3 +25,7 @@ class BaseControl(object):
 
     async def load(self, path):
         raise NotImplementedError()
+
+    async def close(self):
+        """Closes resources if neccessary. Depends on used client."""
+        pass

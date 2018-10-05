@@ -34,6 +34,8 @@ class BaseControlTest(asynctest.TestCase):
         with self.assertRaises(NotImplementedError):
             await self.base.load("path")
 
+    async def test_close(self):
+        assert await self.base.close() == None
 
 class ControlDataTests(asynctest.TestCase):
 
