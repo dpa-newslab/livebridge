@@ -18,7 +18,7 @@ from setuptools import setup, find_packages
 with open('./README.md') as f:
     long_description = f.read()
 
-version = '0.26.0'
+version = '0.26.1'
 
 setup(
     name='livebridge',
