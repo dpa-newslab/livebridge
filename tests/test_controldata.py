@@ -210,6 +210,27 @@ class ControlDataTests(asynctest.TestCase):
         assert len(self.control.removed_bridges) == 1
         assert self.control.removed_bridges == self.control.list_removed_bridges()
 
+    async def test_load_control_doc_sorted(self):
+        sorted_doc = {
+            "auth":{},
+            "bridges":[
+                {"a":"b", "c":"d", "e":"f", "g":"h", "targets":[]},
+                {"i":"j", "k":"l", "m":"n", "o":"p", "targets":[]}
+            ]
+        }
+        doc_data = {
+            "auth":{},
+            "bridges":[
+                {"g":"h", "c":"d", "e":"f", "a":"b", "targets":[]},
+                {"targets":[], "m":"n", "i":"j", "o":"p", "k":"l"}
+            ]
+        }
+        self.control.control_client = asynctest.MagicMock(spec=ControlFile)
+        self.control.control_client.load = asynctest.CoroutineMock(return_value=doc_data)
+        data = await self.control.load_control_doc("/tmp/foo")
+        assert self.control.control_client.load.call_count == 1
+        assert data == sorted_doc
+
     async def test_save(self):
         self.control.control_client = asynctest.MagicMock(spec=ControlFile)
         self.control.control_client.save.return_value = True

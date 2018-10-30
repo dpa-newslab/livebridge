@@ -16,6 +16,7 @@
 import copy
 import os
 import logging
+import json
 from collections import OrderedDict
 from livebridge.controldata.controlfile import ControlFile
 from livebridge.controldata.dynamo import DynamoControl
@@ -105,6 +106,8 @@ class ControlData(object):
 
     async def load_control_doc(self, path):
         control_data = await self.control_client.load(path)
+        # ensure data is consistent sorted, independent by key/item order in file.
+        control_data = json.loads(json.dumps(control_data, sort_keys=True))
         control_data = self._remove_doubles(control_data)
         return control_data
 
