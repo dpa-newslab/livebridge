@@ -22,7 +22,7 @@ from aiohttp import web
 
 logger = logging.getLogger(__name__)
 
-_tokens = {}
+_tokens = []
 
 @web.middleware
 async def auth_middleware(request, handler):
@@ -30,7 +30,7 @@ async def auth_middleware(request, handler):
         # check auth header
         if request.path not in ["/", "/api/v1/session"] and not request.path.startswith("/dashboard"):
             token = request.cookies.get("lb-db") or request.headers.get("X-Auth-Token")
-            if token not in _tokens.values():
+            if token not in _tokens:
                 return web.json_response({"error": "Invalid token."}, status=401)
         # return response
         response = await handler(request)
@@ -93,9 +93,10 @@ class WebApi(object):
         if (user == self.config["auth"]["user"] and
                 params.get('password', None) == self.config["auth"]["password"]):
             # User is in our database, remember their login details
-            _tokens[user] = str(uuid.uuid4())
-            response = web.json_response({"token": _tokens[user]})
-            response.set_cookie("lb-db", _tokens[user])
+            token = str(uuid.uuid4())
+            _tokens.append(token)
+            response = web.json_response({"token": token})
+            response.set_cookie("lb-db", token)
             return response
         return web.json_response({"error": "Unauthorized"}, status=401)
 
@@ -115,7 +116,7 @@ class WebApi(object):
             # check etag first
             control_doc = await self.app["controller"].load_control_doc()
             if self._get_etag(control_doc) != request.headers.get("If-Match"):
-                return web.json_response({"error": "Precondition Failed."}, status=412)
+                return web.json_response({"error": "Checksum check failed."}, status=412)
             # handle data
             await request.post()
             if request.can_read_body:
