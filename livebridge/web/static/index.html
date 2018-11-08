@@ -52,8 +52,8 @@
                             </button>
                         </div>
                         <div is="bridge" v-for="(bridge, index) in control_data.bridges" v-bind:bridge="bridge"
-                               v-if="hideInactives==false || bridge.active === true || bridge.active === undefined" v-bind:index="index"
-                                    :key="'bridge-'+bridge.type+'-'+bridge.label" :id="'bridge-'+index">
+                               v-if="hideInactives==false || bridge.active === true || bridge.active === undefined || bridge.__edited === true"
+                                    v-bind:index="index" :key="'bridge-'+bridge.type+'-'+bridge.label" :id="'bridge-'+index">
                         </div>
                         <bridge-form v-bind:index="-1" id="bridge-add-form"></bridge-form>
                     </div>
