@@ -625,6 +625,7 @@ var app = new Vue({
     },
     mounted() {
         this.getControlData()
+        window.addEventListener("beforeunload", this.reload);// function (e) {
     },
     methods: {
         showMessage: function(txt, mode) {
@@ -857,6 +858,12 @@ var app = new Vue({
                 app.showMessage(error.response.data.error, "danger");
                 app.loading = false;
             });
+        },
+        reload: function(ev) {
+            if(app.edited) {
+                (ev || window.event).returnValue = true;
+                return true;
+            }
         }
     }
 })
