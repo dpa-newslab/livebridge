@@ -370,7 +370,7 @@ var flashMessageTmpl = `
 var loaderTmpl = `
 <div id="loader-overlay">
     <div class="loader-box">
-        <div class="loader"></div> 
+        <div class="loader"></div>
     </div>
 </div>
 `
@@ -389,13 +389,15 @@ Vue.component('auth-form', {
     },
     methods: {
         addAuth: function() {
-           this.$parent.edited = true;
-           this.$parent.$options.methods.addAuth(this.name, this.local_auth)
-           this.reset()
+            this.addAuthProp();
+            this.$parent.edited = true;
+            this.$parent.$options.methods.addAuth(this.name, this.local_auth)
+            this.reset()
         },
         updateAuth: function() {
-           this.$parent.edited = true;
-           this.$parent.$parent.$options.methods.updateAuth(this.local_auth, this.name)
+            this.addAuthProp();
+            this.$parent.edited = true;
+            this.$parent.$parent.$options.methods.updateAuth(this.local_auth, this.name)
         },
         removeAuthProp: function(key) {
             Vue.delete(this.local_auth, key)
@@ -404,10 +406,12 @@ Vue.component('auth-form', {
             if(this.add_bool) {
                 this.add_value = (this.add_value) ? true : false;
             }
-            Vue.set(this.local_auth, this.add_key, this.add_value)
-            this.add_value = ""
-            this.add_key = ""
-            this.add_bool= false
+            if(this.add_key != "" && (this.add_value != "" || this.add_bool)) {
+                Vue.set(this.local_auth, this.add_key, this.add_value)
+                this.add_value = ""
+                this.add_key = ""
+                this.add_bool= false
+            }
         },
         reset: function() {
             if (this.mode === "add") {
@@ -449,6 +453,7 @@ Vue.component('target-form', {
     methods: {
         addTarget: function(ev) {
             if(this.validateNode(this.local_target)) {
+                this.addTargetProp();
                 this.$parent.$parent.$options.methods.addTarget(this.bridge_index, this.local_target)
                 this.$parent.edited = true;
                 this.reset()
@@ -459,6 +464,7 @@ Vue.component('target-form', {
         },
         updateTarget: function(ev) {
             if(this.validateNode(this.local_target)) {
+                this.addTargetProp();
                 this.$parent.edited = true;
                 this.$parent.$parent.$parent.$options.methods.updateTarget(this.bridge_index, this.local_target, this.index)
             } else {
@@ -473,10 +479,12 @@ Vue.component('target-form', {
             if(this.add_bool) {
                 this.add_value = (this.add_value) ? true : false;
             }
-            Vue.set(this.local_target, this.add_key, this.add_value)
-            this.add_value = ""
-            this.add_key = ""
-            this.add_bool= false
+            if(this.add_key != "" && (this.add_value != "" || this.add_bool)) {
+                Vue.set(this.local_target, this.add_key, this.add_value)
+                this.add_value = ""
+                this.add_key = ""
+                this.add_bool= false
+           }
         },
         reset: function() {
             if (this.index < 0) {
@@ -503,6 +511,7 @@ Vue.component('bridge-form', {
         addBridge: function(ev) {
             app.loading = true;
             if(this.validateNode(this.local_bridge)) {
+                this.addBridgeProp();
                 this.$parent.$options.methods.addBridge(this.local_bridge)
                 this.reset()
 
@@ -521,6 +530,7 @@ Vue.component('bridge-form', {
         },
         updateBridge: function(ev) {
             if(this.validateNode(this.local_bridge)) {
+                this.addBridgeProp();
                 this.$parent.$parent.$options.methods.updateBridge(this.local_bridge, this.index)
                 this.$parent.edited = true;
             } else {
@@ -535,10 +545,12 @@ Vue.component('bridge-form', {
             if(this.add_bool) {
                 this.add_value = (this.add_value) ? true : false;
             }
-            Vue.set(this.local_bridge, this.add_key, this.add_value)
-            this.add_value = ""
-            this.add_key = ""
-            this.add_bool= false
+            if(this.add_key != "" && (this.add_value != "" || this.add_bool)) {
+                Vue.set(this.local_bridge, this.add_key, this.add_value)
+                this.add_value = ""
+                this.add_key = ""
+                this.add_bool= false
+            }
         },
         reset: function() {
             if (this.index < 0) {
