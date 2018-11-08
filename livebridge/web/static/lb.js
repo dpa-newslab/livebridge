@@ -93,7 +93,7 @@ var authFormTmpl = `
                                     </datalist>
                                 </div>
                                 <div>
-                                    Boolean: <input v-model="add_bool" type="checkbox"/>
+                                    Boolean: <input v-model="add_bool" type="checkbox" @click="add_value=false"/>
                                 </div>
                             </td>
                             <td class="align-top">
@@ -105,7 +105,10 @@ var authFormTmpl = `
                                     </datalist>
                                 </div>
                                 <div v-else>
-                                    true / false: <input type="checkbox" v-model="add_value"/>
+                                    <label> True </label>
+                                    <input type="radio" v-model="add_value" name="add_value" value="true"><br>
+                                    <label> False</label>
+                                    <input type="radio" v-model="add_value" name="add_value" value="false">
                                 </div>
                             </td>
                             <td class="align-top">
@@ -194,7 +197,7 @@ var targetFormTmpl = `
                                 </datalist>
                             </div>
                             <div>
-                                Boolean: <input v-model="add_bool" type="checkbox"/>
+                                Boolean: <input v-model="add_bool" type="checkbox" @click="add_value=false"/>
                             </div>
                         </td>
                         <td class="align-top">
@@ -206,7 +209,10 @@ var targetFormTmpl = `
                                 </datalist>
                             </div>
                             <div v-else>
-                                true / false: <input type="checkbox" v-model="add_value"/>
+                                <label> True </label>
+                                <input type="radio" v-model="add_value" name="add_value" value="true"><br>
+                                <label> False</label>
+                                <input type="radio" v-model="add_value" name="add_value" value="false">
                             </div>
                         </td>
                         <td class="align-top">
@@ -269,7 +275,7 @@ var bridgeFormTmpl = `
                                 </datalist>
                             </div>
                             <div>
-                                Boolean: <input v-model="add_bool" type="checkbox"/>
+                                Boolean: <input v-model="add_bool" type="checkbox" @click="add_value=false"/>
                             </div>
                         </td>
                         <td class="align-top">
@@ -281,7 +287,10 @@ var bridgeFormTmpl = `
                                 </datalist>
                             </div>
                             <div v-else>
-                                true / false: <input type="checkbox" v-model="add_value"/>
+                                <label> True </label>
+                                <input type="radio" v-model="add_value" name="add_value" value="true"><br>
+                                <label> False</label>
+                                <input type="radio" v-model="add_value" name="add_value" value="false">
                             </div>
                         </td>
                         <td class="align-top">
