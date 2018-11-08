@@ -732,7 +732,7 @@ var app = new Vue({
             if((typeof obj) == "object") {
                 for(let prop in obj) {
                     let val = obj[prop]
-                    if(typeof(val) === "string")
+                    if(typeof(val) !== "object")
                         this.addChoice(prop, val)
                     this.collectChoices(prop, val, d)
                 }
