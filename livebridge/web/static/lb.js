@@ -158,7 +158,12 @@ var targetFormTmpl = `
             </button>
           </div>
           <div class="modal-header">
-            <h3 class="modal-title"><span v-if="index < 0">Add</span><span v-else>Edit</span> {{ local_target.label }}</h3>
+            <h3 class="modal-title">
+                <span v-if="index < 0">Add</span>
+                <span v-else>Edit</span>
+                <span v-if="local_target.label">{{ local_target.label }}</span>
+                <span v-else>Target</span>
+            </h3>
           </div>
           <div class="modal-body">
             <form>
@@ -226,7 +231,12 @@ var bridgeFormTmpl = `
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title"><span v-if="index < 0">Add</span><span v-else>Edit</span> {{ local_bridge.label }}</h5>
+            <h5 class="modal-title">
+                <span v-if="index < 0">Add</span>
+                <span v-else>Edit</span>
+                <span v-if="local_bridge.label">{{ local_bridge.label }}</span>
+                <span v-else>Source</span>
+            </h5>
             <button type="button" class="close" data-dismiss="modal" @click="reset()" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
