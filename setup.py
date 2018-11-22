@@ -18,7 +18,7 @@ from setuptools import setup, find_packages
 with open('./README.md') as f:
     long_description = f.read()
 
-version = '0.27.0-dev0'
+version = '0.27.0'
 
 setup(
     name='livebridge',
@@ -38,8 +38,8 @@ setup(
     ],  # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
     keywords=["liveticker", "liveblog", "syndication", "async", "asyncio", "realtime"],
     author='dpa-infocom GmbH',
-    maintainer='Martin Borho',
-    maintainer_email='martin@borho.net',
+    maintainer='dpa-newslab',
+    maintainer_email='livebridge-maintainers@dpa-newslab.com',
     url='https://github.com/dpa-newslab/livebridge',
     license='Apache Software License (http://www.apache.org/licenses/LICENSE-2.0)',
     packages=find_packages(exclude=['tests', 'htmlcov', 'dist']),
