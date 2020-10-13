@@ -51,7 +51,7 @@ To use MongoDB_ or any **SQL** database supported by SQLALchemy_ as storage back
  **Be sure the database already exists and the database user from the dsn-url string has sufficient rights.**
 
 .. note::
-    For simple, straight forward distribution, storage can be disabled by setting **LB_DSN_DB=dummy://**. Updates and deletes of distributed posts will therefore be not applied.
+    For simple, straight forward distribution, storage can be disabled by setting **LB_DB_DSN=dummy://**. Updates and deletes of distributed posts will therefore be not applied.
 
 Since livebridge also supports `AWS DynamoDB`_ as storage backend, following **Amazon AWS** related config variables are available:
 
